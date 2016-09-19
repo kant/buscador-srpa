@@ -11,5 +11,8 @@ pip install -r requirements.txt
 
 ```
 export FLASK_APP=main.py
+export FLASK_DEBUG=1
 flask run
 ```
+
+Para levantar un servidor smtp para desarrollo, correr `sudo python -m smtpd -n -c DebuggingServer localhost:25`
