@@ -16,3 +16,7 @@ flask run
 ```
 
 Para levantar un servidor smtp para desarrollo, correr `sudo python -m smtpd -n -c DebuggingServer localhost:25`
+
+Documentaciones relevantes:
+- [Flask Mail](https://pythonhosted.org/Flask-Mail/)
+- [Flask User](https://pythonhosted.org/Flask-User/)

@@ -1,14 +1,20 @@
-import os
+class Config(object):
+    DEBUG = False
+    TESTING = False
+    CSRF_ENABLED = False
+    USER_APP_NAME = "PreguntasJGM"
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'THIS IS AN INSECURE SECRET')
-SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///db.sqlite')
-CSRF_ENABLED = False
 
-MAIL_USERNAME = os.getenv('MAIL_USERNAME', 'email@example.com')
-MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', 'password')
-MAIL_DEFAULT_SENDER = os.getenv('MAIL_DEFAULT_SENDER', 'noreply@example.com')
-MAIL_SERVER = os.getenv('MAIL_SERVER', 'localhost')
-MAIL_PORT = int(os.getenv('MAIL_PORT', '25'))
-MAIL_USE_SSL = int(os.getenv('MAIL_USE_SSL', False))
+class DevelopmentConfig(Config):
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///db.sqlite'
+    SECRET_KEY = 'THIS IS AN INSECURE SECRET'
 
-USER_APP_NAME = "PreguntasJGM"
+    MAIL_USERNAME = 'noreply@jgm.com'
+    MAIL_DEFAULT_SENDER = 'no-reply <noreply@jgm.com>'
+    MAIL_SERVER = 'localhost'
+    MAIL_PORT = 25
+    MAIL_USE_SSL = False
+
+# class ProductionConfig(Config):
+#    DATABASE_URI = 'mysql://user@localhost/foo'
