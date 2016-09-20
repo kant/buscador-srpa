@@ -1,0 +1,269 @@
+$fonts-dir: '../fonts/';
+
+/* latin */
+@font-face {
+  font-family: 'Droid Serif';
+  font-style: normal;
+  font-weight: 400;
+  src: url('#{$fonts-dir}DroidSerif.ttf') format('truetype'),
+        url('#{$fonts-dir}DroidSerif.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Droid Serif';
+  font-style: normal;
+  font-weight: 700;
+  src: url('#{$fonts-dir}DroidSerif-Bold.ttf') format('truetype'),
+        url('#{$fonts-dir}DroidSerif-Bold.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Droid Serif';
+  font-style: italic;
+  font-weight: 400;
+  src: url('#{$fonts-dir}DroidSerif-Italic.ttf') format('truetype'),
+        url('#{$fonts-dir}DroidSerif-Italic.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src:  url('#{$fonts-dir}Roboto-Thin-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-Thin-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-Thin-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-Thin-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-Thin-webfont.svg#Roboto') format('svg');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto-Thin';
+  src:  url('#{$fonts-dir}Roboto-Thin-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-Thin-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-Thin-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-Thin-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-Thin-webfont.svg#Roboto') format('svg');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src:  url('#{$fonts-dir}Roboto-ThinItalic-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-ThinItalic-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-ThinItalic-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-ThinItalic-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-ThinItalic-webfont.svg#Roboto') format('svg');
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto-ThinItalic';
+  src:  url('#{$fonts-dir}Roboto-ThinItalic-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-ThinItalic-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-ThinItalic-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-ThinItalic-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-ThinItalic-webfont.svg#Roboto') format('svg');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src:  url('#{$fonts-dir}Roboto-Light-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-Light-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-Light-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-Light-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-Light-webfont.svg#Roboto') format('svg');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto-Light';
+  src:  url('#{$fonts-dir}Roboto-Light-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-Light-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-Light-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-Light-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-Light-webfont.svg#Roboto') format('svg');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src:  url('#{$fonts-dir}Roboto-LightItalic-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-LightItalic-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-LightItalic-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-LightItalic-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-LightItalic-webfont.svg#Roboto') format('svg');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto-LightItalic';
+  src:  url('#{$fonts-dir}Roboto-LightItalic-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-LightItalic-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-LightItalic-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-LightItalic-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-LightItalic-webfont.svg#Roboto') format('svg');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src:  url('#{$fonts-dir}Roboto-Regular-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-Regular-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-Regular-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-Regular-webfont.svg#Roboto') format('svg');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto-Regular';
+  src:  url('#{$fonts-dir}Roboto-Regular-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-Regular-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-Regular-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-Regular-webfont.svg#Roboto') format('svg');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src:  url('#{$fonts-dir}Roboto-Italic-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-Italic-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-Italic-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-Italic-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-Italic-webfont.svg#Roboto') format('svg');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto-RegularItalic';
+  src:  url('#{$fonts-dir}Roboto-Italic-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-Italic-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-Italic-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-Italic-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-Italic-webfont.svg#Roboto') format('svg');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src:  url('#{$fonts-dir}Roboto-Medium-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-Medium-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-Medium-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-Medium-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-Medium-webfont.svg#Roboto') format('svg');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto-Medium';
+  src:  url('#{$fonts-dir}Roboto-Medium-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-Medium-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-Medium-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-Medium-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-Medium-webfont.svg#Roboto') format('svg');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src:  url('#{$fonts-dir}Roboto-MediumItalic-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-MediumItalic-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-MediumItalic-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-MediumItalic-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-MediumItalic-webfont.svg#Roboto') format('svg');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto-MediumItalic';
+  src:  url('#{$fonts-dir}Roboto-MediumItalic-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-MediumItalic-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-MediumItalic-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-MediumItalic-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-MediumItalic-webfont.svg#Roboto') format('svg');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src:  url('#{$fonts-dir}Roboto-Bold-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-Bold-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-Bold-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-Bold-webfont.svg#Roboto') format('svg');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto-Bold';
+  src:  url('#{$fonts-dir}Roboto-Bold-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-Bold-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-Bold-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-Bold-webfont.svg#Roboto') format('svg');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src:  url('#{$fonts-dir}Roboto-BoldItalic-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-BoldItalic-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-BoldItalic-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-BoldItalic-webfont.svg#Roboto') format('svg');
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto-BoldItalic';
+  src:  url('#{$fonts-dir}Roboto-BoldItalic-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-BoldItalic-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-BoldItalic-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-BoldItalic-webfont.svg#Roboto') format('svg');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src:  url('#{$fonts-dir}Roboto-Black-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-Black-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-Black-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-Black-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-Black-webfont.svg#Roboto') format('svg');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto-Black';
+  src:  url('#{$fonts-dir}Roboto-Black-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-Black-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-Black-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-Black-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-Black-webfont.svg#Roboto') format('svg');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src:  url('#{$fonts-dir}Roboto-BlackItalic-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-BlackItalic-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-BlackItalic-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-BlackItalic-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-BlackItalic-webfont.svg#Roboto') format('svg');
+  font-weight: 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto-BlackItalic';
+  src:  url('#{$fonts-dir}Roboto-BlackItalic-webfont.eot');
+  src:  url('#{$fonts-dir}Roboto-BlackItalic-webfont.eot?#iefix') format('embedded-opentype'),
+        url('#{$fonts-dir}Roboto-BlackItalic-webfont.woff') format('woff'),
+        url('#{$fonts-dir}Roboto-BlackItalic-webfont.ttf') format('truetype'),
+        url('#{$fonts-dir}Roboto-BlackItalic-webfont.svg#Roboto') format('svg');
+}
