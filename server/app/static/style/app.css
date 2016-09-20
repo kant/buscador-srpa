@@ -1,5 +1,6 @@
 /* latin */
-@import url(poncho/poncho.css);
+@import url(libs/bootstrap.min.css);
+@import url(libs/poncho.css);
 @font-face {
   font-family: 'Droid Serif';
   font-style: normal;

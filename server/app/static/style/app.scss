@@ -1,2 +1,6 @@
-@import 'poncho/fonts';
-@import 'poncho/poncho.css';
+// Para compilar:
+// sass --watch app.scss:app.css
+
+@import 'fonts';
+@import 'libs/bootstrap.min.css';
+@import 'libs/poncho.css';

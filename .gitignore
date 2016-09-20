@@ -2,3 +2,4 @@ venv-server
 *.pyc
 db.sqlite
 .idea
+.sass-cache

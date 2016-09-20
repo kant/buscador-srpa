@@ -20,3 +20,5 @@ Para levantar un servidor smtp para desarrollo, correr `sudo python -m smtpd -n 
 Documentaciones relevantes:
 - [Flask Mail](https://pythonhosted.org/Flask-Mail/)
 - [Flask User](https://pythonhosted.org/Flask-User/)
+- [Flask SQLAlchemy](http://flask-sqlalchemy.pocoo.org/)
+- [Poncho](http://argob.github.io/poncho/)
