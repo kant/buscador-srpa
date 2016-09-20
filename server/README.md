@@ -21,4 +21,5 @@ Documentaciones relevantes:
 - [Flask Mail](https://pythonhosted.org/Flask-Mail/)
 - [Flask User](https://pythonhosted.org/Flask-User/)
 - [Flask SQLAlchemy](http://flask-sqlalchemy.pocoo.org/)
+- [Flask Babel](https://pythonhosted.org/Flask-Babel/)
 - [Poncho](http://argob.github.io/poncho/)

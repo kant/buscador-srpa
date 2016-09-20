@@ -3,7 +3,11 @@ class Config(object):
     TESTING = False
     CSRF_ENABLED = False
     USER_APP_NAME = "PreguntasJGM"
-
+    USER_ENABLE_CONFIRM_EMAIL = False
+    USER_ENABLE_USERNAME = False
+    USER_ENABLE_CHANGE_USERNAME = False
+    BABEL_DEFAULT_LOCALE = 'es'
+    
 
 class DevelopmentConfig(Config):
     DEBUG = True
