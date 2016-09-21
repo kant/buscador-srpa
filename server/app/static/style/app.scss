@@ -4,3 +4,8 @@
 @import 'fonts';
 @import 'libs/bootstrap.min.css';
 @import 'libs/poncho.css';
+
+
+.container-fluid {
+  max-width: 1170px;
+}

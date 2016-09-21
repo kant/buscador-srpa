@@ -141,5 +141,7 @@
   font-family: 'Roboto-BlackItalic';
   src: url("../fonts/Roboto-BlackItalic-webfont.eot");
   src: url("../fonts/Roboto-BlackItalic-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/Roboto-BlackItalic-webfont.woff") format("woff"), url("../fonts/Roboto-BlackItalic-webfont.ttf") format("truetype"), url("../fonts/Roboto-BlackItalic-webfont.svg#Roboto") format("svg"); }
+.container-fluid {
+  max-width: 1170px; }
 
 /*# sourceMappingURL=app.css.map */

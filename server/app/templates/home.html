@@ -1,8 +1,14 @@
 {% extends "base.html" %}
-{% block content %}
-    <h2>Home page</h2>
-    <p>This page can be accessed by anyone.</p><br/>
-    <p><a href={{ url_for('home_page') }}>Home page</a> (anyone)</p>
-    <p><a href={{ url_for('members_page') }}>Members page</a> (login required)</p>
-    <p><a href={{ url_for('special_page') }}>Special page</a> (login with username 'user007' and password 'Password1')</p>
+{% block main %}
+    <section class="jumbotron" style="background-image: url('{{ url_for('static', filename='img/jefatura.jpg') }}');">
+        <div class="jumbotron_body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="text-center">Informes de gestión</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
