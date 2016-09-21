@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-08-05 12:15-0700\n"
-"PO-Revision-Date: 2016-09-20 17:21-0300\n"
+"PO-Revision-Date: 2016-09-21 10:55-0300\n"
 "Language: es\n"
 "Language-Team: es <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -87,7 +87,7 @@ msgstr "Reingresar la nueva contraseña"
 
 #: flask_user/forms.py:80 flask_user/forms.py:307
 msgid "New Password and Retype Password did not match"
-msgstr ""
+msgstr "Las contraseñas no son iguales."
 
 #: flask_user/forms.py:83 flask_user/forms.py:309
 #: flask_user/templates/flask_user/change_password.html:5
@@ -132,7 +132,7 @@ msgstr "Enviar email"
 #: flask_user/forms.py:157 flask_user/forms.py:231
 #, python-format
 msgid "%(username_or_email)s does not exist"
-msgstr ""
+msgstr "%(username_or_email)s no existe"
 
 #: flask_user/forms.py:164 flask_user/forms.py:223 flask_user/forms.py:251
 msgid "Username"
@@ -166,7 +166,7 @@ msgstr "Nombre de usuario / email"
 #: flask_user/forms.py:238
 #, python-format
 msgid "Incorrect %(username_or_email)s and/or Password"
-msgstr ""
+msgstr "%(username_or_email)s y/o contraseña invalida."
 
 #: flask_user/forms.py:260
 msgid "Retype Password"
@@ -174,11 +174,11 @@ msgstr "Reingresar contraseña"
 
 #: flask_user/forms.py:261
 msgid "Password and Retype Password did not match"
-msgstr ""
+msgstr "Las contraseñas no son iguales."
 
 #: flask_user/forms.py:262
 msgid "Token"
-msgstr ""
+msgstr "Token"
 
 #: flask_user/forms.py:264
 #: flask_user/templates/flask_user/login_or_register.html:41
@@ -188,7 +188,7 @@ msgstr "Registrarse"
 
 #: flask_user/forms.py:301
 msgid "Resend email confirmation email"
-msgstr ""
+msgstr "Reenviar email de confirmación"
 
 #: flask_user/forms.py:334
 msgid "Invite!"
@@ -208,11 +208,11 @@ msgstr "Pagina especial"
 
 #: flask_user/views.py:29
 msgid "Your confirmation token has expired."
-msgstr ""
+msgstr "Tu token de confirmación ha expirado"
 
 #: flask_user/views.py:33 flask_user/views.py:53
 msgid "Invalid confirmation token."
-msgstr ""
+msgstr "Token de confirmación invalido"
 
 #: flask_user/views.py:60
 msgid "Your email has been confirmed."
@@ -220,12 +220,12 @@ msgstr "Tu email ha sido confirmado"
 
 #: flask_user/views.py:97
 msgid "Your password has been changed successfully."
-msgstr ""
+msgstr "Su contraseña ha sido cambiada con éxito."
 
 #: flask_user/views.py:133
 #, python-format
 msgid "Your username has been changed to '%(username)s'."
-msgstr ""
+msgstr "Su nombre de usuario ha sido cambiado a '%(username)s'."
 
 #: flask_user/views.py:200
 #, python-format
@@ -233,6 +233,8 @@ msgid ""
 "A reset password email has been sent to '%(email)s'. Open that email and "
 "follow the instructions to reset your password."
 msgstr ""
+"Se ha enviado un correo a '%(email)s' con instrucciones para "
+"reestablecer su contraseña."
 
 #: flask_user/views.py:271
 msgid "You have signed out successfully."
@@ -244,30 +246,30 @@ msgstr "La invitación ha sido enviada"
 
 #: flask_user/views.py:552
 msgid "Your reset password token has expired."
-msgstr ""
+msgstr "Su token para reestablecer contraseña ha expirado."
 
 #: flask_user/views.py:556 flask_user/views.py:567
 msgid "Your reset password token is invalid."
-msgstr ""
+msgstr "Su token de restablecer contraseña no es válido."
 
 #: flask_user/views.py:594
 msgid "Your password has been reset successfully."
-msgstr ""
+msgstr "Su contraseña se ha restablecido con éxito."
 
 #: flask_user/views.py:611
 #, python-format
 msgid "You must confirm your email to access '%(url)s'."
-msgstr ""
+msgstr "Debes confirmar tu correo electrónico para acceder a '%(url) s'."
 
 #: flask_user/views.py:622
 #, python-format
 msgid "You must be signed in to access '%(url)s'."
-msgstr ""
+msgstr "El acceso a '%(url)s' es solo para usuarios registrados."
 
 #: flask_user/views.py:636
 #, python-format
 msgid "You do not have permission to access '%(url)s'."
-msgstr ""
+msgstr "No tienes permiso para acceder a '%(url) s'."
 
 #: flask_user/views.py:667 flask_user/views.py:688
 #, python-format
@@ -275,6 +277,8 @@ msgid ""
 "A confirmation email has been sent to %(email)s with instructions to "
 "complete your registration."
 msgstr ""
+"Un correo de confirmación ha sido enviado a %(email)s con instrucciones "
+"para completar tu registración."
 
 #: flask_user/views.py:669
 msgid "You have registered successfully."
@@ -282,7 +286,7 @@ msgstr "La registración ha sido exitosa"
 
 #: flask_user/views.py:697
 msgid "Your account has not been enabled."
-msgstr ""
+msgstr "Tu cuenta no ha sido activada"
 
 #: flask_user/views.py:706
 #, python-format
@@ -291,6 +295,9 @@ msgid ""
 "and Spam folders for the confirmation email or <a href=\"%(url)s\">Re-"
 "send confirmation email</a>."
 msgstr ""
+"Tu dirección de correo aun no ha sido confirmada. Revisa tu bandeja de "
+"entrada y tus filtros de spam para encontrar el email de confirmación o "
+"pide <a href=\"%(url)s\">enviarlo de vuelta</a>."
 
 #: flask_user/views.py:717
 msgid "You have signed in successfully."
@@ -327,7 +334,7 @@ msgstr "Reenviar email"
 
 #: flask_user/templates/flask_user/reset_password.html:5
 msgid "Reset Password"
-msgstr ""
+msgstr "Resetear contraseña"
 
 #: flask_user/templates/flask_user/user_profile.html:5
 msgid "User profile"
