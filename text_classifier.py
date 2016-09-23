@@ -13,12 +13,15 @@ Example:
 Todo:
     * For module TODOs
 """
+from __future__ import unicode_literals
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.linear_model import SGDClassifier
 from scipy import sparse
 import pandas as pd
 import numpy as np
+import os
+import warnings
 
 
 class TextClassifier():
@@ -36,14 +39,23 @@ class TextClassifier():
     """
 
     def __init__(self, texts, ids, vocabulary=None):
-        """Definido en la declaracion de la clase."""
-        es_stopwords = pd.read_csv('ES_stopwords.txt',
+        """Definido en la declaracion de la clase.
+
+        Attributes:
+            attr1 (str): Description of `attr1`.
+            attr2 (:obj:`int`, optional): Description of `attr2`.
+        """
+        this_dir, this_filename = os.path.split(__file__)
+        es_stopwords = pd.read_csv(os.path.join(this_dir, 'ES_stopwords.txt'),
                                    header=None, encoding='utf-8')
         es_stopwords = list(np.squeeze(es_stopwords.values))
+        self._check_id_length(ids)
         self.vectorizer = CountVectorizer(input='content', ngram_range=(1, 1),
                                           min_df=1, stop_words=es_stopwords,
                                           vocabulary=vocabulary)
         self.transformer = TfidfTransformer()
+        self.term_mat = None  # Matriz que cuenta los terminos en un texto.
+        self.tfidf_mat = None  # Matriz de relevancia de los terminos.
         self.reload_texts(texts, ids)
 
     def __str__():
@@ -92,12 +104,9 @@ class TextClassifier():
         indices = np.in1d(self.ids, ids)
         classifier.partial_fit(self.tfidf_mat[indices, :], labels)
 
-    def classify(self, classifier_name, examples, max_labels=1,
+    def classify(self, classifier_name, examples, max_labels=None,
                  goodness_of_fit=False):
         """Usar un clasificador SVM para etiquetar textos nuevos.
-
-        Nota:
-            Usa el clasificador de `Scikit-learn <http://scikit-learn.org/>`_
 
         Args:
             classifier_name (str): Nombre del clasidicador a usar.
@@ -105,9 +114,12 @@ class TextClassifier():
                 ejemplos a clasificar en texto plano o en ids.
             max_labels (int, optional): Cantidad de etiquetas a devolver para
                 cada ejemplo. Si se devuelve mas de una el orden corresponde a
-                la plausibilidad de cada etiqueta.
+                la plausibilidad de cada etiqueta. Si es None devuelve todas
+                las etiquetas posibles.
             goodness_of_fit (bool, optional): Indica si devuelve o no una
                 medida de cuan buenas son las etiquetas.
+        Nota:
+            Usa el clasificador de `Scikit-learn <http://scikit-learn.org/>`_
         """
         classifier = getattr(self, classifier_name)
         texts_vectors = self._make_text_vectors(examples)
@@ -119,6 +131,11 @@ class TextClassifier():
         Args:
             examples (list or str): Se espera un ejemplo o una lista de:
                 o bien ids, o bien textos.
+        Returns:
+            textvec (sparse matrix): Devuelve una matriz sparse que contiene
+                los vectores TF-IDF para los ejemplos que se pasan de entrada.
+                El tamaño de la matriz es de (N, T) donde N es la cantidad de
+                ejemplos y T es la cantidad de términos en el vocabulario.
         """
         if type(examples) is str:
             if examples in self.ids:
@@ -147,12 +164,16 @@ class TextClassifier():
             Usa la distancia de coseno del vector de features TF-IDF
 
         Args:
-            example (str): Se espera un id de texto  o un texto a partir del
+            example (str): Se espera un id de texto o un texto a partir del
                 cual se buscaran otros textos similares.
             max_similars (int, optional): Cantidad de textos similares a
                 devolver.
             similarity_cutoff (float, optional): Valor umbral de similaridad
                 para definir que dos textos son similares entre si.
+        Returns:
+            text_ids (list of str): Devuelve los ids de los textos sugeridos.
+            sorted_dist (list of float): Devuelve la distancia entre las
+                opciones sugeridas y el ejemplo dado como entrada.
         """
         if max_similars > self.term_mat.shape[0]:
             raise ValueError("No se pueden pedir mas sugerencias que la \
@@ -168,13 +189,13 @@ class TextClassifier():
             y = self.vectorizer.transform([example])  # contar terminos
             y = self.transformer.transform(y)  # calcular tfidf
             distances = np.squeeze(pairwise_distances(self.tfidf_mat, y))
-        I = np.argsort(distances)
-        closest_n = I[:max_similars]
+        sorted_indices = np.argsort(distances)
+        closest_n = sorted_indices[:max_similars]
         sorted_dist = distances[closest_n]
         if similarity_cutoff:
             closest_n = closest_n[sorted_dist < similarity_cutoff]
         text_ids = self.ids[closest_n]
-        return text_ids, sorted_dist
+        return list(text_ids), list(sorted_dist)
 
     def reload_texts(self, texts, ids, vocabulary=None):
         """Calcula los vectores de terminos de textos y los almacena.
@@ -188,6 +209,7 @@ class TextClassifier():
             texts (list): Una lista de N textos a incorporar.
             ids (list): Una lista de N ids alfanumericos para los textos.
         """
+        self._check_id_length(ids)
         self.ids = np.array(ids)
         if vocabulary:
             self.vectorizer.vocabulary = vocabulary
@@ -204,13 +226,12 @@ class TextClassifier():
             :func:`~TextClassifier.TextClassifier.reload_texts`
         Args:
             texts (list): Una lista de N textos a incorporar.
-            ids (list): Una lista de N ids alfanumericos para los textos.
-            etiquetas (list, optional): Si esta presente se interpreta que los
-                textos deben ser ademas usados para entrenar al clasificador.
+            ids (list of str): Una lista de N ids alfanumericos para los textos
             replace_texts (bool, optional): Indica si deben reemplazarse los
                 textos cuyo id ya este almacenado. Si es False y algun id ya se
                 encuentra almacenado se considera un error.
         """
+        self._check_id_length(ids)
         if not replace_texts and any(np.in1d(ids, self.ids)):
             raise ValueError("Alguno de los ids provistos ya esta en el \
                               indice")
@@ -231,10 +252,15 @@ class TextClassifier():
                 self.term_mat[oldrows, :] = partial_mat[oldpartial, :]
                 # y agrego las que no
                 partial_mat = partial_mat[~oldpartial, :]
-                self.term_mat = sparse.vstack((self.term_mat,
-                                               partial_mat))
+                self.term_mat = sparse.vstack((self.term_mat, partial_mat))
+                # concateno los viejos ids y los nuevos
                 self.ids = np.r_[self.ids, ids[~oldpartial]]
         self._update_tfidf()
 
     def _update_tfidf(self):
         self.tfidf_mat = self.transformer.fit_transform(self.term_mat)
+
+    def _check_id_length(self, ids):
+        if any(map(lambda x: len(x) > 10, ids)):
+            warnings.warn("Hay ids que son muy largos. Es posible que se hayan \
+            ingresado textos planos en lugar de ids.")
