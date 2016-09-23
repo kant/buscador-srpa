@@ -22,4 +22,5 @@ Documentaciones relevantes:
 - [Flask User](https://pythonhosted.org/Flask-User/)
 - [Flask SQLAlchemy](http://flask-sqlalchemy.pocoo.org/)
 - [Flask Babel](https://pythonhosted.org/Flask-Babel/)
+- [Flask WTF](http://flask.pocoo.org/docs/0.11/patterns/wtforms/)
 - [Poncho](http://argob.github.io/poncho/)

@@ -12,5 +12,5 @@ def create_app():
     db.create_all()
     db_adapter = SQLAlchemyAdapter(db, models.User)
     UserManager(db_adapter, app)
-    init_routes(app)
+    init_routes(app, db.session)
     return app
