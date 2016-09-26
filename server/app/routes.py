@@ -1,7 +1,6 @@
-from flask import render_template, request, flash, redirect
+from flask import render_template, request, redirect
 from flask_user import login_required
-from forms import QuestionForm
-from models import Question
+from forms import QuestionForm, UploadForm
 
 
 def init_routes(app, db_session):
@@ -10,17 +9,19 @@ def init_routes(app, db_session):
         return render_template('home.html')
 
     @login_required
-    @app.route('/carga', methods=['GET', 'POST'])
-    def question_form():
-        form = QuestionForm(request.form)
-        if request.method == 'POST' and form.validate():
-            question = Question(
-                number=form.number.data,
-                body=form.body.data,
-                justification=form.justification.data,
-                context=form.context.data
-            )
-            db_session.add(question)
-            db_session.commit()
+    @app.route('/carga_de_preguntas', methods=['GET', 'POST'])
+    def question_upload():
+        upload_form = UploadForm()
+        if upload_form.validate_on_submit():
+            filename = upload_form.save_spreadsheet()
+            return redirect('/carga_de_preguntas/interpretar_planilla', filename=filename)
+        return render_template('forms/question_upload_form.html', upload_form=upload_form)
+
+    @login_required
+    @app.route('/carga_de_preguntas/manual', methods=['GET', 'POST'])
+    def single_question():
+        single_question_form = QuestionForm()
+        if single_question_form.validate_on_submit():
+            single_question_form.save_question(db_session)
             return redirect('/')
-        return render_template('forms/question_form.html', form=form)
+        return render_template('forms/single_question_form.html', question_form=single_question_form)
