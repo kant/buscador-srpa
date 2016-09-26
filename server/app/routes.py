@@ -17,7 +17,8 @@ def init_routes(app, db_session):
             question = Question(
                 number=form.number.data,
                 body=form.body.data,
-                justification=form.justification.data
+                justification=form.justification.data,
+                context=form.context.data
             )
             db_session.add(question)
             db_session.commit()

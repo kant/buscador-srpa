@@ -16,3 +16,7 @@ class QuestionForm(Form):
         _('Question justification (optional)'),
         [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
     )
+    context = TextAreaField(
+        _('Question context (optional)'),
+        [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
+    )
