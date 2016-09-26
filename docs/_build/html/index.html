@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to text-classifier’s documentation! &#8212; documentación de text-classifier - 0.01</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.01',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="documentación de text-classifier - 0.01" href="#" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-text-classifier-s-documentation">
+<h1>Welcome to text-classifier&#8217;s documentation!<a class="headerlink" href="#welcome-to-text-classifier-s-documentation" title="Enlazar permanentemente con este título">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-text_classifier"></span><p>Módulo de clasificación de textos.</p>
+<p>Este módulo contiene a los objetos que permiten entrenar un clasificador
+automático de textos y pedir sugerencias de textos similares.</p>
+<dl class="docutils">
+<dt>Example:</dt>
+<dd><p class="first">Examples can be given using either the <code class="docutils literal"><span class="pre">Example</span></code> or <code class="docutils literal"><span class="pre">Examples</span></code>
+sections. Sections support any reStructuredText formatting, including
+literal blocks:</p>
+<div class="last highlight-default"><div class="highlight"><pre>$ python example_google.py
+</pre></div>
+</div>
+</dd>
+<dt>Todo:</dt>
+<dd><ul class="first last simple">
+<li>For module TODOs</li>
+</ul>
+</dd>
+</dl>
+<dl class="class">
+<dt id="text_classifier.TextClassifier">
+<em class="property">class </em><code class="descclassname">text_classifier.</code><code class="descname">TextClassifier</code><span class="sig-paren">(</span><em>texts</em>, <em>ids</em>, <em>vocabulary=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/text_classifier.html#TextClassifier"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#text_classifier.TextClassifier" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Clasificador automático de textos.</p>
+<p>Usa TF-IDF para vectorizar.
+Usa SVM para clasificar.
+Usa Ball-Tree para devolver vecinos cercanos.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>attr1 (str): Description of <cite>attr1</cite>.
+attr2 (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(en Python versión 2.7)"><code class="xref py py-obj docutils literal"><span class="pre">int</span></code></a>, optional): Description of <cite>attr2</cite>.</dd>
+</dl>
+<dl class="method">
+<dt id="text_classifier.TextClassifier.classify">
+<code class="descname">classify</code><span class="sig-paren">(</span><em>classifier_name</em>, <em>examples</em>, <em>max_labels=None</em>, <em>goodness_of_fit=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/text_classifier.html#TextClassifier.classify"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#text_classifier.TextClassifier.classify" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Usar un clasificador SVM para etiquetar textos nuevos.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">classifier_name (str): Nombre del clasidicador a usar.
+examples (list or str): Se espera un ejemplo o una lista de</p>
+<blockquote>
+<div>ejemplos a clasificar en texto plano o en ids.</div></blockquote>
+<dl class="last docutils">
+<dt>max_labels (int, optional): Cantidad de etiquetas a devolver para</dt>
+<dd>cada ejemplo. Si se devuelve mas de una el orden corresponde a
+la plausibilidad de cada etiqueta. Si es None devuelve todas
+las etiquetas posibles.</dd>
+<dt>goodness_of_fit (bool, optional): Indica si devuelve o no una</dt>
+<dd>medida de cuan buenas son las etiquetas.</dd>
+</dl>
+</dd>
+<dt>Nota:</dt>
+<dd>Usa el clasificador de <a class="reference external" href="http://scikit-learn.org/">Scikit-learn</a></dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="text_classifier.TextClassifier.get_similar">
+<code class="descname">get_similar</code><span class="sig-paren">(</span><em>example</em>, <em>max_similars=3</em>, <em>similarity_cutoff=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/text_classifier.html#TextClassifier.get_similar"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#text_classifier.TextClassifier.get_similar" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Devuelve textos similares al ejemplo dentro de los textos entrenados.</p>
+<dl class="docutils">
+<dt>Nota:</dt>
+<dd>Usa la distancia de coseno del vector de features TF-IDF</dd>
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>example (str): Se espera un id de texto o un texto a partir del</dt>
+<dd>cual se buscaran otros textos similares.</dd>
+<dt>max_similars (int, optional): Cantidad de textos similares a</dt>
+<dd>devolver.</dd>
+<dt>similarity_cutoff (float, optional): Valor umbral de similaridad</dt>
+<dd>para definir que dos textos son similares entre si.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><p class="first">text_ids (list of str): Devuelve los ids de los textos sugeridos.
+sorted_dist (list of float): Devuelve la distancia entre las</p>
+<blockquote class="last">
+<div>opciones sugeridas y el ejemplo dado como entrada.</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="text_classifier.TextClassifier.make_classifier">
+<code class="descname">make_classifier</code><span class="sig-paren">(</span><em>name</em>, <em>ids</em>, <em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/text_classifier.html#TextClassifier.make_classifier"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#text_classifier.TextClassifier.make_classifier" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Entrenar un clasificador SVM sobre los textos cargados.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">name (str): Nombre para el clasidicador.
+ids (list): Se espera una lista de N ids de textos ya almacenados</p>
+<blockquote>
+<div>en el TextClassifier.</div></blockquote>
+<dl class="last docutils">
+<dt>labels (list): Se espera una lista de N etiquetas. Una por cada id</dt>
+<dd>de texto presente en ids.</dd>
+</dl>
+</dd>
+<dt>Nota:</dt>
+<dd>Usa el clasificador de <a class="reference external" href="http://scikit-learn.org/">Scikit-learn</a></dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="text_classifier.TextClassifier.reload_texts">
+<code class="descname">reload_texts</code><span class="sig-paren">(</span><em>texts</em>, <em>ids</em>, <em>vocabulary=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/text_classifier.html#TextClassifier.reload_texts"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#text_classifier.TextClassifier.reload_texts" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Calcula los vectores de terminos de textos y los almacena.</p>
+<p>A diferencia de <code class="xref py py-func docutils literal"><span class="pre">store_text()</span></code> esta
+funcion borra cualquier informacion almacenada y comienza el conteo
+desde cero. Se usa para redefinir el vocabulario sobre el que se
+construyen los vectores.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>texts (list): Una lista de N textos a incorporar.
+ids (list): Una lista de N ids alfanumericos para los textos.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="text_classifier.TextClassifier.retrain">
+<code class="descname">retrain</code><span class="sig-paren">(</span><em>name</em>, <em>ids</em>, <em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/text_classifier.html#TextClassifier.retrain"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#text_classifier.TextClassifier.retrain" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Reentrenar parcialmente un clasificador SVM.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">name (str): Nombre para el clasidicador.
+ids (list): Se espera una lista de N ids de textos ya almacenados</p>
+<blockquote>
+<div>en el TextClassifier.</div></blockquote>
+<dl class="last docutils">
+<dt>labels (list): Se espera una lista de N etiquetas. Una por cada id</dt>
+<dd>de texto presente en ids.</dd>
+</dl>
+</dd>
+<dt>Nota:</dt>
+<dd>Usa el clasificador de <a class="reference external" href="http://scikit-learn.org/">Scikit-learn</a></dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="text_classifier.TextClassifier.store_text">
+<code class="descname">store_text</code><span class="sig-paren">(</span><em>texts</em>, <em>ids</em>, <em>replace_texts=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/text_classifier.html#TextClassifier.store_text"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#text_classifier.TextClassifier.store_text" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Calcula los vectores de terminos de un texto y los almacena.</p>
+<dl class="docutils">
+<dt>Nota:</dt>
+<dd>Esta funcion usa el vocabulario que ya esta almacenado, es decir,
+que no se incorporan nuevos terminos. Si se quiere cambiar el
+vocabulario deben recargarse todos los textos con
+<code class="xref py py-func docutils literal"><span class="pre">reload_texts()</span></code></dd>
+<dt>Args:</dt>
+<dd><p class="first">texts (list): Una lista de N textos a incorporar.
+ids (list of str): Una lista de N ids alfanumericos para los textos
+replace_texts (bool, optional): Indica si deben reemplazarse los</p>
+<blockquote class="last">
+<div>textos cuyo id ya este almacenado. Si es False y algun id ya se
+encuentra almacenado se considera un error.</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Enlazar permanentemente con este título">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Índice</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Índice de Módulos</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Página de Búsqueda</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Tabla de Contenidos</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to text-classifier&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>Esta página</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Mostrar el código</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Búsqueda rápida</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Ir a" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, mec.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

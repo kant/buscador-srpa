@@ -1,1 +1,0 @@
-Search.setIndex({envversion:49,filenames:["index"],objects:{},objnames:{},objtypes:{},terms:{"\u00edndic":0,busqued:0,contents:0,modul:0,pagin:0},titles:["Welcome to Text-Classifier&#8217;s documentation!"],titleterms:{and:0,classifi:0,documentation:0,indic:0,tabl:0,text:0,welcom:0}})
