@@ -4,6 +4,7 @@ import sys
 import os
 import codecs
 import numpy as np
+from sklearn.cross_validation import train_test_split
 sys.path.insert(0, os.path.abspath('..'))
 from text_classifier import TextClassifier
 
@@ -30,28 +31,25 @@ class TestTextClassifier(unittest.TestCase):
                     content = ''.join(lines[11:])
                 contenidos.append(content)
         # sacar los textos muy cortos
-        contenidos = filter(lambda x: len(x) > 100, contenidos)
-        self.ids = [x[0] for x in contenidos]
+        largo = map(len, contenidos)
+        contenidos = [c for c, l in zip(contenidos, largo) if l > 100]
+        labels = [lab for lab, l in zip(cats_totales, largo) if l > 100]
+        self.ids = [str(i) for i in range(len(contenidos))]
         self.texts = contenidos
-        self.labels = cats_totales
-        self.tc = TextClassifier(self.texts, self.ids)
+        self.labels = labels
+        self.tc = TextClassifier(self.texts, self.ids, encoding='latin1')
 
     def test_reload_texts(self):
         # TODO aca van los tests!
         self.assertEqual(12, 12)
 
     def test_classifier_performance(self):
-        cantidad_datos = len(self.ids)
-        mitad_datos = cantidad_datos / 2
-        self.tc.make_classifier("prueba",
-                                self.ids[:mitad_datos],
-                                self.labels[:mitad_datos])
+        X_train, X_test, y_train, y_test = train_test_split(
+            self.tc.tfidf_mat, self.labels, test_size=0.33, random_state=42)
+        self.tc.make_classifier("prueba", X_train, y_train)
         clasificador = getattr(self.tc, "prueba")
-        otra_mitad = self.ids[mitad_datos:]
-        X_test = self.tc.tfidf_mat[mitad_datos:, :]
-        y_test = self.labels[mitad_datos:]
         my_score = clasificador.score(X_test, y_test)
-        self.assertEqual('aaa', 'aaa')
+        self.assertGreater(my_score, 0.8)
 
 if __name__ == '__main__':
     unittest.main()

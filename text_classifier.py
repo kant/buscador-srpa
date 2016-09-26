@@ -17,6 +17,7 @@ from __future__ import unicode_literals
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.linear_model import SGDClassifier
+from sklearn.svm import LinearSVC
 from scipy import sparse
 import pandas as pd
 import numpy as np
@@ -30,7 +31,7 @@ class TextClassifier():
 
     Usa TF-IDF para vectorizar.
     Usa SVM para clasificar.
-    Usa Ball-Tree para devolver vecinos cercanos.
+
 
     Attributes:
         attr1 (str): Description of `attr1`.
@@ -38,7 +39,7 @@ class TextClassifier():
 
     """
 
-    def __init__(self, texts, ids, vocabulary=None):
+    def __init__(self, texts, ids, vocabulary=None, encoding='utf-8'):
         """Definido en la declaracion de la clase.
 
         Attributes:
@@ -50,9 +51,13 @@ class TextClassifier():
                                    header=None, encoding='utf-8')
         es_stopwords = list(np.squeeze(es_stopwords.values))
         self._check_id_length(ids)
-        self.vectorizer = CountVectorizer(input='content', ngram_range=(1, 1),
-                                          min_df=1, stop_words=es_stopwords,
-                                          vocabulary=vocabulary)
+        self.vectorizer = CountVectorizer(
+            input='content', encoding=encoding, decode_error='strict',
+            strip_accents='ascii', lowercase=True, preprocessor=None,
+            tokenizer=None, stop_words=es_stopwords, ngram_range=(1, 1),
+            analyzer='word', max_df=1.0, min_df=3, max_features=None,
+            vocabulary=vocabulary, binary=False)
+
         self.transformer = TfidfTransformer()
         self.term_mat = None  # Matriz que cuenta los terminos en un texto.
         self.tfidf_mat = None  # Matriz de relevancia de los terminos.
@@ -77,7 +82,7 @@ class TextClassifier():
         if not all(np.in1d(ids, self.ids)):
             raise ValueError("Hay ids de textos que no se encuentran \
                               almacenados.")
-        setattr(self, name, SGDClassifier())
+        setattr(self, name, LinearSVC())
         classifier = getattr(self, name)
         indices = np.in1d(self.ids, ids)
         classifier.fit(self.tfidf_mat[indices, :], labels)
