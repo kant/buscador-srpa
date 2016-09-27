@@ -3,7 +3,7 @@ from wtforms import validators, IntegerField, TextAreaField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from flask_user.translations import lazy_gettext as _
 from models import MAX_TEXT_LENGTH, Question
-from werkzeug.utils import secure_filename
+import time
 
 
 class QuestionForm(Form):
@@ -42,5 +42,11 @@ class UploadForm(Form):
     )
 
     def save_spreadsheet(self):
-        filename = secure_filename(self.spreadsheet.data.filename)
-        self.spreadsheet.data.save('app/uploads/' + filename)
+        original_filename = self.spreadsheet.data.filename
+        new_filename = str(int(time.time())) + '.' + original_filename.split('.')[-1]
+        self.spreadsheet.data.save('app/uploads/' + new_filename)
+        return new_filename
+
+
+class ProcessSpreadsheetForm(Form):
+    pass

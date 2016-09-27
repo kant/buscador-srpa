@@ -5,7 +5,7 @@
 {% block main %}
     <div class="container-fluid">
         <div class="col-md-8 col-md-offset-2">
-            <h1>Carga de preguntas</h1>
+            <h1>Procesar planilla</h1>
 
             <ul class="nav nav-tabs">
                 <li role="presentation" class="active">
@@ -16,13 +16,12 @@
                 </li>
             </ul>
 
-            <form id="upload_form" method="post" action="{{ url_for('question_upload') }}" class="form-tab" enctype="multipart/form-data">
-                {{ upload_form.csrf_token }}
+            <form id="upload_form" method="post" action="{{ url_for('process_spreadsheet', filename=filename) }}" class="form-tab" enctype="multipart/form-data">
+                {{ process_spreadsheet_form.csrf_token }}
 
                 <div class="form-group row">
-                    {{ render_field(upload_form.spreadsheet) }}
                 </div>
-                <input type=submit value="Subir" class="btn btn-success">
+                <input type=submit value="Procesar" class="btn btn-success">
             </form>
         </div>
     </div>

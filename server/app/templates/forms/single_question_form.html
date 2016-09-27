@@ -8,10 +8,10 @@
             <h1>Carga de preguntas</h1>
 
             <ul class="nav nav-tabs">
-                <li role="presentation" id="upload_form_tag">
+                <li role="presentation">
                     <a href="{{ url_for('question_upload') }}">Subir archivo</a>
                 </li>
-                <li role="presentation" id="single_question_form_tab" class="active">
+                <li role="presentation" class="active">
                     <a href="#">Carga manual</a>
                 </li>
             </ul>
@@ -38,7 +38,7 @@
                     {{ render_field(question_form.context) }}
                 </div>
 
-                <input type=submit value=Register class="btn btn-success">
+                <input type=submit value=Guardar class="btn btn-success">
             </form>
         </div>
     </div>
