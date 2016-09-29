@@ -1,11 +1,9 @@
 // Para compilar:
 // sass --watch app.scss:app.css
-
 @import 'fonts';
 @import 'libs/fontawesome/font-awesome';
 @import 'libs/bootstrap.min.css';
 @import 'libs/poncho.css';
-
 
 .container-fluid {
   max-width: 1170px;
@@ -29,25 +27,69 @@
 }
 
 #search_results {
-  #results_list {
-    .result {
-      blockquote {
-        margin: 10px;
-      }
-      .date {
-        margin-left: 2em;
-        font-weight: 400;
+  .result {
+    blockquote {
+      margin: 10px;
+    }
+    .date {
+      margin-left: 2em;
+      font-weight: 400;
+      transition: none;
+    }
+    button {
+      background-color: #0695d6;
+      cursor: inherit;
+      opacity: 1;
+    }
+    .more-info {
+      text-align: right;
+      color: #aaa;
+    }
+    .panel:hover,
+    .panel:focus {
+      background-color: white;
+      color: inherit;
+      small {
+        color: #767676;
       }
       button {
-        background-color: #0695d6;
-        cursor: inherit;
-        opacity: 1;
+        color: white;
       }
-      .panel:hover {
-        button {
-          color: white;
-        }
+      .text-muted {
+        color: #767676!important;
+      }
+      .more-info {
+        color: #555;
       }
     }
+  }
+
+  .pagination {
+    display: block;
+    text-align: center;
+    li {
+      display: inline-block;
+    }
+  }
+}
+
+#search_filters {
+  .panel {
+    &:hover, &:focus {
+      color: inherit;
+      background-color: white;
+      .close {
+        opacity: 0.6;
+      }
+    }
+  }
+  .close {
+    position: absolute;
+    top: 0.5em;
+    right: 1em;
+  }
+
+  .add-filter {
+    margin: auto;
   }
 }

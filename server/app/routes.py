@@ -54,7 +54,28 @@ def init_routes(app, db_session):
     @app.route('/buscar', methods=['GET', 'POST'])
     @login_required
     def search():
-        result_list = [{
+        result_list = fake_results()
+        query = {
+            'text': u'¿Existen exenciones impositivas a nivel nacional para los sectores sociales damnificados por las inundaciones en Entre Rios?',
+            'can_add_more_filters': True,
+            'filters': [
+
+            ]
+        }
+        return render_template('search/results.html', result_list=result_list, query=query)
+
+    @app.route('/pregunta')
+    @login_required
+    def see_question():
+        return render_template('question.html')
+
+    @app.route('/gestion_de_entidades')
+    @login_required
+    def management():
+        return render_template('management.html')
+
+    def fake_results():
+        return [{
             'report': {
                 'date': date(2015, 12, 31)
             },
@@ -121,7 +142,7 @@ def init_routes(app, db_session):
             'answerer': {
                 'name': u'Ministerio de Relaciones Exteriores y Culto'
             },
-            'topic': u'RelacionesExteriores',
+            'topic': u'Relaciones Exteriores',
             'subtopic': u'Integración regional',
             'context': u'Ya hemos requerido sin éxito precisiones al Jefe de Gabinete de Ministros en ocasión de su anterior visita a la Cámara de Diputados sobre la posición oficial del Gobierno nacional en relación al golpe institucional que se está consumando en Brasil. A su vez, el bloque PRO-Cambiemos de la Cámara de Diputados ya hizo de defensor del golpe institucional frente a las mociones que presentamos el 27 de abril y el 18 de mayo para repudiarlo; se negaron a tratarlo siquiera, mientras que 140 diputados votamos por hacerlo.  Luego de eso, el Poder Ejecutivo fue más allá en su reconocimiento al gobierno golpista de Michel Temer, al recibir al canciller José Serra con los brazos abiertos para dar apoyo directo al Gobierno golpista.'
         }, {
@@ -139,9 +160,3 @@ def init_routes(app, db_session):
             'subtopic': u'Gas  ',
             'context': u'El costo de gas para la generación de energía eléctrica pasó del orden de los U$S 2,8 el millón de BTU a U$S 5 el millón de BTU, por lo que se sabe hasta ahora ese incremento sería cubierto por subsidios estatales ante el compromiso del gobierno de no volver a modificar las tarifas eléctricas para este año. '
         }]
-        return render_template('search/results.html', result_list=result_list)
-
-    @app.route('/gestion_de_entidades')
-    @login_required
-    def management():
-        return render_template('management.html')
