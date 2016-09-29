@@ -15,5 +15,15 @@
   background: white;
   padding: 10px;
   border: solid 1px #dddddd;
-  border-top: none;
+
+  &#upload_form,
+  &#single_question_form {
+    border-top: none;
+  }
+
+  &#full_text_query_form {
+    textarea {
+      height: 200px;
+    }
+  }
 }

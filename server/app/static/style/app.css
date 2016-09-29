@@ -2334,7 +2334,10 @@
 .form-tab {
   background: white;
   padding: 10px;
-  border: solid 1px #dddddd;
-  border-top: none; }
+  border: solid 1px #dddddd; }
+  .form-tab#upload_form, .form-tab#single_question_form {
+    border-top: none; }
+  .form-tab#full_text_query_form textarea {
+    height: 200px; }
 
 /*# sourceMappingURL=app.css.map */

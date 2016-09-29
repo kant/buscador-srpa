@@ -62,3 +62,10 @@ class ProcessSpreadsheetForm(Form):
         self.body.choices = choices
         self.justification.choices = choices
         self.context.choices = choices
+
+
+class FullTextQueryForm(Form):
+    main_text = TextAreaField(
+        _('Base text to query'),
+        [validators.Length(min=1, max=MAX_TEXT_LENGTH)]
+    )

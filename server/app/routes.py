@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for
 from flask_user import login_required
-from forms import QuestionForm, UploadForm, ProcessSpreadsheetForm
+from forms import QuestionForm, UploadForm, ProcessSpreadsheetForm, FullTextQueryForm
 from helpers import SpreadSheetReader
 
 
@@ -46,7 +46,8 @@ def init_routes(app, db_session):
     @app.route('/busqueda_por_similaridad', methods=['GET', 'POST'])
     @login_required
     def full_text_query():
-        return render_template('full_text_query.html')
+        form = FullTextQueryForm()
+        return render_template('forms/full_text_query.html', form=form)
 
     @app.route('/buscar', methods=['GET', 'POST'])
     @login_required
