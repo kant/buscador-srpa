@@ -2331,4 +2331,10 @@
 .container-fluid {
   max-width: 1170px; }
 
+.form-tab {
+  background: white;
+  padding: 10px;
+  border: solid 1px #dddddd;
+  border-top: none; }
+
 /*# sourceMappingURL=app.css.map */
