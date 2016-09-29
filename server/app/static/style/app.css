@@ -2340,4 +2340,16 @@
   .form-tab#full_text_query_form textarea {
     height: 200px; }
 
+#search_results #results_list .result blockquote {
+  margin: 10px; }
+#search_results #results_list .result .date {
+  margin-left: 2em;
+  font-weight: 400; }
+#search_results #results_list .result button {
+  background-color: #0695d6;
+  cursor: inherit;
+  opacity: 1; }
+#search_results #results_list .result .panel:hover button {
+  color: white; }
+
 /*# sourceMappingURL=app.css.map */

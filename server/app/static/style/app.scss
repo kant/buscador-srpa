@@ -27,3 +27,27 @@
     }
   }
 }
+
+#search_results {
+  #results_list {
+    .result {
+      blockquote {
+        margin: 10px;
+      }
+      .date {
+        margin-left: 2em;
+        font-weight: 400;
+      }
+      button {
+        background-color: #0695d6;
+        cursor: inherit;
+        opacity: 1;
+      }
+      .panel:hover {
+        button {
+          color: white;
+        }
+      }
+    }
+  }
+}
