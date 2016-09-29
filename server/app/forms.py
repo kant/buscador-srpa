@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import validators, IntegerField, TextAreaField
+from wtforms import validators, IntegerField, TextAreaField, BooleanField, SelectField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from flask_user.translations import lazy_gettext as _
 from models import MAX_TEXT_LENGTH, Question
@@ -49,4 +49,16 @@ class UploadForm(Form):
 
 
 class ProcessSpreadsheetForm(Form):
-    pass
+    discard_first_row = BooleanField(_('First row is header'), [validators.DataRequired()])
+    number = SelectField('Question number')
+    body = SelectField('Question body')
+    justification = SelectField('Question justification')
+    context = SelectField('Question context')
+
+    def update_choices(self, spreadsheet_summary):
+        first_row = spreadsheet_summary['first_row']
+        choices = [(str(i), first_row[i]) for i in range(len(first_row))]
+        self.number.choices = choices
+        self.body.choices = choices
+        self.justification.choices = choices
+        self.context.choices = choices
