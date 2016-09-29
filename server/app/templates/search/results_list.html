@@ -1,54 +1,12 @@
 <section class="container-fluid" id="search_results">
-    <h2>Se encontraron 27 resultados</h2>
+    {% if result_list|length > 0 %}
+        <h2>Se encontraron {{ result_list|length }} {{ results_name }}</h2>
+    {% else %}
+        <h2>No se encontrar {{ results_name }}</h2>
+    {% endif %}
     <div class="row panels-row">
         {% for result in result_list %}
-            <div class="col-xs-12 result">
-                <a class="panel panel-default" href="{{ url_for('see_question') }}">
-                    <div class="panel-body">
-                        {% if result.context|length > 0 %}
-                            <p class="text-muted">{{ result.context }}</p>
-                        {% endif %}
-                        <blockquote>
-                            <p>“ {{ result.body }} ”</p>
-                            <small>
-                                {{ result.author.name }}
-                                <span class="date">
-                                        <i class="fa fa-calendar"></i>
-                                        {{ result.report.date.strftime("%Y/%m/%d") }}
-                                    </span>
-                            </small>
-                        </blockquote>
-                        {% if result.topic|length > 0 or result.subtopic|length > 0 %}
-                            <div class="tags">
-                                {% if result.topic|length > 0 %}
-                                    <button type="button" class="btn btn-primary disabled">
-                                        <i class="fa fa-tag"></i>
-                                        {{ result.topic }}
-                                    </button>
-                                {% endif %}
-                                {% if result.subtopic|length > 0 %}
-                                    <button type="button" class="btn btn-primary disabled">
-                                        <i class="fa fa-tags"></i>
-                                        {{ result.subtopic }}
-                                    </button>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                        {% if result.answerer and result.answerer.name|length > 0 %}
-                            <p>
-                                Responde:
-                                <span class="text-muted">
-                                    {{ result.answerer.name }}
-                                </span>
-                            </p>
-                        {% endif %}
-                        <div class="more-info">
-                            Ver mas información sobre esta pregunta
-                        </div>
-                    </div>
-                </a>
-            </div>
-
+            {% include 'search/result.html' %}
         {% endfor %}
     </div>
 

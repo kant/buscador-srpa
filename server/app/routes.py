@@ -67,7 +67,9 @@ def init_routes(app, db_session):
     @app.route('/pregunta')
     @login_required
     def see_question():
-        return render_template('question.html')
+        question = fake_results()[0]
+        similar_questions = fake_results()[1:]
+        return render_template('question.html', question=question, similar_questions=similar_questions)
 
     @app.route('/gestion_de_entidades')
     @login_required

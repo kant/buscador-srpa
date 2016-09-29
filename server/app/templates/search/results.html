@@ -2,5 +2,7 @@
 
 {% block main %}
     {% include 'search/filters.html' %}
-    {% include 'search/results_list.html' %}
+    {% with results_name = 'preguntas' %}
+        {% include 'search/results_list.html' %}
+    {% endwith %}
 {% endblock %}
