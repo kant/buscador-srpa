@@ -1,81 +1,44 @@
 {% extends "base.html" %}
 {% block main %}
-    <section class="jumbotron" style="background-image: url('{{ url_for('static', filename='img/jefatura.jpg') }}');">
-        <div class="jumbotron_body">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h1 class="text-center">Informes de gestión</h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section class="container-fluid">
         <div class="row panels-row">
 
             <div class="col-xs-12 col-sm-6">
-                <a class="panel panel-default" href="/preguntas">
+                <a class="panel panel-default panel-icon" href="{{ url_for('search') }}">
+                    <div class="panel-heading hidden-xs"><i class="fa fa-search"></i></div>
                     <div class="panel-body">
-                        <div class="media">
-                            <div class="media-left padding-20">
-                                <i class="fa fa-list-alt fa-fw fa-3x text-primary"></i>
-                            </div>
-                            <div class="media-body">
-                                <h3>Preguntas a jefatura</h3>
-                                <p class="text-muted">Busqueda y navegación de las preguntas que el Congreso realizó a
-                                    Jefatura</p>
-                            </div>
-                        </div>
+                        <h3><span class="visible-xs-inline"><i class="fa fa-search text-secondary"></i>&nbsp;</span>Navegar preguntas</h3>
+                        <p class="text-muted">Listado general de preguntas junto a opciones de filtrado segun sus atributos.</p>
                     </div>
                 </a>
             </div>
 
             <div class="col-xs-12 col-sm-6">
-                <a class="panel panel-default" href="/informes">
+                <a class="panel panel-default panel-icon" href="{{ url_for('question_form') }}">
+                    <div class="panel-heading hidden-xs"><i class="fa fa-wpforms"></i></div>
                     <div class="panel-body">
-                        <div class="media">
-                            <div class="media-left padding-20">
-                                <i class="fa fa-paperclip fa-fw fa-3x text-primary"></i>
-                            </div>
-                            <div class="media-body">
-                                <h3>Informes de gestion</h3>
-                                <p class="text-muted">Navegación según los informes presentados ante el Congreso</p>
-                            </div>
-                        </div>
+                        <h3><span class="visible-xs-inline"><i class="fa fa-wpforms text-secondary"></i>&nbsp;</span>Carga de preguntas</h3>
+                        <p class="text-muted">Formulario para carga manual y alternativa de subida de planilla para carga de preguntas multiples.</p>
                     </div>
                 </a>
             </div>
 
             <div class="col-xs-12 col-sm-6">
-                <a class="panel panel-default" href="/carga">
+                <a class="panel panel-default panel-icon" href="{{ url_for('full_text_query') }}">
+                    <div class="panel-heading hidden-xs"><i class="fa fa-quote-left"></i></div>
                     <div class="panel-body">
-                        <div class="media">
-                            <div class="media-left padding-20">
-                                <i class="fa fa-edit fa-fw fa-3x text-primary"></i>
-                            </div>
-                            <div class="media-body">
-                                <h3>Carga de preguntas</h3>
-                                <p class="text-muted">Alta manual o masiva de preguntas</p>
-                            </div>
-                        </div>
+                        <h3><span class="visible-xs-inline"><i class="fa fa-quote-left text-secondary"></i>&nbsp;</span>Buscar por similaridad</h3>
+                        <p class="text-muted">Busqueda segun similaridad a un texto en particular.</p>
                     </div>
                 </a>
             </div>
 
             <div class="col-xs-12 col-sm-6">
-                <a class="panel panel-default" href="/usuarios">
+                <a class="panel panel-default panel-icon" href="{{ url_for('management') }}">
+                    <div class="panel-heading hidden-xs"><i class="fa fa-gear"></i></div>
                     <div class="panel-body">
-                        <div class="media">
-                            <div class="media-left padding-20">
-                                <i class="fa fa-users fa-fw fa-3x text-primary"></i>
-                            </div>
-                            <div class="media-body">
-                                <h3>Usuarios</h3>
-                                <p class="text-muted">Alta, baja y administración de usuarios y permisos del sistema</p>
-                            </div>
-                        </div>
+                        <h3><span class="visible-xs-inline"><i class="fa fa-gear text-secondary"></i>&nbsp;</span>Gestion del sistema</h3>
+                        <p class="text-muted">Alta, baja y modificación de otras entidades.</p>
                     </div>
                 </a>
             </div>

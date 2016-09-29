@@ -24,3 +24,18 @@ def init_routes(app, db_session):
             db_session.commit()
             return redirect('/')
         return render_template('forms/question_form.html', form=form)
+
+    @login_required
+    @app.route('/busqueda_por_similaridad', methods=['GET', 'POST'])
+    def full_text_query():
+        return render_template('full_text_query.html')
+
+    @login_required
+    @app.route('/buscar', methods=['GET', 'POST'])
+    def search():
+        return render_template('search.html')
+
+    @login_required
+    @app.route('/gestion_de_entidades')
+    def management():
+        return render_template('management.html')
