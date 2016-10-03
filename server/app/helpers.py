@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import csv
 
 
@@ -14,8 +16,10 @@ class SpreadSheetReader:
             if extension == 'csv':
                 spreadsheet = cls.read_csv(spreadsheet_file)
 
+            # TODO: leer xls y xlsx
+
             summary = {'best_row': []}
-            for i, row in enumerate(spreadsheet):
+            for i, row in spreadsheet:
                 if i > 100:
                     break
                 elif i == 0:
@@ -29,7 +33,8 @@ class SpreadSheetReader:
         dialect = csv.Sniffer().sniff(csvfile.read(10240), delimiters=';,')
         csvfile.seek(0)
         reader = csv.reader(csvfile, dialect)
-        return reader
+        for i, row in enumerate(reader):
+            yield (i, [unicode(cell, 'utf-8') for cell in row])
 
     @staticmethod
     def _best_row(first_row, second_row):

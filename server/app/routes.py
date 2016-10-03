@@ -1,4 +1,5 @@
-# coding: utf-8
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from flask import render_template, request, redirect, url_for
 from flask_user import login_required
 from forms import QuestionForm, UploadForm, ProcessSpreadsheetForm, FullTextQueryForm
@@ -30,13 +31,14 @@ def init_routes(app, db_session):
             return redirect(url_for('home_page'))
         return render_template('forms/single_question_form.html', question_form=single_question_form)
 
-    @app.route('/carga_de_preguntas/procesar_planilla/<filename>')
+    @app.route('/carga_de_preguntas/procesar_planilla/<filename>', methods=['GET', 'POST'])
     @login_required
     def process_spreadsheet(filename):
         spreadsheet_summary = SpreadSheetReader.first_read(filename)
         process_spreadsheet_form = ProcessSpreadsheetForm()
+        process_spreadsheet_form.update_choices(spreadsheet_summary['first_row'])
         if process_spreadsheet_form.validate_on_submit():
-            # procesar y guardar preguntas nuevas
+            process_spreadsheet_form.save_models(filename, db_session)
             return redirect(url_for('home_page'))
         return render_template(
             'forms/process_spreadsheet.html',
