@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% from "forms/_formhelpers.html" import render_field, render_label %}
+
+{% block main %}
+    <div class="container-fluid">
+        <div class="col-md-8 col-md-offset-2">
+            <h1>Procesar planilla</h1>
+
+            <ul class="nav nav-tabs">
+                <li role="presentation" class="active">
+                    <a href="#">Subir archivo</a>
+                </li>
+                <li role="presentation">
+                    <a href="{{ url_for('single_question') }}">Carga manual</a>
+                </li>
+            </ul>
+
+            <form id="upload_form" method="post" action="{{ url_for('process_spreadsheet', filename=filename) }}" class="form-tab" enctype="multipart/form-data">
+                {{ process_spreadsheet_form.csrf_token }}
+
+                <div class="form-group row">
+                    <div class="col-xs-12">
+                        {{ process_spreadsheet_form.discard_first_row.label() }}
+                        {{ process_spreadsheet_form.discard_first_row() }}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-12">
+                        {{ render_label(process_spreadsheet_form.number) }}
+                        {{ render_field(process_spreadsheet_form.number) }}
+                    </div>
+
+                    <div class="col-xs-12">
+                        {{ render_label(process_spreadsheet_form.report) }}
+                        {{ render_field(process_spreadsheet_form.report) }}
+                    </div>
+
+                    <div class="col-xs-12">
+                        {{ render_label(process_spreadsheet_form.body) }}
+                        {{ render_field(process_spreadsheet_form.body) }}
+                    </div>
+
+                    <div class="col-xs-12">
+                        {{ render_label(process_spreadsheet_form.author) }}
+                        {{ render_field(process_spreadsheet_form.author) }}
+                    </div>
+
+                    <div class="col-xs-12">
+                        {{ render_label(process_spreadsheet_form.justification) }}
+                        {{ render_field(process_spreadsheet_form.justification) }}
+                    </div>
+
+                    <div class="col-xs-12">
+                        {{ render_label(process_spreadsheet_form.context) }}
+                        {{ render_field(process_spreadsheet_form.context) }}
+                    </div>
+
+                    <div class="col-xs-12">
+                        {{ render_label(process_spreadsheet_form.topic) }}
+                        {{ render_field(process_spreadsheet_form.topic) }}
+                    </div>
+
+                    <div class="col-xs-12">
+                        {{ render_label(process_spreadsheet_form.subtopic) }}
+                        {{ render_field(process_spreadsheet_form.subtopic) }}
+                    </div>
+
+                    <div class="col-xs-12">
+                        {{ render_label(process_spreadsheet_form.answerer) }}
+                        {{ render_field(process_spreadsheet_form.answerer) }}
+                    </div>
+
+                </div>
+                <input type=submit value="Procesar" class="btn btn-success">
+            </form>
+        </div>
+    </div>
+{% endblock %}

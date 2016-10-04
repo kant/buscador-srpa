@@ -1,0 +1,24 @@
+<section class="container-fluid" id="search_filters">
+    <div class="row panels-row">
+        {% if query.text|length > 0 %}
+            <div class="col-xs-12 filter text-query">
+                <a class="panel panel-default" href="#">
+                    <div class="panel-body">
+                        <h3>Buscando similares a:</h3>
+                        <blockquote>
+                            <p>“ {{ query.text }} ”</p>
+                        </blockquote>
+                    </div>
+                    <i class="fa fa-times fa-2x close" aria-hidden="true"></i>
+                </a>
+            </div>
+        {% endif %}
+        {% if query.can_add_more_filters %}
+            <div class="col-xs-12">
+                <button type="button" class="btn btn-success add-filter">
+                    <i class="fa fa-filter" aria-hidden="true"></i> Agregar filtro
+                </button>
+            </div>
+        {% endif %}
+    </div>
+</section>

@@ -3,3 +3,4 @@ venv-server
 db.sqlite
 .idea
 .sass-cache
+uploads

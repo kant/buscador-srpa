@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "forms/_formhelpers.html" import render_field, render_label %}
+
+{% block main %}
+    <div class="container-fluid">
+        <div class="col-md-8 col-md-offset-2">
+            <h1>Busqueda por similaridad de texto</h1>
+
+            <form id="full_text_query_form" method=post action="{{ url_for('full_text_query') }}" class="form-tab"
+                  enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                <div class="form-group row">
+                    {{ render_label(form.main_text) }}
+                    {{ render_field(form.main_text) }}
+                </div>
+
+                <input type=submit value=Buscar class="btn btn-success">
+            </form>
+        </div>
+    </div>
+{% endblock %}

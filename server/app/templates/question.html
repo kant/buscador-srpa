@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <section class="container-fluid" id="search_results">
+        <div class="row panels-row">
+            {% with result = question, hide_more_info_link = True %}
+                {% include 'search/result.html' %}
+            {% endwith %}
+        </div>
+    </section>
+    {% with result_list = similar_questions, results_name = 'preguntas similares' %}
+        {% include 'search/results_list.html' %}
+    {% endwith %}
+{% endblock %}
