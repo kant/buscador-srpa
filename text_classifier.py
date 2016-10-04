@@ -59,6 +59,7 @@ class TextClassifier():
             vocabulary=vocabulary, binary=False)
 
         self.transformer = TfidfTransformer()
+        self.ids = None # Matiene una lista ordenada de ids de textos.
         self.term_mat = None  # Matriz que cuenta los terminos en un texto.
         self.tfidf_mat = None  # Matriz de relevancia de los terminos.
         self.reload_texts(texts, ids)
@@ -84,7 +85,7 @@ class TextClassifier():
                               almacenados.")
         setattr(self, name, LinearSVC())
         classifier = getattr(self, name)
-        indices = np.in1d(self.ids, ids)
+        indices = np.searchsorted(self.ids, ids)
         classifier.fit(self.tfidf_mat[indices, :], labels)
 
     def retrain(self, name, ids, labels):
@@ -215,11 +216,13 @@ class TextClassifier():
             ids (list): Una lista de N ids alfanumericos para los textos.
         """
         self._check_id_length(ids)
-        self.ids = np.array(ids)
+        self.ids = np.array(sorted(ids))
         if vocabulary:
             self.vectorizer.vocabulary = vocabulary
-        self.term_mat = self.vectorizer.fit_transform(texts)
+        sorted_texts = [x for (y,x) in sorted(zip(ids,texts))]
+        self.term_mat = self.vectorizer.fit_transform(sorted_texts)
         self._update_tfidf()
+        print("Algo")
 
     def store_text(self, texts, ids, replace_texts=False):
         """Calcula los vectores de terminos de un texto y los almacena.
