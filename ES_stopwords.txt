@@ -5,10 +5,10 @@ unos
 uno
 sobre
 todo
-también
+tambien
 tras
 otro
-algún
+algun
 alguno
 alguna
 algunos
@@ -29,7 +29,7 @@ en
 para
 atras
 porque
-por qué
+por que
 estado
 estaba
 ante
@@ -176,3 +176,10 @@ podrian
 podriais
 yo
 aquel
+que
+de
+del
+se
+al
+asi
+han

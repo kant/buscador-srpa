@@ -64,9 +64,11 @@ class TextClassifier():
         self.tfidf_mat = None  # Matriz de relevancia de los terminos.
         self.reload_texts(texts, ids)
 
-    def __str__():
+    def __str__(self):
         """Representacion en str del objeto."""
-        pass
+        string = """ Clasificador de textos con {:d} textos almacenados, \
+        """.format(len(self.ids))
+        return string
 
     def make_classifier(self, name, ids, labels):
         """Entrenar un clasificador SVM sobre los textos cargados.
@@ -163,7 +165,8 @@ class TextClassifier():
         else:
             raise TypeError("Los ejemplos no son del tipo de dato adecuado.")
 
-    def get_similar(self, example, max_similars=3, similarity_cutoff=None):
+    def get_similar(self, example, max_similars=3, similarity_cutoff=None,
+                    term_diff_cutoff=0.6):
         """Devuelve textos similares al ejemplo dentro de los textos entrenados.
 
         Nota:
@@ -176,32 +179,58 @@ class TextClassifier():
                 devolver.
             similarity_cutoff (float, optional): Valor umbral de similaridad
                 para definir que dos textos son similares entre si.
+            term_diff_cutoff (float, optional): Este valor sirve para controlar
+                el umbral con el que los terminos son considerados importantes
+                a la hora de recuperar textos (no afecta el funcionamiento de
+                que textos se consideran cercanos, solo la cantidad de terminos
+                que se devuelven en best_words).
+
         Returns:
             text_ids (list of str): Devuelve los ids de los textos sugeridos.
             sorted_dist (list of float): Devuelve la distancia entre las
                 opciones sugeridas y el ejemplo dado como entrada.
+            best_words (list of list): Para cada sugerencia devuelve las
+                palabras mas relevantes que se usaron para seleccionar esa
+                sugerencia.
         """
         if max_similars > self.term_mat.shape[0]:
             raise ValueError("No se pueden pedir mas sugerencias que la \
                               cantidad de textos que hay almacenados.")
         if example in self.ids:
             index = self.ids == example
-            y = self.tfidf_mat[index, :]
-            distances = np.squeeze(pairwise_distances(self.tfidf_mat, y))
+            exmpl_vec = self.tfidf_mat[index, :]
+            distances = np.squeeze(pairwise_distances(self.tfidf_mat,
+                                                      exmpl_vec))
             # Pongo la distancia a si mismo como inf, par que no se devuelva a
             # si mismo como una opcion
             distances[index] = np.inf
         else:
-            y = self.vectorizer.transform([example])  # contar terminos
-            y = self.transformer.transform(y)  # calcular tfidf
-            distances = np.squeeze(pairwise_distances(self.tfidf_mat, y))
+            exmpl_vec = self.vectorizer.transform([example])  # contar terminos
+            exmpl_vec = self.transformer.transform(exmpl_vec)  # calcular tfidf
+            distances = np.squeeze(pairwise_distances(self.tfidf_mat,
+                                                      exmpl_vec))
         sorted_indices = np.argsort(distances)
         closest_n = sorted_indices[:max_similars]
         sorted_dist = distances[closest_n]
         if similarity_cutoff:
             closest_n = closest_n[sorted_dist < similarity_cutoff]
+            sorted_dist = sorted_dist[sorted_dist < similarity_cutoff]
+        best_words = []
+        exmpl_vec = exmpl_vec.toarray()
+        for suggested in closest_n:
+            test_vec = self.tfidf_mat[suggested,:].toarray()
+            differences = np.abs(exmpl_vec - test_vec)**2 / \
+                            (exmpl_vec**2 + test_vec**2)
+            differences = np.squeeze(np.array(differences))
+            sort_I = np.argsort(differences)
+            limit = np.flatnonzero((differences[sort_I] > term_diff_cutoff) \
+                                   | (np.isnan(differences[sort_I]))
+                                   )[0]
+            best_words.append([k for k,v in
+                               self.vectorizer.vocabulary_.iteritems()
+                                if v in sort_I[:limit]])
         text_ids = self.ids[closest_n]
-        return list(text_ids), list(sorted_dist)
+        return list(text_ids), list(sorted_dist), best_words
 
     def reload_texts(self, texts, ids, vocabulary=None):
         """Calcula los vectores de terminos de textos y los almacena.
@@ -222,48 +251,48 @@ class TextClassifier():
         sorted_texts = [x for (y,x) in sorted(zip(ids,texts))]
         self.term_mat = self.vectorizer.fit_transform(sorted_texts)
         self._update_tfidf()
-        print("Algo")
 
-    def store_text(self, texts, ids, replace_texts=False):
-        """Calcula los vectores de terminos de un texto y los almacena.
-
-        Nota:
-            Esta funcion usa el vocabulario que ya esta almacenado, es decir,
-            que no se incorporan nuevos terminos. Si se quiere cambiar el
-            vocabulario deben recargarse todos los textos con
-            :func:`~TextClassifier.TextClassifier.reload_texts`
-        Args:
-            texts (list): Una lista de N textos a incorporar.
-            ids (list of str): Una lista de N ids alfanumericos para los textos
-            replace_texts (bool, optional): Indica si deben reemplazarse los
-                textos cuyo id ya este almacenado. Si es False y algun id ya se
-                encuentra almacenado se considera un error.
-        """
-        self._check_id_length(ids)
-        if not replace_texts and any(np.in1d(ids, self.ids)):
-            raise ValueError("Alguno de los ids provistos ya esta en el \
-                              indice")
-        else:
-            ids = np.array(ids)
-            partial_mat = self.vectorizer.transform(texts)
-            # Si no hay ids ya guardados solo concateno y los agrego al
-            # array self.ids
-            if not any(np.in1d(ids, self.ids)):
-                self.ids = np.r_[self.ids, ids]
-                self.term_mat = sparse.vstack((self.term_mat,
-                                               partial_mat))
-            # Si los hay,
-            else:
-                oldrows = np.in1d(self.ids, ids)
-                oldpartial = np.in1d(ids, self.ids)
-                # Actualizo las filas que ya estaban
-                self.term_mat[oldrows, :] = partial_mat[oldpartial, :]
-                # y agrego las que no
-                partial_mat = partial_mat[~oldpartial, :]
-                self.term_mat = sparse.vstack((self.term_mat, partial_mat))
-                # concateno los viejos ids y los nuevos
-                self.ids = np.r_[self.ids, ids[~oldpartial]]
-        self._update_tfidf()
+    # NO ENCUENTRO UNA MANERA EFICIENTE DE HACER ESTO POR AHORA NO HACE FALTA
+    # def store_text(self, texts, ids, replace_texts=False):
+    #     """Calcula los vectores de terminos de un texto y los almacena.
+    #         NOT IMPLEMENTED.
+    #     Nota:
+    #         Esta funcion usa el vocabulario que ya esta almacenado, es decir,
+    #         que no se incorporan nuevos terminos. Si se quiere cambiar el
+    #         vocabulario deben recargarse todos los textos con
+    #         :func:`~TextClassifier.TextClassifier.reload_texts`
+    #     Args:
+    #         texts (list): Una lista de N textos a incorporar.
+    #         ids (list of str): Una lista de N ids alfanumericos para los textos
+    #         replace_texts (bool, optional): Indica si deben reemplazarse los
+    #             textos cuyo id ya este almacenado. Si es False y algun id ya se
+    #             encuentra almacenado se considera un error.
+    #     """
+    #     self._check_id_length(ids)
+    #     if not replace_texts and any(np.in1d(ids, self.ids)):
+    #         raise ValueError("Alguno de los ids provistos ya esta en el \
+    #                           indice")
+    #     else:
+    #         ids = np.array(ids)
+    #         partial_mat = self.vectorizer.transform(texts)
+    #         # Si no hay ids ya guardados solo concateno y los agrego al
+    #         # array self.ids
+    #         if not any(np.in1d(ids, self.ids)):
+    #             self.ids = np.r_[self.ids, ids]
+    #             self.term_mat = sparse.vstack((self.term_mat,
+    #                                            partial_mat))
+    #         # Si los hay,
+    #         else:
+    #             oldrows = np.in1d(self.ids, ids)
+    #             oldpartial = np.in1d(ids, self.ids)
+    #             # Actualizo las filas que ya estaban
+    #             self.term_mat[oldrows, :] = partial_mat[oldpartial, :]
+    #             # y agrego las que no
+    #             partial_mat = partial_mat[~oldpartial, :]
+    #             self.term_mat = sparse.vstack((self.term_mat, partial_mat))
+    #             # concateno los viejos ids y los nuevos
+    #             self.ids = np.r_[self.ids, ids[~oldpartial]]
+    #     self._update_tfidf()
 
     def _update_tfidf(self):
         self.tfidf_mat = self.transformer.fit_transform(self.term_mat)
@@ -272,3 +301,7 @@ class TextClassifier():
         if any(map(lambda x: len(x) > 10, ids)):
             warnings.warn("Hay ids que son muy largos. Es posible que se hayan \
             ingresado textos planos en lugar de ids.")
+
+    def _check_repeated_ids(self, ids):
+        if length(np.unique(ids)) != length(ids):
+            raise ValueError("Hay ids repetidos.")
