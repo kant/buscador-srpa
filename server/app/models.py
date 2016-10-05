@@ -10,11 +10,16 @@ MAX_NAME_LENGTH = 255
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     password = db.Column(db.String(255), nullable=False)
-    reset_password_token = db.Column(db.String(100), nullable=False)
+    reset_password_token = db.Column(db.String(100))
     email = db.Column(db.String(255), nullable=False, unique=True)
     confirmed_at = db.Column(db.DateTime())
     active = db.Column('is_active', db.Boolean(), nullable=False, server_default='0')
     roles = db.relationship('Role', secondary='user_roles', backref=db.backref('users', lazy='dynamic'))
+
+    def __init__(self, **kwargs):
+        self.active = kwargs.get('active', False)
+        self.password = kwargs.get('password', None)
+        self.email = kwargs.get('email', None)
 
 
 class Role(db.Model):
