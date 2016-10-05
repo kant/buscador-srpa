@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import csv
+import models
 
 
 class SpreadSheetReader:
@@ -57,3 +58,24 @@ class SpreadSheetReader:
             if first_average > second_average:
                 return first_row
             return second_row
+
+
+class Searcher:
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def search(cls):
+        results = models.Question.query.all()
+        return results
+
+    @classmethod
+    def query_from_url(cls):
+        return {
+            'text': u'¿Existen exenciones impositivas a nivel nacional para los sectores sociales damnificados por las inundaciones en Entre Rios?',
+            'can_add_more_filters': True,
+            'filters': [
+
+            ]
+        }
