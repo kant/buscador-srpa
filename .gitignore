@@ -4,3 +4,4 @@ db.sqlite
 .idea
 .sass-cache
 uploads
+venv

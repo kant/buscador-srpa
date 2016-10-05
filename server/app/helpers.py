@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import csv
+import models
+from flask import request
 
 
 class SpreadSheetReader:
@@ -57,3 +59,22 @@ class SpreadSheetReader:
             if first_average > second_average:
                 return first_row
             return second_row
+
+
+class Searcher:
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def search(cls):
+        results = models.Question.query.all()
+        return results
+
+    @classmethod
+    def query_from_url(cls):
+        return {
+            'text': request.args.get('q'),
+            'can_add_more_filters': True,
+            'filters': []
+        }

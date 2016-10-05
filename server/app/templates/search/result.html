@@ -1,20 +1,26 @@
 <div class="col-xs-12 result">
     <a class="panel panel-default" href="{{ url_for('see_question') }}">
         <div class="panel-body">
-            {% if result.context|length > 0 %}
-                <p class="text-muted">{{ result.context }}</p>
-            {% endif %}
+            <p class="text-muted">
+                {% if result.context|length > 0 %}
+                    {{ result.context }}
+                {% else %}
+                    Sin contexto
+                {% endif %}
+            </p>
             <blockquote>
                 <p>“ {{ result.body }} ”</p>
                 <small>
                     {{ result.author.name }}
-                    <span class="date">
-                        <i class="fa fa-calendar"></i>
-                        {{ result.report.date.strftime("%Y/%m/%d") }}
-                    </span>
+                    {% if result.report %}
+                        <span class="date">
+                            <i class="fa fa-calendar"></i>
+                            {{ result.report.date.strftime("%Y/%m/%d") }}
+                        </span>
+                    {% endif %}
                 </small>
             </blockquote>
-            {% if result.topic|length > 0 or result.subtopic|length > 0 %}
+            {% if result.topic and result.topic|length > 0 or result.subtopic and result.subtopic|length > 0 %}
                 <div class="tags">
                     {% if result.topic|length > 0 %}
                         <button type="button" class="btn btn-primary disabled">

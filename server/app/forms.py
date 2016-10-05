@@ -7,6 +7,7 @@ from flask_user.translations import lazy_gettext as _
 from models import MAX_TEXT_LENGTH, Question
 import time
 from helpers import SpreadSheetReader
+from flask import render_template, redirect, url_for
 
 
 class QuestionForm(Form):
@@ -37,6 +38,12 @@ class QuestionForm(Form):
         db_session.add(question)
         db_session.commit()
 
+    def handle_request(self, db_session):
+        if self.validate_on_submit():
+            self.save_question(db_session)
+            return redirect(url_for('home_page'))
+        return render_template('forms/single_question_form.html', question_form=self)
+
 
 class UploadForm(Form):
     spreadsheet = FileField(
@@ -49,6 +56,12 @@ class UploadForm(Form):
         new_filename = str(int(time.time())) + '.' + original_filename.split('.')[-1]
         self.spreadsheet.data.save('app/uploads/' + new_filename)
         return new_filename
+
+    def handle_request(self):
+        if self.validate_on_submit():
+            filename = self.save_spreadsheet()
+            return redirect(url_for('process_spreadsheet', filename=filename))
+        return render_template('forms/question_upload_form.html', upload_form=self)
 
 
 class ProcessSpreadsheetForm(Form):
@@ -63,6 +76,19 @@ class ProcessSpreadsheetForm(Form):
     topic = SelectField('Question topic')
     subtopic = SelectField('Question subtopic')
     # keywords ?
+
+    def handle_request(self, filename, db_session):
+        spreadsheet_summary = SpreadSheetReader.first_read(filename)
+        self.update_choices(spreadsheet_summary['first_row'])
+        if self.validate_on_submit():
+            self.save_models(filename, db_session)
+            return redirect(url_for('home_page'))
+        return render_template(
+            'forms/process_spreadsheet.html',
+            filename=filename,
+            spreadsheet_summary=spreadsheet_summary,
+            process_spreadsheet_form=self
+        )
 
     def update_choices(self, first_row):
         choices = [(str(i), first_row[i]) for i in range(len(first_row))]
@@ -124,5 +150,10 @@ class ProcessSpreadsheetForm(Form):
 class FullTextQueryForm(Form):
     main_text = TextAreaField(
         _('Base text to query'),
-        [validators.Length(min=1, max=MAX_TEXT_LENGTH)]
+        [validators.Length(min=1, max=200)]
     )
+
+    def handle_request(self):
+        if self.validate_on_submit():
+            return redirect(url_for('search', q=self.main_text.data))
+        return render_template('forms/full_text_query.html', form=self)
