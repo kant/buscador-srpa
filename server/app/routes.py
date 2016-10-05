@@ -33,8 +33,8 @@ def init_routes(app, db_session):
     @app.route('/busqueda_por_similaridad', methods=['GET', 'POST'])
     @login_required
     def full_text_query():
-        form = FullTextQueryForm()
-        return render_template('forms/full_text_query.html', form=form)
+        full_text_query_form = FullTextQueryForm()
+        return full_text_query_form.handle_request()
 
     @app.route('/buscar', methods=['GET', 'POST'])
     @login_required

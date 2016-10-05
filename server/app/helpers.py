@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import csv
 import models
+from flask import request
 
 
 class SpreadSheetReader:
@@ -73,9 +74,7 @@ class Searcher:
     @classmethod
     def query_from_url(cls):
         return {
-            'text': u'¿Existen exenciones impositivas a nivel nacional para los sectores sociales damnificados por las inundaciones en Entre Rios?',
+            'text': request.args.get('q'),
             'can_add_more_filters': True,
-            'filters': [
-
-            ]
+            'filters': []
         }

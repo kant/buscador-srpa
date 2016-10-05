@@ -150,5 +150,10 @@ class ProcessSpreadsheetForm(Form):
 class FullTextQueryForm(Form):
     main_text = TextAreaField(
         _('Base text to query'),
-        [validators.Length(min=1, max=MAX_TEXT_LENGTH)]
+        [validators.Length(min=1, max=200)]
     )
+
+    def handle_request(self):
+        if self.validate_on_submit():
+            return redirect(url_for('search', q=self.main_text.data))
+        return render_template('forms/full_text_query.html', form=self)
