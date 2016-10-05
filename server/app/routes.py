@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from flask import render_template, request, redirect, url_for
+from flask import render_template
 from flask_user import login_required
 from forms import QuestionForm, UploadForm, ProcessSpreadsheetForm, FullTextQueryForm
-from helpers import SpreadSheetReader, Searcher
+from helpers import Searcher
 
 
 def init_routes(app, db_session):
@@ -16,35 +16,19 @@ def init_routes(app, db_session):
     @login_required
     def question_upload():
         upload_form = UploadForm()
-        if upload_form.validate_on_submit():
-            filename = upload_form.save_spreadsheet()
-            return redirect(url_for('process_spreadsheet', filename=filename))
-        return render_template('forms/question_upload_form.html', upload_form=upload_form)
+        return upload_form.handle_request()
 
     @app.route('/carga_de_preguntas/manual', methods=['GET', 'POST'])
     @login_required
     def single_question():
         single_question_form = QuestionForm()
-        if single_question_form.validate_on_submit():
-            single_question_form.save_question(db_session)
-            return redirect(url_for('home_page'))
-        return render_template('forms/single_question_form.html', question_form=single_question_form)
+        return single_question_form.handle_request(db_session)
 
     @app.route('/carga_de_preguntas/procesar_planilla/<filename>', methods=['GET', 'POST'])
     @login_required
     def process_spreadsheet(filename):
-        spreadsheet_summary = SpreadSheetReader.first_read(filename)
         process_spreadsheet_form = ProcessSpreadsheetForm()
-        process_spreadsheet_form.update_choices(spreadsheet_summary['first_row'])
-        if process_spreadsheet_form.validate_on_submit():
-            process_spreadsheet_form.save_models(filename, db_session)
-            return redirect(url_for('home_page'))
-        return render_template(
-            'forms/process_spreadsheet.html',
-            filename=filename,
-            spreadsheet_summary=spreadsheet_summary,
-            process_spreadsheet_form=process_spreadsheet_form
-        )
+        return process_spreadsheet_form.handle_request(filename, db_session)
 
     @app.route('/busqueda_por_similaridad', methods=['GET', 'POST'])
     @login_required
