@@ -1,5 +1,11 @@
+<script>
+{% for word in best_words %}
+$("p").highlight("{{word}}");
+{% endfor %}
+</script>
+
 <div class="col-xs-12 result">
-    <a class="panel panel-default" href="{{ url_for('see_question') }}">
+    <a class="panel panel-default" href="{{ url_for('see_question', question_id=result.id) }}">
         <div class="panel-body">
             <p class="text-muted">
                 {% if result.context|length > 0 %}

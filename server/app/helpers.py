@@ -3,7 +3,15 @@
 import csv
 import models
 from flask import request
-
+# HORRIBLE HACK PARA IMPORTAR EL MODULO, ARREGLAR:
+import os
+import sys
+import inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+parentdir2 = os.path.dirname(parentdir)
+sys.path.insert(0, parentdir2)
+from text_classifier import TextClassifier
 
 class SpreadSheetReader:
 
@@ -67,8 +75,41 @@ class Searcher:
         pass
 
     @classmethod
+    def get_question(cls, question_id):
+        results = models.Question.query.get(question_id)
+        return results
+
+    @classmethod
     def search(cls):
         results = models.Question.query.all()
+        return results
+
+    @classmethod
+    def search_similar(cls, question_id):
+        all_questions = models.Question.query.all()
+        ids = [str(q.id) for q in all_questions]
+        texts = [q.body for q in all_questions]
+        tc = TextClassifier(texts, ids)
+        ids_sim, dist, best_words = tc.get_similar(str(question_id), max_similars=10)
+        ids_sim = map(int, ids_sim)
+        results = []
+        for qid in ids_sim:
+            my_result = models.Question.query.get(qid)
+            my_result = dict(my_result.__dict__)
+            results.append(models.Question.query.get(qid))
+        return zip(results, best_words)
+
+    @classmethod
+    def search_by_text(cls, text):
+        all_questions = models.Question.query.all()
+        ids = [str(q.id) for q in all_questions]
+        texts = [q.body for q in all_questions]
+        tc = TextClassifier(texts, ids)
+        ids_sim, dist, best_words = tc.get_similar(text, max_similars=10)
+        ids_sim = map(int, ids_sim)
+        results = []
+        for qid in ids_sim:
+            results.append(models.Question.query.get(qid))
         return results
 
     @classmethod

@@ -5,7 +5,7 @@
         <h2>No se encontrar {{ results_name }}</h2>
     {% endif %}
     <div class="row panels-row">
-        {% for result in result_list %}
+        {% for result, best_words in result_list %}
             {% include 'search/result.html' %}
         {% endfor %}
     </div>

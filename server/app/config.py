@@ -7,7 +7,7 @@ class Config(object):
     USER_ENABLE_USERNAME = False
     USER_ENABLE_CHANGE_USERNAME = False
     BABEL_DEFAULT_LOCALE = 'es'
-    
+    WERKZEUG_DEBUG_PIN = '123456'
 
 class DevelopmentConfig(Config):
     DEBUG = True
