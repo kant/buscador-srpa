@@ -3,10 +3,9 @@
 from flask import render_template, request
 from flask_user import login_required
 from forms import QuestionForm, UploadForm, ProcessSpreadsheetForm, FullTextQueryForm
-from helpers import Searcher
 
 
-def init_routes(app, db_session):
+def init_routes(app, db_session, searcher):
     @app.route('/')
     @login_required
     def home_page():
@@ -39,15 +38,14 @@ def init_routes(app, db_session):
     @app.route('/buscar', methods=['GET', 'POST'])
     @login_required
     def search():
-        query = Searcher.query_from_url()
-        result_list = Searcher.search_similar(query['text'])
+        query = searcher.query_from_url()
+        result_list = searcher.search_from_url()
         return render_template('search/results.html', result_list=result_list, query=query)
 
     @app.route('/pregunta/<int:question_id>')
     @login_required
     def see_question(question_id):
-        question = Searcher.get_question(question_id)
-        similar_questions = Searcher.search_similar(question_id)
+        question, similar_questions = searcher.get_question_and_similars(question_id)
         return render_template('question.html', question=question, similar_questions=similar_questions)
 
     @app.route('/gestion_de_entidades')

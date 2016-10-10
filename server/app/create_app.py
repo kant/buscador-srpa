@@ -3,6 +3,16 @@ from flask_user import SQLAlchemyAdapter, UserManager
 from flask.ext.babel import Babel
 from . import app, db, models
 from routes import init_routes
+from helpers import Searcher
+# HORRIBLE HACK PARA IMPORTAR EL MODULO, ARREGLAR:
+import os
+import sys
+import inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+parentdir2 = os.path.dirname(parentdir)
+sys.path.insert(0, parentdir2)
+from text_classifier import TextClassifier
 
 
 def create_app():
@@ -11,7 +21,9 @@ def create_app():
     Mail(app)
     db.create_all()
     init_users()
-    init_routes(app, db.session)
+    text_classifier = init_text_classifier()
+    searcher = Searcher(text_classifier)
+    init_routes(app, db.session, searcher)
     return app
 
 
@@ -27,3 +39,10 @@ def init_users():
         db.session.add(admin_user)
         db.session.commit()
     return
+
+
+def init_text_classifier():
+    all_questions = models.Question.query.all()
+    ids = [str(q.id) for q in all_questions]
+    texts = [q.body for q in all_questions]
+    return TextClassifier(texts, ids)
