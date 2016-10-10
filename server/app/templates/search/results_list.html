@@ -13,48 +13,5 @@
         {% endfor %}
     </div>
 
-    {% set query = results['query'] %}
-    {% if pagination['total_pages'] > 1 %}
-        <ul class="pagination">
-            {% if pagination['current_page'] > 2 %}
-                <li>
-                    <a href="{{ url_maker(query, page=1) }}">
-                        <span aria-hidden="true">«</span>
-                    </a>
-                </li>
-            {% endif %}
-            {% if pagination['current_page'] > 1 %}
-                <li>
-                    <a href="{{ url_maker(query, page=pagination['current_page'] - 1) }}">
-                        <span aria-hidden="true">‹</span>
-                    </a>
-                </li>
-            {% endif %}
-
-            {% set from_page = pagination['current_page'] - 3 if pagination['current_page'] - 3 > 1 else 1 %}
-            {% set to_page = pagination['current_page'] + 3 if pagination['current_page'] + 3 < pagination['total_pages'] else pagination['total_pages'] %}
-            {% for n in range(from_page, to_page + 1) %}
-                <li class="{{ 'active' if pagination['current_page'] == n else '' }}">
-                    <a href="{{ url_maker(query, page=n) }}">
-                        {{ n }}
-                    </a>
-                </li>
-            {% endfor %}
-
-            {% if pagination['current_page'] < pagination['total_pages'] %}
-                <li>
-                    <a href="{{ url_maker(query, page=pagination['current_page'] + 1) }}">
-                        <span aria-hidden="true">›</span>
-                    </a>
-                </li>
-            {% endif %}
-            {% if pagination['current_page'] < pagination['total_pages'] - 1 %}
-                <li>
-                    <a href="{{ url_maker(query, page=pagination['total_pages']) }}">
-                        <span aria-hidden="true">»</span>
-                    </a>
-                </li>
-            {% endif %}
-        </ul>
-    {% endif  %}
+    {% include 'search/pagination.html' %}
 </section>

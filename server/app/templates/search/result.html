@@ -1,60 +1,90 @@
 <script>
-{% for word in best_words %}
-$("p").highlight("{{word}}");
-{% endfor %}
+$(function() {
+    var text = $("p#result-{{ result.id }}");
+    {% for word in best_words %}
+        text.highlight("{{word}}");
+    {% endfor %}
+});
 </script>
 
 <div class="col-xs-12 result">
-    <a class="panel panel-default" href="{{ url_for('see_question', question_id=result.id) }}">
+    <div class="panel panel-default">
         <div class="panel-body">
             <p class="text-muted">
                 {% if result.context|length > 0 %}
+                    Contexto:
                     {{ result.context }}
                 {% else %}
                     Sin contexto
                 {% endif %}
             </p>
             <blockquote>
-                <p>“ {{ result.body }} ”</p>
+                <p id="result-{{ result.id }}">“ {{ result.body }} ”</p>
                 <small>
-                    {{ result.author.name }}
-                    {% if result.report %}
-                        <span class="date">
-                            <i class="fa fa-calendar"></i>
+                    {{ result.author.name if result.author.name and result.author.name|length > 0 else 'Sin autor' }}
+                    <span class="date">
+                        <i class="fa fa-calendar"></i>
+                        {% if result.report %}
                             {{ result.report.date.strftime("%Y/%m/%d") }}
-                        </span>
-                    {% endif %}
+                        {% else %}
+                            Sin fecha
+                        {% endif %}
+                    </span>
+                    <span class="number">
+                        <i class="fa fa-hashtag" aria-hidden="true"></i>
+                        {% if result.number %}
+                            {{ result.number }}
+                        {% else %}
+                            Sin numero
+                        {% endif %}
+                    </span>
                 </small>
             </blockquote>
-            {% if result.topic and result.topic|length > 0 or result.subtopic and result.subtopic|length > 0 %}
-                <div class="tags">
-                    {% if result.topic|length > 0 %}
-                        <button type="button" class="btn btn-primary disabled">
-                            <i class="fa fa-tag"></i>
-                            {{ result.topic }}
-                        </button>
+            <p class="text-muted">
+                {% if result.justification|length > 0 %}
+                    Justificación:
+                    {{ result.justification}}
+                {% else %}
+                    Sin justificación
+                {% endif %}
+            </p>
+            <div class="tags">
+                <button type="button" class="btn btn-primary disabled">
+                    <i class="fa fa-tag"></i>
+                    {% if result.topic and result.topic|length > 0 %}
+                        {{ result.topic }}
+                    {% else %}
+                        Sin tema
                     {% endif %}
-                    {% if result.subtopic|length > 0 %}
-                        <button type="button" class="btn btn-primary disabled">
-                            <i class="fa fa-tags"></i>
-                            {{ result.subtopic }}
-                        </button>
+                </button>
+                <button type="button" class="btn btn-primary disabled">
+                    <i class="fa fa-tags"></i>
+                    {% if result.subtopic and result.subtopic|length > 0 %}
+                        {{ result.subtopic }}
+                    {% else %}
+                        Sin subtema
                     {% endif %}
-                </div>
-            {% endif %}
-            {% if result.answerer and result.answerer.name|length > 0 %}
-                <p>
+                </button>
+            </div>
+            <p>
+                {% if result.answerer and result.answerer.name|length > 0 %}
                     Responde:
                     <span class="text-muted">
                         {{ result.answerer.name }}
                     </span>
-                </p>
-            {% endif %}
+                {% else %}
+                    <span class="text-muted">
+                        Sin asignado a responder
+                    </span>
+                {% endif %}
+            </p>
             {% if not hide_more_info_link %}
                 <div class="more-info">
-                    Ver mas información sobre esta pregunta
+                    <a href="{{ url_for('see_question', question_id=result.id) }}">
+                        Ver mas información sobre esta pregunta
+                    </a>
                 </div>
             {% endif %}
         </div>
-    </a>
+    </div>
 </div>
