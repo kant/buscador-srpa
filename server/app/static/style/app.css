@@ -2387,5 +2387,7 @@
 #search_filters .add-filter {
   margin: auto; }
 
+.highlight {
+  background-color: yellow; }
+
 /*# sourceMappingURL=app.css.map */
-.highlight { background-color: yellow }
