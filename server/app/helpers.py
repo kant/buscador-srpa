@@ -3,6 +3,15 @@
 import csv
 import models
 from flask import request
+# HORRIBLE HACK PARA IMPORTAR EL MODULO, ARREGLAR:
+import os
+import sys
+import inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+parentdir2 = os.path.dirname(parentdir)
+sys.path.insert(0, parentdir2)
+from text_classifier import TextClassifier
 
 
 class SpreadSheetReader:
@@ -63,8 +72,17 @@ class SpreadSheetReader:
 
 class Searcher:
 
-    def __init__(self, text_classifier):
-        self.text_classifier = text_classifier
+    def __init__(self):
+        self.text_classifier = self.restart_text_classifier()
+
+    def restart_text_classifier(self):
+        all_questions = models.Question.query.all()
+        if len(all_questions) > 0:
+            ids = [str(q.id) for q in all_questions]
+            texts = [q.body for q in all_questions]
+            return TextClassifier(texts, ids)
+        else:
+            return None
 
     def get_question_and_similars(self, question_id):
         question = models.Question.query.get(question_id)

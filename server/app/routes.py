@@ -27,7 +27,7 @@ def init_routes(app, db_session, searcher):
     @login_required
     def process_spreadsheet(filename):
         process_spreadsheet_form = ProcessSpreadsheetForm()
-        return process_spreadsheet_form.handle_request(filename, db_session)
+        return process_spreadsheet_form.handle_request(filename, db_session, searcher)
 
     @app.route('/busqueda_por_similaridad', methods=['GET', 'POST'])
     @login_required

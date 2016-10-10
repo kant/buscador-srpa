@@ -77,11 +77,12 @@ class ProcessSpreadsheetForm(Form):
     subtopic = SelectField('Question subtopic')
     # keywords ?
 
-    def handle_request(self, filename, db_session):
+    def handle_request(self, filename, db_session, searcher):
         spreadsheet_summary = SpreadSheetReader.first_read(filename)
         self.update_choices(spreadsheet_summary['first_row'])
         if self.validate_on_submit():
             self.save_models(filename, db_session)
+            searcher.restart_text_classifier()
             return redirect(url_for('home_page'))
         return render_template(
             'forms/process_spreadsheet.html',
@@ -104,12 +105,13 @@ class ProcessSpreadsheetForm(Form):
         self.subtopic.choices = choices
 
     def save_models(self, filename, db_session):
-        columns = self.collect_columns()
+        columns = self._collect_columns()
         extension = filename.split('.')[-1]
         with open('app/uploads/' + filename, 'rb') as spreadsheet_file:
 
             if extension == 'csv':
                 spreadsheet = SpreadSheetReader.read_csv(spreadsheet_file)
+            # TODO: leer xls y xlsx
 
             for i, row in spreadsheet:
                 if i == 0 and self.discard_first_row.data:
@@ -118,9 +120,8 @@ class ProcessSpreadsheetForm(Form):
                 question = Question(**args)
                 db_session.add(question)
             db_session.commit()
-        return
 
-    def collect_columns(self):
+    def _collect_columns(self):
         columns = [
             (self.number.data, 'number'),
             (self.body.data, 'body'),
