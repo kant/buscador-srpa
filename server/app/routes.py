@@ -39,14 +39,15 @@ def init_routes(app, db_session, searcher):
     @login_required
     def search():
         query = searcher.query_from_url()
-        result_list = searcher.search_from_url()
-        return render_template('search/results.html', result_list=result_list, query=query)
+        result = searcher.search_from_url()
+        return render_template('search/results.html', results=result, query=query, url_maker=searcher.url_maker)
 
     @app.route('/pregunta/<int:question_id>')
     @login_required
     def see_question(question_id):
-        question, similar_questions = searcher.get_question_and_similars(question_id)
-        return render_template('question.html', question=question, similar_questions=similar_questions)
+        question = searcher.get_question(question_id)
+        similar_results = searcher.get_similar_to(question_id)
+        return render_template('question.html', question=question, similar_results=similar_results, url_maker=searcher.url_maker)
 
     @app.route('/gestion_de_entidades')
     @login_required

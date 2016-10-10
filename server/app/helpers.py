@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 import csv
 import models
-from flask import request
+import math
+from flask import request, url_for
 # HORRIBLE HACK PARA IMPORTAR EL MODULO, ARREGLAR:
 import os
 import sys
@@ -74,6 +75,7 @@ class Searcher:
 
     def __init__(self):
         self.text_classifier = self.restart_text_classifier()
+        self.per_page = 10
 
     def restart_text_classifier(self):
         all_questions = models.Question.query.all()
@@ -84,10 +86,9 @@ class Searcher:
         else:
             return None
 
-    def get_question_and_similars(self, question_id):
+    def get_question(self, question_id):
         question = models.Question.query.get(question_id)
-        similar_questions = self.search_similar(question_id)
-        return question, similar_questions
+        return question
 
     def search_from_url(self):
         query = self.query_from_url()
@@ -95,13 +96,33 @@ class Searcher:
 
     def search(self, query):
         if query['text'] is not None:
-            results = self.search_similar(query['text'])
+            results = self._search_similar(query['text'])
         else:
             results = models.Question.query.all()
-        return results
+            results = [(result, []) for result in results]
+        return self._paginate(results, query)
 
-    def search_similar(self, question_id):
-        ids_sim, dist, best_words = self.text_classifier.get_similar(str(question_id), max_similars=10)
+    def _paginate(self, results, query):
+        pagination = {
+            'current_page': query['current_page'],
+            'total_pages': int(math.ceil(len(results) / float(self.per_page))),
+            'total_results': len(results)
+        }
+        from_position = (pagination['current_page']-1) * self.per_page
+        to_position = pagination['current_page'] * self.per_page
+        return {
+            'pagination': pagination,
+            'result_list': results[from_position:to_position],
+            'query': query
+        }
+
+    def get_similar_to(self, question_id):
+        query = self.query_from_url()
+        query['text'] = question_id
+        return self.search(query)
+
+    def _search_similar(self, question_id):
+        ids_sim, dist, best_words = self.text_classifier.get_similar(str(question_id), max_similars=self.per_page)
         ids_sim = map(int, ids_sim)
         results = []
         for qid in ids_sim:
@@ -110,8 +131,8 @@ class Searcher:
             results.append(models.Question.query.get(qid))
         return zip(results, best_words)
 
-    def search_by_text(self, text):
-        ids_sim, dist, best_words = self.text_classifier.get_similar(text, max_similars=10)
+    def _search_by_text(self, text):
+        ids_sim, dist, best_words = self.text_classifier.get_similar(text, max_similars=self.per_page)
         ids_sim = map(int, ids_sim)
         results = []
         for qid in ids_sim:
@@ -121,6 +142,15 @@ class Searcher:
     def query_from_url(self):
         return {
             'text': request.args.get('q'),
+            'current_page': int(request.args.get('pagina', 1)),
             'can_add_more_filters': True,
             'filters': []
         }
+
+    def url_maker(self, query, page=None):
+        args = {}
+        if 'text' in query and query['text'] is not None:
+            args['q'] = query['text']
+        if page is not None:
+            args['pagina'] = page
+        return url_for('search', **args)
