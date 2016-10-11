@@ -74,7 +74,8 @@ class SpreadSheetReader:
 class Searcher:
 
     def __init__(self):
-        self.text_classifier = self.restart_text_classifier()
+        self.text_classifier = None
+        self.restart_text_classifier()
         self.per_page = 10
 
     def restart_text_classifier(self):
@@ -82,9 +83,7 @@ class Searcher:
         if len(all_questions) > 0:
             ids = [str(q.id) for q in all_questions]
             texts = [q.body for q in all_questions]
-            return TextClassifier(texts, ids)
-        else:
-            return None
+            self.text_classifier = TextClassifier(texts, ids)
 
     def get_question(self, question_id):
         question = models.Question.query.get(question_id)
