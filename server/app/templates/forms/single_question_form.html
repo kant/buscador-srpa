@@ -38,6 +38,27 @@
                     {{ render_field(question_form.context) }}
                 </div>
 
+                <div class="form-group row">
+                    {{ render_label(question_form.report) }}
+                    {{ render_field(question_form.report) }}
+                </div>
+
+                <div class="form-group row">
+                    {{ render_label(question_form.author) }}
+                    {{ render_field(question_form.author) }}
+                </div>
+
+                <div class="form-group row">
+                    {{ render_label(question_form.topic) }}
+                    {{ render_field(question_form.topic) }}
+                </div>
+
+                <div class="form-group row">
+                    {{ render_label(question_form.subtopic) }}
+                    {{ render_field(question_form.subtopic) }}
+                </div>
+
+
                 <input type=submit value=Guardar class="btn btn-success">
             </form>
         </div>

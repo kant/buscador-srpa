@@ -4,16 +4,31 @@ from flask.ext.wtf import Form
 from wtforms import validators, IntegerField, TextAreaField, BooleanField, SelectField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from flask_user.translations import lazy_gettext as _
-from models import MAX_TEXT_LENGTH, Question
+from models import MAX_TEXT_LENGTH, Question, Report, Topic, SubTopic, Author, Answerer
 import time
+import datetime
 from helpers import SpreadSheetReader
 from flask import render_template, redirect, url_for
 
 
+def get_or_create(session, model, **kwargs):
+    """ Imita el get_or_create de django
+        URL: http://stackoverflow.com/questions/2546207/does-sqlalchemy-have-an-equivalent-of-djangos-get-or-create
+    """
+    instance = session.query(model).filter_by(**kwargs).first()
+    if instance:
+        return instance.id
+    else:
+        instance = model(**kwargs)
+        session.add(instance)
+        session.commit()
+        return instance.id
+
 class QuestionForm(Form):
     number = IntegerField(
         _('Question number'),
-        [validators.NumberRange(min=1, message=_('Question number must be a positive integer'))]
+        [validators.NumberRange(min=1, message=_('Question number must be a \
+                                                  positive integer'))]
     )
     body = TextAreaField(
         _('Question body'),
@@ -27,13 +42,43 @@ class QuestionForm(Form):
         _('Question context (optional)'),
         [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
     )
+    answerer = TextAreaField(
+        _('Question answerer'),
+        [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
+    )
+    report = TextAreaField(
+        _('Report number'),
+        [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
+    )
+    author = TextAreaField(
+        _('Question author'),
+        [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
+    )
+    topic = TextAreaField(
+        _('Question topic'),
+        [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
+    )
+    subtopic = TextAreaField(
+        _('Question subtopic'),
+        [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
+    )
 
     def save_question(self, db_session):
+        #  TODO> Le agrego una fecha a mano aca para que no tire error.
+        report_id = get_or_create(db_session, Report, name=self.report.data, date=datetime.date(2999, 9, 9))
+        author_id = get_or_create(db_session, Author, name=self.author.data)
+        topic_id = get_or_create(db_session, Topic, name=self.topic.data)
+        subtopic_id = get_or_create(db_session, SubTopic, name=self.subtopic.data)
         question = Question(
             number=self.number.data,
             body=self.body.data,
             justification=self.justification.data,
-            context=self.context.data
+            context=self.context.data,
+            answerer=None,  # TODO: incorporar answerers que es many-to-many
+            report_id=report_id,
+            author_id=author_id,
+            topic_id=topic_id,
+            subtopic_id=subtopic_id
         )
         db_session.add(question)
         db_session.commit()
@@ -66,15 +111,15 @@ class UploadForm(Form):
 
 class ProcessSpreadsheetForm(Form):
     discard_first_row = BooleanField(_('First row is header'), [validators.DataRequired()])
-    number = SelectField('Question number', [validators.DataRequired()])
-    body = SelectField('Question body', [validators.DataRequired()])
-    justification = SelectField('Question justification')
-    context = SelectField('Question context')
-    answerer = SelectField('Question answerer')
-    report = SelectField('Report number')
-    author = SelectField('Question author')
-    topic = SelectField('Question topic')
-    subtopic = SelectField('Question subtopic')
+    number = SelectField(_('Question number'), [validators.DataRequired()])
+    body = SelectField(_('Question body'), [validators.DataRequired()])
+    justification = SelectField(_('Question justification'))
+    context = SelectField(_('Question context'))
+    answerer = SelectField(_('Question answerer'))
+    report = SelectField(_('Report number'))
+    author = SelectField(_('Question author'))
+    topic = SelectField(_('Question topic'))
+    subtopic = SelectField(_('Question subtopic'))
     # keywords ?
 
     def handle_request(self, filename, db_session, searcher):

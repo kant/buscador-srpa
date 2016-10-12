@@ -51,16 +51,16 @@ $(function() {
             <div class="tags">
                 <button type="button" class="btn btn-primary disabled">
                     <i class="fa fa-tag"></i>
-                    {% if result.topic and result.topic|length > 0 %}
-                        {{ result.topic }}
+                    {% if result.topic.name and result.topic.name|length > 0 %}
+                        {{ result.topic.name }}
                     {% else %}
                         Sin tema
                     {% endif %}
                 </button>
                 <button type="button" class="btn btn-primary disabled">
                     <i class="fa fa-tags"></i>
-                    {% if result.subtopic and result.subtopic|length > 0 %}
-                        {{ result.subtopic }}
+                    {% if result.subtopic.name and result.subtopic.name|length > 0 %}
+                        {{ result.subtopic.name }}
                     {% else %}
                         Sin subtema
                     {% endif %}

@@ -72,6 +72,7 @@ class QuestionKeywords(db.Model):
 
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+    name = db.Column(db.String(MAX_NAME_LENGTH), unique=True)
     date = db.Column(db.Date())
     questions = db.relationship('Question', backref='report')
 
