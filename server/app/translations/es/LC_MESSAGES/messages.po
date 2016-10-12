@@ -7,8 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2016-10-12 14:21-0300\n"
 "PO-Revision-Date: 2016-10-12 14:13-0300\n"
+=======
+"POT-Creation-Date: 2016-10-12 10:43-0300\n"
+"PO-Revision-Date: 2016-10-12 10:34-0300\n"
+>>>>>>> master
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
 "Language-Team: es <LL@li.org>\n"
@@ -18,6 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
+<<<<<<< HEAD
 #: forms.py:15 forms.py:90
 msgid "Question number"
 msgstr "Numero de Pregunta"
@@ -82,3 +88,37 @@ msgstr "Texto de busqueda"
 
 #~ msgid "Question number must be a positive integer"
 #~ msgstr "El numero de pregunta debe ser un entero positivo"
+=======
+#: forms.py:15
+msgid "Question number"
+msgstr "Numero de pregunta"
+
+#: forms.py:16
+msgid "Question number must be a positive integer"
+msgstr ""
+
+#: forms.py:19
+msgid "Question body"
+msgstr ""
+
+#: forms.py:23
+msgid "Question justification (optional)"
+msgstr ""
+
+#: forms.py:27
+msgid "Question context (optional)"
+msgstr ""
+
+#: forms.py:68
+msgid "First row is header"
+msgstr ""
+
+#: forms.py:96
+msgid "None"
+msgstr ""
+
+#: forms.py:153
+msgid "Base text to query"
+msgstr ""
+
+>>>>>>> master

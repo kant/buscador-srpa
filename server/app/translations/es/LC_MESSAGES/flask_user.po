@@ -9,15 +9,14 @@ msgstr ""
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-08-05 12:15-0700\n"
 "PO-Revision-Date: 2016-09-21 10:55-0300\n"
+"Last-Translator: \n"
 "Language: es\n"
 "Language-Team: es <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
-"Last-Translator: \n"
-"X-Generator: Poedit 1.8.9\n"
 
 #: flask_user/forms.py:35
 msgid ""
@@ -39,8 +38,7 @@ msgstr ""
 
 #: flask_user/forms.py:52
 msgid "This Username is already in use. Please try another one."
-msgstr ""
-"Este nombre de usuario ya se encuentra registrado. Por favor elija otro"
+msgstr "Este nombre de usuario ya se encuentra registrado. Por favor elija otro"
 
 #: flask_user/forms.py:59
 msgid "This Email is already in use. Please try another one."
@@ -233,8 +231,8 @@ msgid ""
 "A reset password email has been sent to '%(email)s'. Open that email and "
 "follow the instructions to reset your password."
 msgstr ""
-"Se ha enviado un correo a '%(email)s' con instrucciones para "
-"reestablecer su contraseña."
+"Se ha enviado un correo a '%(email)s' con instrucciones para reestablecer"
+" su contraseña."
 
 #: flask_user/views.py:271
 msgid "You have signed out successfully."
@@ -291,9 +289,9 @@ msgstr "Tu cuenta no ha sido activada"
 #: flask_user/views.py:706
 #, python-format
 msgid ""
-"Your email address has not yet been confirmed. Check your email Inbox "
-"and Spam folders for the confirmation email or <a href=\"%(url)s\">Re-"
-"send confirmation email</a>."
+"Your email address has not yet been confirmed. Check your email Inbox and"
+" Spam folders for the confirmation email or <a href=\"%(url)s\">Re-send "
+"confirmation email</a>."
 msgstr ""
 "Tu dirección de correo aun no ha sido confirmada. Revisa tu bandeja de "
 "entrada y tus filtros de spam para encontrar el email de confirmación o "
@@ -339,3 +337,4 @@ msgstr "Resetear contraseña"
 #: flask_user/templates/flask_user/user_profile.html:5
 msgid "User profile"
 msgstr "Perfil de usuario"
+
