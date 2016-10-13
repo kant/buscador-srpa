@@ -125,8 +125,6 @@ class Searcher:
         ids_sim = map(int, ids_sim)
         results = []
         for qid in ids_sim:
-            my_result = models.Question.query.get(qid)
-            my_result = dict(my_result.__dict__)
             results.append(models.Question.query.get(qid))
         return zip(results, best_words)
 
