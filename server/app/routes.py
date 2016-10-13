@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from flask import render_template, request
+from flask import render_template
 from flask_user import login_required
 from forms import QuestionForm, UploadForm, ProcessSpreadsheetForm, FullTextQueryForm
 
@@ -21,7 +21,7 @@ def init_routes(app, db_session, searcher):
     @login_required
     def single_question():
         single_question_form = QuestionForm()
-        return single_question_form.handle_request(db_session)
+        return single_question_form.handle_request(db_session, searcher)
 
     @app.route('/carga_de_preguntas/procesar_planilla/<filename>', methods=['GET', 'POST'])
     @login_required
