@@ -7,13 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-<<<<<<< HEAD
-"POT-Creation-Date: 2016-10-12 14:21-0300\n"
-"PO-Revision-Date: 2016-10-12 14:13-0300\n"
-=======
-"POT-Creation-Date: 2016-10-12 10:43-0300\n"
+"POT-Creation-Date: 2016-10-13 08:33-0300\n"
 "PO-Revision-Date: 2016-10-12 10:34-0300\n"
->>>>>>> master
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
 "Language-Team: es <LL@li.org>\n"
@@ -23,102 +18,68 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-<<<<<<< HEAD
-#: forms.py:15 forms.py:90
+#: forms.py:29 forms.py:114
 msgid "Question number"
 msgstr "Numero de Pregunta"
 
-#: forms.py:16
+#: forms.py:30
 msgid ""
 "Question number must be a"
 "                                                   positive integer"
 msgstr "El numero de pregunta debe ser un entero positivo"
 
-#: forms.py:20 forms.py:91
+#: forms.py:34 forms.py:115
 msgid "Question body"
 msgstr "Texto de la Pregunta"
 
-#: forms.py:24
+#: forms.py:38
 msgid "Question justification (optional)"
 msgstr "Justificacion de la Pregunta (opcional)"
 
-#: forms.py:28
+#: forms.py:42
 msgid "Question context (optional)"
 msgstr "Contexto de la Pregunta (opcional)"
 
-#: forms.py:32 forms.py:94
+#: forms.py:46 forms.py:118
 msgid "Question answerer"
 msgstr "Responsable de la respuesta"
 
-#: forms.py:36 forms.py:95
+#: forms.py:50 forms.py:119
 msgid "Report number"
 msgstr "Numero de informe"
 
-#: forms.py:40 forms.py:96
+#: forms.py:54 forms.py:120
 msgid "Question author"
 msgstr "Autor de la Pregunta"
 
-#: forms.py:44 forms.py:97
+#: forms.py:58 forms.py:121
 msgid "Question topic"
 msgstr "Tema de la pregunta"
 
-#: forms.py:48 forms.py:98
+#: forms.py:62 forms.py:122
 msgid "Question subtopic"
 msgstr "Subtema de la pregunta"
 
-#: forms.py:89
+#: forms.py:113
 msgid "First row is header"
 msgstr "Contiene encabezado"
 
-#: forms.py:92
+#: forms.py:116
 msgid "Question justification"
 msgstr "Justificacion de la Pregunta"
 
-#: forms.py:93
+#: forms.py:117
 msgid "Question context"
 msgstr "Contexto de la Pregunta"
 
-#: forms.py:117
+#: forms.py:141
 msgid "None"
 msgstr ""
 
-#: forms.py:174
+#: forms.py:198
 msgid "Base text to query"
 msgstr "Texto de busqueda"
 
 #~ msgid "Question number must be a positive integer"
-#~ msgstr "El numero de pregunta debe ser un entero positivo"
-=======
-#: forms.py:15
-msgid "Question number"
-msgstr "Numero de pregunta"
+#~ msgstr ""
 
-#: forms.py:16
-msgid "Question number must be a positive integer"
-msgstr ""
-
-#: forms.py:19
-msgid "Question body"
-msgstr ""
-
-#: forms.py:23
-msgid "Question justification (optional)"
-msgstr ""
-
-#: forms.py:27
-msgid "Question context (optional)"
-msgstr ""
-
-#: forms.py:68
-msgid "First row is header"
-msgstr ""
-
-#: forms.py:96
-msgid "None"
-msgstr ""
-
-#: forms.py:153
-msgid "Base text to query"
-msgstr ""
-
->>>>>>> master
