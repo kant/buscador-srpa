@@ -1,15 +1,21 @@
-<script>
-$(function() {
-    var text = $("p#result-{{ result.id }}");
-    {% for word in best_words %}
-        text.highlight("{{word}}");
-    {% endfor %}
-});
-</script>
+{% if best_words %}
+    <script>
+        $(function () {
+            window.jgm.results.highlight({{ result.id }}, {{ best_words|tojson|safe }});
+        });
+    </script>
+{% endif %}
 
-<div class="col-xs-12 result">
+<div class="col-xs-12 result" data-question-id="{{ result.id }}">
     <div class="panel panel-default">
         <div class="panel-body">
+            <div class="question-actions">
+
+                <span class="delete">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    eliminar
+                </span>
+            </div>
             <p class="text-muted">
                 {% if result.context|length > 0 %}
                     Contexto:
@@ -19,7 +25,7 @@ $(function() {
                 {% endif %}
             </p>
             <blockquote>
-                <p id="result-{{ result.id }}">“ {{ result.body }} ”</p>
+                <p class="question-body">“ {{ result.body }} ”</p>
                 <small>
                     {{ result.author.name if result.author.name and result.author.name|length > 0 else 'Sin autor' }}
                     <span class="date">
@@ -43,13 +49,13 @@ $(function() {
             <p class="text-muted">
                 {% if result.justification|length > 0 %}
                     Justificación:
-                    {{ result.justification}}
+                    {{ result.justification }}
                 {% else %}
                     Sin justificación
                 {% endif %}
             </p>
             <div class="tags">
-                <button type="button" class="btn btn-primary disabled">
+                <button type="button" class="btn btn-topic disabled">
                     <i class="fa fa-tag"></i>
                     {% if result.topic.name and result.topic.name|length > 0 %}
                         {{ result.topic.name }}
@@ -57,7 +63,7 @@ $(function() {
                         Sin tema
                     {% endif %}
                 </button>
-                <button type="button" class="btn btn-primary disabled">
+                <button type="button" class="btn btn-subtopic disabled ">
                     <i class="fa fa-tags"></i>
                     {% if result.subtopic.name and result.subtopic.name|length > 0 %}
                         {{ result.subtopic.name }}
@@ -85,6 +91,15 @@ $(function() {
                     </a>
                 </div>
             {% endif %}
+        </div>
+        <div class="panel panel-body delete-confirmation">
+            <div class="center-vertical-table">
+                <div class="center-vertical-cell">
+                    <p class="confirmation-text">¿Está seguro de querer borrar esta pregunta?</p>
+                    <button type="button" class="btn btn-default cancel-delete">Cancelar</button>
+                    <button type="button" class="btn btn-danger confirm-delete">Borrar</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
