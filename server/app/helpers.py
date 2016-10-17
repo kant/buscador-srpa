@@ -121,20 +121,16 @@ class Searcher:
         return self.search(query)
 
     def _search_similar(self, question_id):
-        ids_sim, dist, best_words = self.text_classifier.get_similar(str(question_id), max_similars=self.per_page)
+        ids_sim, dist, best_words = self.text_classifier.get_similar(
+            str(question_id), max_similars=self.per_page)
         ids_sim = map(int, ids_sim)
         results = []
         for qid in ids_sim:
             results.append(models.Question.query.get(qid))
         return zip(results, best_words)
 
-    def _search_by_text(self, text):
-        ids_sim, dist, best_words = self.text_classifier.get_similar(text, max_similars=self.per_page)
-        ids_sim = map(int, ids_sim)
-        results = []
-        for qid in ids_sim:
-            results.append(models.Question.query.get(qid))
-        return results
+    def _suggest_tags(self, tag_type, question_id):
+        return self.text_classifier.classify(tag_type, str(question_id))
 
     def query_from_url(self):
         return {
