@@ -2340,40 +2340,17 @@
   .form-tab#full_text_query_form textarea {
     height: 200px; }
 
-#search_results .result blockquote {
-  margin: 10px; }
-#search_results .result .date {
-  margin-left: 2em;
-  font-weight: 400;
-  transition: none; }
-#search_results .result button {
-  background-color: #0695d6;
-  cursor: inherit;
-  opacity: 1; }
-#search_results .result .more-info {
-  text-align: right;
-  color: #aaa; }
-#search_results .result .panel:hover,
-#search_results .result .panel:focus {
-  background-color: white;
-  color: inherit; }
-  #search_results .result .panel:hover small,
-  #search_results .result .panel:focus small {
-    color: #767676; }
-  #search_results .result .panel:hover button,
-  #search_results .result .panel:focus button {
-    color: white; }
-  #search_results .result .panel:hover .text-muted,
-  #search_results .result .panel:focus .text-muted {
-    color: #767676 !important; }
-  #search_results .result .panel:hover .more-info,
-  #search_results .result .panel:focus .more-info {
-    color: #555; }
-#search_results .pagination {
-  display: block;
-  text-align: center; }
-  #search_results .pagination li {
-    display: inline-block; }
+.center-vertical-table {
+  display: table;
+  width: 100%;
+  height: 100%;
+  table-layout: fixed; }
+  .center-vertical-table .center-vertical-cell {
+    display: table-cell;
+    vertical-align: middle; }
+
+.highlight {
+  background-color: yellow; }
 
 #search_filters .panel:hover, #search_filters .panel:focus {
   color: inherit;
@@ -2387,7 +2364,54 @@
 #search_filters .add-filter {
   margin: auto; }
 
-.highlight {
-  background-color: yellow; }
+#search_results .result .question-actions {
+  text-align: right; }
+  #search_results .result .question-actions .edit:hover {
+    cursor: pointer;
+    color: #0695d6; }
+  #search_results .result .question-actions .delete:hover {
+    cursor: pointer;
+    color: #ef4d3d; }
+#search_results .result blockquote {
+  margin: 10px; }
+#search_results .result .date {
+  margin-left: 2em;
+  font-weight: 400;
+  transition: none; }
+#search_results .result button.btn-topic,
+#search_results .result button.btn-subtopic {
+  background-color: #0695d6;
+  cursor: inherit;
+  color: white;
+  opacity: 1; }
+#search_results .result .more-info {
+  text-align: right;
+  color: #aaa; }
+#search_results .pagination {
+  display: block;
+  text-align: center; }
+  #search_results .pagination li {
+    display: inline-block; }
+
+.result .panel-default {
+  position: relative; }
+.result .panel.delete-confirmation {
+  z-index: -1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 200ms linear; }
+  .result .panel.delete-confirmation .confirmation-text {
+    color: white;
+    font-size: 18px;
+    margin-bottom: 20px; }
+.result.confirm-delete .delete-confirmation {
+  z-index: 1;
+  opacity: 1; }
 
 /*# sourceMappingURL=app.css.map */

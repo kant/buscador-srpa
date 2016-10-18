@@ -58,6 +58,12 @@ class Question(db.Model):
         self.topic_id = kwargs.get('topic_id', None)
         self.subtopic_id = kwargs.get('subtopic_id', None)
 
+    @classmethod
+    def delete(cls, question_id, db_session):
+        question = cls.query.get(question_id)
+        db_session.delete(question)
+        db_session.commit()
+
 
 class Keyword(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)

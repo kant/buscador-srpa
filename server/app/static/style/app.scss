@@ -26,72 +26,18 @@
   }
 }
 
-#search_results {
-  .result {
-    blockquote {
-      margin: 10px;
-    }
-    .date {
-      margin-left: 2em;
-      font-weight: 400;
-      transition: none;
-    }
-    button {
-      background-color: #0695d6;
-      cursor: inherit;
-      opacity: 1;
-    }
-    .more-info {
-      text-align: right;
-      color: #aaa;
-    }
-    .panel:hover,
-    .panel:focus {
-      background-color: white;
-      color: inherit;
-      small {
-        color: #767676;
-      }
-      button {
-        color: white;
-      }
-      .text-muted {
-        color: #767676!important;
-      }
-      .more-info {
-        color: #555;
-      }
-    }
-  }
-
-  .pagination {
-    display: block;
-    text-align: center;
-    li {
-      display: inline-block;
-    }
-  }
-}
-
-#search_filters {
-  .panel {
-    &:hover, &:focus {
-      color: inherit;
-      background-color: white;
-      .close {
-        opacity: 0.6;
-      }
-    }
-  }
-  .close {
-    position: absolute;
-    top: 0.5em;
-    right: 1em;
-  }
-
-  .add-filter {
-    margin: auto;
+.center-vertical-table {
+  display: table;
+  width: 100%;
+  height: 100%;
+  table-layout: fixed;
+  .center-vertical-cell {
+    display: table-cell;
+    vertical-align: middle;
   }
 }
 
 .highlight { background-color: yellow }
+
+@import 'search';
+@import 'question';

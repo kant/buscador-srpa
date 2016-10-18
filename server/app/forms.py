@@ -24,6 +24,7 @@ def get_or_create(session, model, **kwargs):
         session.commit()
         return instance.id
 
+
 class QuestionForm(Form):
     number = IntegerField(
         _('Question number'),
@@ -82,11 +83,13 @@ class QuestionForm(Form):
         )
         db_session.add(question)
         db_session.commit()
+        return question
 
-    def handle_request(self, db_session):
+    def handle_request(self, db_session, searcher):
         if self.validate_on_submit():
-            self.save_question(db_session)
-            return redirect(url_for('home_page'))
+            question = self.save_question(db_session)
+            searcher.restart_text_classifier()
+            return redirect(url_for('see_question', question_id=question.id))
         return render_template('forms/single_question_form.html', question_form=self)
 
 

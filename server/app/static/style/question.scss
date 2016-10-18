@@ -1,0 +1,74 @@
+#search_results {
+  .result {
+    .question-actions {
+      text-align: right;
+      .edit:hover {
+        cursor: pointer;
+        color: #0695d6;
+      }
+      .delete:hover {
+        cursor: pointer;
+        color: #ef4d3d;
+      }
+    }
+
+    blockquote {
+      margin: 10px;
+    }
+    .date {
+      margin-left: 2em;
+      font-weight: 400;
+      transition: none;
+    }
+    button.btn-topic,
+    button.btn-subtopic {
+      background-color: #0695d6;
+      cursor: inherit;
+      color: white;
+      opacity: 1;
+    }
+    .more-info {
+      text-align: right;
+      color: #aaa;
+    }
+  }
+
+  .pagination {
+    display: block;
+    text-align: center;
+    li {
+      display: inline-block;
+    }
+  }
+}
+
+.result {
+  .panel-default {
+    position: relative;
+  }
+
+  .panel.delete-confirmation {
+    z-index: -1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.7);
+    text-align: center;
+    opacity: 0;
+    transition: opacity 200ms linear;
+    .confirmation-text {
+      color: white;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+  }
+
+  &.confirm-delete {
+    .delete-confirmation {
+      z-index: 1;
+      opacity: 1;
+    }
+  }
+}

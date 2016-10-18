@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from flask import render_template, request
+from flask import render_template, jsonify
 from flask_user import login_required
 from forms import QuestionForm, UploadForm, ProcessSpreadsheetForm, FullTextQueryForm
+from models import Question
 
 
 def init_routes(app, db_session, searcher):
@@ -21,7 +22,7 @@ def init_routes(app, db_session, searcher):
     @login_required
     def single_question():
         single_question_form = QuestionForm()
-        return single_question_form.handle_request(db_session)
+        return single_question_form.handle_request(db_session, searcher)
 
     @app.route('/carga_de_preguntas/procesar_planilla/<filename>', methods=['GET', 'POST'])
     @login_required
@@ -47,7 +48,15 @@ def init_routes(app, db_session, searcher):
     def see_question(question_id):
         question = searcher.get_question(question_id)
         similar_results = searcher.get_similar_to(question_id)
-        return render_template('question.html', question=question, similar_results=similar_results, url_maker=searcher.url_maker)
+        return render_template('question.html', question=question, similar_results=similar_results,
+                               url_maker=searcher.url_maker)
+
+    @app.route('/pregunta/<int:question_id>/borrar', methods=['POST'])
+    @login_required
+    def delete_question(question_id):
+        Question.delete(question_id, db_session)
+        searcher.restart_text_classifier()
+        return jsonify({'success': True})
 
     @app.route('/gestion_de_entidades')
     @login_required

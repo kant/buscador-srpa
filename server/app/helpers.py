@@ -83,7 +83,10 @@ class Searcher:
         if len(all_questions) > 0:
             ids = [str(q.id) for q in all_questions]
             texts = [q.body for q in all_questions]
-            self.text_classifier = TextClassifier(texts, ids)
+            try:
+                self.text_classifier = TextClassifier(texts, ids)
+            except Exception as e:
+                print e
 
     def get_question(self, question_id):
         question = models.Question.query.get(question_id)
@@ -121,8 +124,9 @@ class Searcher:
         return self.search(query)
 
     def _search_similar(self, question_id):
-        ids_sim, dist, best_words = self.text_classifier.get_similar(
-            str(question_id), max_similars=self.per_page)
+        if self.text_classifier is None:
+            return []
+        ids_sim, dist, best_words = self.text_classifier.get_similar(str(question_id), max_similars=self.per_page)
         ids_sim = map(int, ids_sim)
         results = []
         for qid in ids_sim:
