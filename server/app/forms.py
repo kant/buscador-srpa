@@ -66,15 +66,15 @@ class QuestionForm(Form):
 
     def save_question(self, db_session):
         #  TODO> Le agrego una fecha a mano aca para que no tire error.
-        report_id = get_or_create(db_session, Report, name=self.report.data, date=datetime.date(2999, 9, 9))
-        author_id = get_or_create(db_session, Author, name=self.author.data)
-        topic_id = get_or_create(db_session, Topic, name=self.topic.data)
-        subtopic_id = get_or_create(db_session, SubTopic, name=self.subtopic.data)
+        report_id = get_or_create(db_session, Report, name=self.report.data.strip(), date=datetime.date(2999, 9, 9))
+        author_id = get_or_create(db_session, Author, name=self.author.data.strip())
+        topic_id = get_or_create(db_session, Topic, name=self.topic.data.strip())
+        subtopic_id = get_or_create(db_session, SubTopic, name=self.subtopic.data.strip())
         question = Question(
-            number=self.number.data,
-            body=self.body.data,
-            justification=self.justification.data,
-            context=self.context.data,
+            number=self.number.data.strip(),
+            body=self.body.data.strip(),
+            justification=self.justification.data.strip(),
+            context=self.context.data.strip(),
             answerer=None,  # TODO: incorporar answerers que es many-to-many
             report_id=report_id,
             author_id=author_id,

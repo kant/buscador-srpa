@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block main %}
-    {% include 'search/filters.html' %}
+    {% if results['pagination']['total_results'] > 0 %}
+        {% include 'search/filters.html' %}
+    {% endif %}
     {% with results_name = 'preguntas' %}
         {% include 'search/results_list.html' %}
     {% endwith %}

@@ -2,6 +2,7 @@
 /* latin */
 @import url(libs/bootstrap.min.css);
 @import url(libs/poncho.css);
+@import url(libs/select2.min.css);
 @font-face {
   font-family: 'Droid Serif';
   font-style: normal;
@@ -2374,7 +2375,7 @@
     color: #ef4d3d; }
 #search_results .result blockquote {
   margin: 10px; }
-#search_results .result .date {
+#search_results .result .date, #search_results .result .number {
   margin-left: 2em;
   font-weight: 400;
   transition: none; }
@@ -2387,6 +2388,9 @@
 #search_results .result .more-info {
   text-align: right;
   color: #aaa; }
+#search_results .result .disabled {
+  opacity: 0.5;
+  pointer-events: none; }
 #search_results .pagination {
   display: block;
   text-align: center; }

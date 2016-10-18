@@ -1,5 +1,6 @@
 #search_results {
   .result {
+    // Generic
     .question-actions {
       text-align: right;
       .edit:hover {
@@ -15,7 +16,7 @@
     blockquote {
       margin: 10px;
     }
-    .date {
+    .date, .number {
       margin-left: 2em;
       font-weight: 400;
       transition: none;
@@ -31,6 +32,11 @@
       text-align: right;
       color: #aaa;
     }
+
+    .disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
   }
 
   .pagination {
@@ -40,9 +46,11 @@
       display: inline-block;
     }
   }
+
 }
 
 .result {
+  // Delete
   .panel-default {
     position: relative;
   }

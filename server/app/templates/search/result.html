@@ -10,12 +10,42 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="question-actions">
-
+                <span class="edit">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    editar
+                </span>
                 <span class="delete">
                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                     eliminar
                 </span>
             </div>
+            <p class="text-muted">
+                Informe
+                <span class="resport-name">
+                    {% if result.report %}
+                        {{ result.report.name }}
+                    {% else %}
+                        sin nombre
+                    {% endif %}
+                </span>
+                <span class="date">
+                    <i class="fa fa-calendar"></i>
+                    {% if result.report %}
+                        {{ result.report.date.strftime("%Y/%m/%d") }}
+                    {% else %}
+                        Sin fecha
+                    {% endif %}
+                    </span>
+                <span class="number">
+                    Pregunta
+                    {% if result.number %}
+                        <i class="fa fa-hashtag" aria-hidden="true"></i>
+                        {{ result.number }}
+                    {% else %}
+                        sin numero
+                    {% endif %}
+                </span>
+            </p>
             <p class="text-muted">
                 {% if result.context|length > 0 %}
                     Contexto:
@@ -28,22 +58,6 @@
                 <p class="question-body">“ {{ result.body }} ”</p>
                 <small>
                     {{ result.author.name if result.author.name and result.author.name|length > 0 else 'Sin autor' }}
-                    <span class="date">
-                        <i class="fa fa-calendar"></i>
-                        {% if result.report %}
-                            {{ result.report.date.strftime("%Y/%m/%d") }}
-                        {% else %}
-                            Sin fecha
-                        {% endif %}
-                    </span>
-                    <span class="number">
-                        <i class="fa fa-hashtag" aria-hidden="true"></i>
-                        {% if result.number %}
-                            {{ result.number }}
-                        {% else %}
-                            Sin numero
-                        {% endif %}
-                    </span>
                 </small>
             </blockquote>
             <p class="text-muted">
