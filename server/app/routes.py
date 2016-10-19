@@ -62,3 +62,20 @@ def init_routes(app, db_session, searcher):
     @login_required
     def management():
         return render_template('management.html')
+
+    @app.route('/pregunta/<int:question_id>/sugerir_tema')
+    @login_required
+    def suggest_topic(question_id):
+        return jsonify([
+            'PolíticaEconómica', 'ObraPública', 'EducaciónyDeportes', 'RelacionesExteriores',
+            'Energía ', 'Seguridad'
+        ])
+
+    @app.route('/pregunta/<int:question_id>/sugerir_subtema', methods=['POST'])
+    @login_required
+    def suggest_subtopic(question_id):
+        return jsonify([
+            'BCRA', 'Coparticipación', 'Fronteras', 'Minería',
+            'Otros ', 'Malvinas', 'BCRA', 'Coparticipación', 'Fronteras',
+            'Minería', 'Otros ', 'Malvinas',
+        ])

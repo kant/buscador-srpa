@@ -37,6 +37,10 @@
   }
 }
 
+button {
+  outline: none!important;
+}
+
 .highlight { background-color: yellow }
 
 @import 'search';

@@ -2349,6 +2349,9 @@
     display: table-cell;
     vertical-align: middle; }
 
+button {
+  outline: none !important; }
+
 .highlight {
   background-color: yellow; }
 

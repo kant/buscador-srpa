@@ -7,7 +7,7 @@ window.jgm.results = {
             questionText.highlight(words[i]);
         }
     },
-    bindEvents: function () {
+    bindDeleteEvents: function () {
         $('.result .delete').on('click', function (e) {
             $(e.currentTarget).closest('.result').addClass('confirm-delete')
         });
@@ -24,6 +24,28 @@ window.jgm.results = {
             };
             $.post(url, {}, callback);
         })
+    },
+    bindTagEvents: function () {
+        $('button').tooltip({html:true, trigger: 'manual', placement: 'right'});
+
+        $('.result .btn.without-topic').on('click', function(e) {
+        });
+        $('.result .btn.without-subtopic').on('click', function(e) {
+            var $button = $(e.currentTarget);
+            var questionId = $button.closest('.result').data('question-id');
+            $button.tooltip('show').addClass('disabled');
+            $.post('/pregunta/' + questionId + '/sugerir_subtema', {}, function (response) {
+                var html = ''
+                for (var i=0; i<response.length; i++) {
+                    html += '<button type="button" class="btn btn-subtopic">' + response[i] + '</button>'
+                }
+                $button.siblings('.tooltip').find('.tooltip-inner').html(html);
+            })
+        });
+    },
+    bindEvents: function () {
+        this.bindTagEvents();
+        this.bindDeleteEvents();
     }
 };
 
