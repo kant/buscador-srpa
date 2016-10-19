@@ -165,6 +165,7 @@ class ProcessSpreadsheetForm(Form):
                 if i == 0 and self.discard_first_row.data:
                     continue
                 args = self.collect_args(row, columns)
+                args = self._get_ids(args, db_session)
                 question = Question(**args)
                 db_session.add(question)
             db_session.commit()
@@ -181,7 +182,21 @@ class ProcessSpreadsheetForm(Form):
             (self.topic.data, 'topic'),
             (self.subtopic.data, 'subtopic')
         ]
-        return [(int(tuple[0]), tuple[1]) for tuple in columns if len(tuple[0]) > 0]
+        return [(int(tuple[0]), tuple[1]) for tuple in columns
+                if len(tuple[0]) > 0]
+
+    def _get_ids(self, question_args, db_session):
+        #  TODO> Le agrego una fecha a mano aca para que no tire error.
+        # question_args['report_id'] = get_or_create(
+        #     db_session, Report, name=question_args['report'],
+        #     date=datetime.date(2999, 9, 9))
+        question_args['author_id'] = get_or_create(
+            db_session, Author, name=question_args['author'])
+        question_args['topic_id'] = get_or_create(
+            db_session, Topic, name=question_args['topic'])
+        question_args['subtopic_id'] = get_or_create(
+            db_session, SubTopic, name=question_args['subtopic'])
+        return question_args
 
     @staticmethod
     def collect_args(row, columns):

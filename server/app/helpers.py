@@ -83,8 +83,20 @@ class Searcher:
         if len(all_questions) > 0:
             ids = [str(q.id) for q in all_questions]
             texts = [q.body for q in all_questions]
+            topics = [str(q.topic_id) for q in all_questions]
+            subtopics = [str(q.subtopic_id) for q in all_questions]
+            ids_filt_topics = [ids[i] for i, x in enumerate(topics)
+                               if len(x) > 0]
+            ids_filt_subtopics = [ids[i] for i, x in enumerate(subtopics)
+                                  if len(x) > 0]
+            filtered_topics = filter(lambda x: len(x) > 0, topics)
+            filtered_subtopics = filter(lambda x: len(x) > 0, subtopics)
             try:
                 self.text_classifier = TextClassifier(texts, ids)
+                self.text_classifier.make_classifier(
+                    "topics", ids_filt_topics, filtered_topics)
+                self.text_classifier.make_classifier(
+                    "subtopics", ids_filt_subtopics, filtered_subtopics)
             except Exception as e:
                 print e
 
