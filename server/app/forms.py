@@ -187,15 +187,19 @@ class ProcessSpreadsheetForm(Form):
 
     def _get_ids(self, question_args, db_session):
         #  TODO> Le agrego una fecha a mano aca para que no tire error.
-        # question_args['report_id'] = get_or_create(
-        #     db_session, Report, name=question_args['report'],
-        #     date=datetime.date(2999, 9, 9))
-        question_args['author_id'] = get_or_create(
-            db_session, Author, name=question_args['author'])
-        question_args['topic_id'] = get_or_create(
-            db_session, Topic, name=question_args['topic'])
-        question_args['subtopic_id'] = get_or_create(
-            db_session, SubTopic, name=question_args['subtopic'])
+        if 'report' in question_args.keys():
+            question_args['report_id'] = get_or_create(
+                db_session, Report, name=question_args['report'],
+                date=datetime.date(2999, 9, 9))
+        if 'author' in question_args.keys():
+            question_args['author_id'] = get_or_create(
+                db_session, Author, name=question_args['author'])
+        if 'topic' in question_args.keys():
+            question_args['topic_id'] = get_or_create(
+                db_session, Topic, name=question_args['topic'])
+        if 'subtopic' in question_args.keys():
+            question_args['subtopic_id'] = get_or_create(
+                db_session, SubTopic, name=question_args['subtopic'])
         return question_args
 
     @staticmethod

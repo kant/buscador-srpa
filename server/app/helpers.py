@@ -145,8 +145,18 @@ class Searcher:
             results.append(models.Question.query.get(qid))
         return zip(results, best_words)
 
-    def _suggest_tags(self, tag_type, question_id):
-        return self.text_classifier.classify(tag_type, str(question_id))
+    def suggest_tags(self, tag_type, question_id):
+        tags, vals = self.text_classifier.classify(tag_type, [str(question_id)])
+        if tag_type == 'topics':
+            myModel = models.Topic
+        elif tag_type == 'subtopics':
+            myModel = models.SubTopic
+        else:
+            raise(ValueError, "No such model")
+        tag_obj = myModel.query.filter(myModel.id.in_(tags)).all()
+        tag_names = [t.name for t in tag_obj]
+        sorted_tags = [x for (y, x) in sorted(zip(vals.tolist()[0], tag_names))]
+        return sorted_tags
 
     def query_from_url(self):
         return {
