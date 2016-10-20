@@ -1,7 +1,9 @@
 {% if best_words %}
     <script>
         $(function () {
-            window.jgm.results.highlight({{ result.id }}, {{ best_words|tojson|safe }});
+            window.jgm.best_words = window.jgm.best_words || {};
+            window.jgm.best_words[{{ result.id }}] = {{ best_words|tojson|safe }}
+            window.jgm.results.highlight({{ result.id }}, window.jgm.best_words[{{ result.id }}]);
         });
     </script>
 {% endif %}

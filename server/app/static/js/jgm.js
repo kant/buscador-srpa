@@ -84,15 +84,15 @@ window.jgm.results = {
             }).then(function (response) {
                 $button.parents('.qtip-jgm').remove();
                 $('.result[data-question-id=' + questionId + ']').replaceWith($(response));
+                window.jgm.results.highlight(questionId, window.jgm.best_words[questionId]);
             })
         }
 
         $('body').on('click', '.qtip-jgm button', submitTags);
-
-        $('.result .btn.without-topic').on('click', function (e) {
+        $('body').on('click', '.result .btn.without-topic', function (e) {
             loadTags(e, 'topic');
         });
-        $('.result .btn.without-subtopic').on('click', function (e) {
+        $('body').on('click', '.result .btn.without-subtopic', function (e) {
             loadTags(e, 'subtopic');
         });
     },
