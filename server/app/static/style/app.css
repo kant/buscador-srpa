@@ -2423,14 +2423,38 @@ button {
 
 .qtip-jgm {
   height: 400px;
+  width: 300px;
   overflow: scroll;
   border-color: #ddd;
   background-color: #fafafa;
   border-radius: 4px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   margin-left: 10px; }
-  .qtip-jgm button {
-    padding: 8px;
-    width: 100%; }
+  .qtip-jgm .qtip-content {
+    position: static;
+    padding: 0;
+    height: 100%; }
+    .qtip-jgm .qtip-content .tag-suggester {
+      height: 100%;
+      position: relative;
+      padding: 10px 10px 50px 10px; }
+    .qtip-jgm .qtip-content .menu {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      left: 0;
+      text-align: center; }
+      .qtip-jgm .qtip-content .menu button {
+        width: 46%;
+        padding: 4px;
+        font-size: 14px; }
+        .qtip-jgm .qtip-content .menu button.btn-success {
+          margin-left: 8px; }
+    .qtip-jgm .qtip-content .tag-list {
+      overflow: scroll;
+      height: 100%; }
+      .qtip-jgm .qtip-content .tag-list button {
+        padding: 8px;
+        width: 100%; }
 
 /*# sourceMappingURL=app.css.map */

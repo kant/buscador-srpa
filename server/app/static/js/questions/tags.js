@@ -1,4 +1,21 @@
 $(function () {
+    var tagsTemplate = function (tagList, questionId, tagType) {
+        var content = '';
+        for (var i = 0; i < tagList.length; i++) {
+            var button = '<button class="btn btn-primary" data-question-id="qid" data-tag-type="tagtype">text</button>';
+            button = button.replace('text', tagList[i]);
+            button = button.replace('qid', questionId);
+            button = button.replace('tagtype', tagType);
+            content += button;
+        }
+        content = '<div class="tag-list">' + content + '</div>'
+        var cancelButton = '<button class="btn btn-default" data-question-id="' + questionId + '">Cancelar</button>';
+        var addButton = '<button class="btn btn-success disabled">Agregar tag</button>';
+        content += '<div class="menu">' + cancelButton + addButton + '</div>'
+        content = '<div class="tag-suggester">' + content + '</div>'
+        return $(content);
+    };
+
     var loadTags = function (e, tagType) {
         var $button = $(e.currentTarget).addClass('disabled');
         var questionId = $button.closest('.result').data('question-id');
@@ -30,15 +47,8 @@ $(function () {
             url: url,
             method: 'GET'
         }).then(function (response) {
-            content = '';
-            for (var i = 0; i < response.length; i++) {
-                var button = '<button class="btn btn-primary" data-question-id="qid" data-tag-type="tagtype">text</button>';
-                button = button.replace('text', response[i]);
-                button = button.replace('qid', questionId);
-                button = button.replace('tagtype', tagType);
-                content += button;
-            }
-            api.set('content.text', $(content));
+            var content = tagsTemplate(response, questionId, tagType);
+            api.set('content.text', content);
         })
         return 'Cargando...'
     };
@@ -61,11 +71,19 @@ $(function () {
         })
     }
 
-    $('body').on('click', '.qtip-jgm button', submitTags);
+    $('body').on('click', '.qtip-jgm button.btn-primary', submitTags);
     $('body').on('click', '.result .btn.without-topic', function (e) {
         loadTags(e, 'topic');
     });
     $('body').on('click', '.result .btn.without-subtopic', function (e) {
         loadTags(e, 'subtopic');
+    });
+    $('body').on('click', '.qtip-jgm button.btn-default', function (e) {
+        var $button = $(e.currentTarget);
+        var questionId = $button.data('question-id');
+        var tooltip = $button.parents('.qtip-jgm');
+        var tagType = tooltip.find('.btn-primary').data('tag-type')
+        $('.result[data-question-id=' + questionId + '] .without-' + tagType).removeClass('disabled');
+        tooltip.remove();
     });
 })

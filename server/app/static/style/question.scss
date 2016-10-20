@@ -82,6 +82,7 @@
 
 .qtip-jgm {
   height: 400px;
+  width: 300px;
   overflow: scroll;
   border-color: #ddd;
   background-color: #fafafa;
@@ -89,8 +90,42 @@
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   margin-left: 10px;
 
-  button {
-    padding: 8px;
-    width: 100%;
+  .qtip-content {
+    position: static;
+    padding: 0;
+    height: 100%;
+
+    .tag-suggester {
+      height: 100%;
+      position: relative;
+      padding: 10px 10px 50px 10px;
+    }
+
+    .menu {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      left: 0;
+      text-align: center;
+
+      button {
+        width: 46%;
+        padding: 4px;
+        font-size: 14px;
+        &.btn-success {
+          margin-left: 8px;
+        }
+      }
+    }
+
+    .tag-list {
+      overflow: scroll;
+      height: 100%;
+
+      button {
+        padding: 8px;
+        width: 100%;
+      }
+    }
   }
 }
