@@ -29,7 +29,6 @@ class SpreadSheetReader:
                 spreadsheet = cls.read_csv(spreadsheet_file)
 
             # TODO: leer xls y xlsx
-            # https://blogs.harvard.edu/rprasad/2014/06/16/reading-excel-with-python-xlrd/
 
             summary = {'best_row': []}
             for i, row in spreadsheet:
@@ -84,8 +83,20 @@ class Searcher:
         if len(all_questions) > 0:
             ids = [str(q.id) for q in all_questions]
             texts = [q.body for q in all_questions]
+            topics = [str(q.topic_id) for q in all_questions]
+            subtopics = [str(q.subtopic_id) for q in all_questions]
+            ids_filt_topics = [ids[i] for i, x in enumerate(topics)
+                               if len(x) > 0]
+            ids_filt_subtopics = [ids[i] for i, x in enumerate(subtopics)
+                                  if len(x) > 0]
+            filtered_topics = filter(lambda x: len(x) > 0, topics)
+            filtered_subtopics = filter(lambda x: len(x) > 0, subtopics)
             try:
                 self.text_classifier = TextClassifier(texts, ids)
+                self.text_classifier.make_classifier(
+                    "topics", ids_filt_topics, filtered_topics)
+                self.text_classifier.make_classifier(
+                    "subtopics", ids_filt_subtopics, filtered_subtopics)
             except Exception as e:
                 print e
 
@@ -134,13 +145,18 @@ class Searcher:
             results.append(models.Question.query.get(qid))
         return zip(results, best_words)
 
-    def _search_by_text(self, text):
-        ids_sim, dist, best_words = self.text_classifier.get_similar(text, max_similars=self.per_page)
-        ids_sim = map(int, ids_sim)
-        results = []
-        for qid in ids_sim:
-            results.append(models.Question.query.get(qid))
-        return results
+    def suggest_tags(self, tag_type, question_id):
+        tags, vals = self.text_classifier.classify(tag_type, [str(question_id)])
+        if tag_type == 'topics':
+            myModel = models.Topic
+        elif tag_type == 'subtopics':
+            myModel = models.SubTopic
+        else:
+            raise(ValueError, "No such model")
+        tag_obj = myModel.query.filter(myModel.id.in_(tags)).all()
+        tag_names = [t.name for t in tag_obj]
+        sorted_tags = [x for (y, x) in sorted(zip(vals.tolist()[0], tag_names))]
+        return sorted_tags
 
     def query_from_url(self):
         return {
