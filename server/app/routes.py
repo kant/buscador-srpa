@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from flask import render_template, jsonify
+from flask import render_template, jsonify, request
 from flask_user import login_required
 from forms import QuestionForm, UploadForm, ProcessSpreadsheetForm, FullTextQueryForm
 from models import Question
@@ -58,36 +58,25 @@ def init_routes(app, db_session, searcher):
         searcher.restart_text_classifier()
         return jsonify({'success': True})
 
-    @app.route('/sugerir_tema/<int:question_id>', methods=['GET', 'POST'])
+    @app.route('/pregunta/<int:question_id>/sugerir_tema', methods=['GET'])
     @login_required
     def suggest_topic(question_id):
         tags = searcher.suggest_tags("topics", question_id)
         return jsonify(tags)
 
-    @app.route('/sugerir_subtema/<int:question_id>', methods=['GET', 'POST'])
+    @app.route('/pregunta/<int:question_id>/sugerir_subtema', methods=['GET'])
     @login_required
     def suggest_subtopic(question_id):
         tags = searcher.suggest_tags("subtopics", question_id)
         return jsonify(tags)
 
+    @app.route('/pregunta/<int:question_id>/actualizar', methods=['POST'])
+    @login_required
+    def update_question(question_id):
+        result = Question.update(question_id, db_session, request.values)
+        return render_template('/search/result.html', result=result, best_words=False)
+
     @app.route('/gestion_de_entidades')
     @login_required
     def management():
         return render_template('management.html')
-
-    @app.route('/pregunta/<int:question_id>/sugerir_tema')
-    @login_required
-    def suggest_topic(question_id):
-        return jsonify([
-            'PolíticaEconómica', 'ObraPública', 'EducaciónyDeportes', 'RelacionesExteriores',
-            'Energía ', 'Seguridad'
-        ])
-
-    @app.route('/pregunta/<int:question_id>/sugerir_subtema', methods=['POST'])
-    @login_required
-    def suggest_subtopic(question_id):
-        return jsonify([
-            'BCRA', 'Coparticipación', 'Fronteras', 'Minería',
-            'Otros ', 'Malvinas', 'BCRA', 'Coparticipación', 'Fronteras',
-            'Minería', 'Otros ', 'Malvinas',
-        ])

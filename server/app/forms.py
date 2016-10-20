@@ -4,25 +4,11 @@ from flask.ext.wtf import Form
 from wtforms import validators, IntegerField, TextAreaField, BooleanField, SelectField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from flask_user.translations import lazy_gettext as _
-from models import MAX_TEXT_LENGTH, Question, Report, Topic, SubTopic, Author, Answerer
+from models import MAX_TEXT_LENGTH, Question, Report, Topic, SubTopic, Author, Answerer, get_or_create
 import time
 import datetime
 from helpers import SpreadSheetReader
 from flask import render_template, redirect, url_for
-
-
-def get_or_create(session, model, **kwargs):
-    """ Imita el get_or_create de django
-        URL: http://stackoverflow.com/questions/2546207/does-sqlalchemy-have-an-equivalent-of-djangos-get-or-create
-    """
-    instance = session.query(model).filter_by(**kwargs).first()
-    if instance:
-        return instance.id
-    else:
-        instance = model(**kwargs)
-        session.add(instance)
-        session.commit()
-        return instance.id
 
 
 class QuestionForm(Form):

@@ -6,6 +6,19 @@ from flask_user import UserMixin
 MAX_TEXT_LENGTH = 1000
 MAX_NAME_LENGTH = 255
 
+def get_or_create(session, model, **kwargs):
+    """ Imita el get_or_create de django
+        URL: http://stackoverflow.com/questions/2546207/does-sqlalchemy-have-an-equivalent-of-djangos-get-or-create
+    """
+    instance = session.query(model).filter_by(**kwargs).first()
+    if instance:
+        return instance.id
+    else:
+        instance = model(**kwargs)
+        session.add(instance)
+        session.commit()
+        return instance.id
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
@@ -63,6 +76,16 @@ class Question(db.Model):
         question = cls.query.get(question_id)
         db_session.delete(question)
         db_session.commit()
+
+    @classmethod
+    def update(cls, question_id, db_session, new_attrs):
+        question = cls.query.get(question_id)
+        if 'topic' in new_attrs:
+            question.topic_id = get_or_create(db_session, Topic, name=new_attrs['topic'])
+        if 'subtopic' in new_attrs:
+            question.subtopic_id = get_or_create(db_session, SubTopic, name=new_attrs['subtopic'])
+        db_session.commit()
+        return question
 
 
 class Keyword(db.Model):
