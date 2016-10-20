@@ -2381,7 +2381,6 @@ button {
   margin: 10px; }
 #search_results .result .date, #search_results .result .number {
   margin-left: 2em;
-  font-weight: 400;
   transition: none; }
 #search_results .result button.btn-topic,
 #search_results .result button.btn-subtopic {
@@ -2425,7 +2424,7 @@ button {
 .qtip-jgm {
   height: 400px;
   overflow: scroll;
-  border-color: transparent;
+  border-color: #ddd;
   background-color: #fafafa;
   border-radius: 4px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);

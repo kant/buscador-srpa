@@ -18,7 +18,6 @@
     }
     .date, .number {
       margin-left: 2em;
-      font-weight: 400;
       transition: none;
     }
     button.btn-topic,
@@ -84,7 +83,7 @@
 .qtip-jgm {
   height: 400px;
   overflow: scroll;
-  border-color: transparent;
+  border-color: #ddd;
   background-color: #fafafa;
   border-radius: 4px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
