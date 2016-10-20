@@ -72,3 +72,18 @@
     }
   }
 }
+
+.qtip-jgm {
+  height: 400px;
+  overflow: scroll;
+  border-color: transparent;
+  background-color: #fafafa;
+  border-radius: 4px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  margin-left: 10px;
+
+  button {
+    padding: 8px;
+    width: 100%;
+  }
+}

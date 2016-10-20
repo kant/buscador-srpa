@@ -2,6 +2,7 @@
 /* latin */
 @import url(libs/bootstrap.min.css);
 @import url(libs/poncho.css);
+@import url(libs/jquery.qtip.min.css);
 @font-face {
   font-family: 'Droid Serif';
   font-style: normal;
@@ -2416,5 +2417,17 @@ button {
 .result.confirm-delete .delete-confirmation {
   z-index: 1;
   opacity: 1; }
+
+.qtip-jgm {
+  height: 400px;
+  overflow: scroll;
+  border-color: transparent;
+  background-color: #fafafa;
+  border-radius: 4px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  margin-left: 10px; }
+  .qtip-jgm button {
+    padding: 8px;
+    width: 100%; }
 
 /*# sourceMappingURL=app.css.map */
