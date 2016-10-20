@@ -31,14 +31,6 @@
                         sin nombre
                     {% endif %}
                 </span>
-                <span class="date">
-                    <i class="fa fa-calendar"></i>
-                    {% if result.report %}
-                        {{ result.report.date.strftime("%Y/%m/%d") }}
-                    {% else %}
-                        Sin fecha
-                    {% endif %}
-                    </span>
                 <span class="number">
                     Pregunta
                     {% if result.number %}

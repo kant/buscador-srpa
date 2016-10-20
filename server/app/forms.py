@@ -51,17 +51,17 @@ class QuestionForm(Form):
     )
 
     def save_question(self, db_session):
-        #  TODO> Le agrego una fecha a mano aca para que no tire error.
-        report_id = get_or_create(db_session, Report, name=self.report.data.strip(), date=datetime.date(2999, 9, 9))
+        report_id = get_or_create(db_session, Report, name=self.report.data.strip())
         author_id = get_or_create(db_session, Author, name=self.author.data.strip())
         topic_id = get_or_create(db_session, Topic, name=self.topic.data.strip())
         subtopic_id = get_or_create(db_session, SubTopic, name=self.subtopic.data.strip())
+        answerer_id = get_or_create(db_session, Answerer, name=self.subtopic.data.strip())
         question = Question(
-            number=self.number.data.strip(),
+            number=self.number.data,
             body=self.body.data.strip(),
             justification=self.justification.data.strip(),
             context=self.context.data.strip(),
-            answerer=None,  # TODO: incorporar answerers que es many-to-many
+            answerer=answerer_id,
             report_id=report_id,
             author_id=author_id,
             topic_id=topic_id,
@@ -172,11 +172,9 @@ class ProcessSpreadsheetForm(Form):
                 if len(tuple[0]) > 0]
 
     def _get_ids(self, question_args, db_session):
-        #  TODO> Le agrego una fecha a mano aca para que no tire error.
         if 'report' in question_args.keys():
             question_args['report_id'] = get_or_create(
-                db_session, Report, name=question_args['report'],
-                date=datetime.date(2999, 9, 9))
+                db_session, Report, name=question_args['report'])
         if 'author' in question_args.keys():
             question_args['author_id'] = get_or_create(
                 db_session, Author, name=question_args['author'])
@@ -186,6 +184,9 @@ class ProcessSpreadsheetForm(Form):
         if 'subtopic' in question_args.keys():
             question_args['subtopic_id'] = get_or_create(
                 db_session, SubTopic, name=question_args['subtopic'])
+        if 'answerer' in question_args.keys():
+            question_args['answerer_id'] = get_or_create(
+                db_session, Answerer, name=question_args['answerer'])
         return question_args
 
     @staticmethod
