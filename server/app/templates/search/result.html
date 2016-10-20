@@ -1,7 +1,10 @@
 {% if best_words %}
     <script>
         $(function () {
-            window.jgm.results.highlight({{ result.id }}, {{ best_words|tojson|safe }});
+            window.jgm = window.jgm || {};
+            window.jgm.best_words = window.jgm.best_words || {};
+            window.jgm.best_words[{{ result.id }}] = {{ best_words|tojson|safe }}
+            window.jgm.results.highlight({{ result.id }}, window.jgm.best_words[{{ result.id }}]);
         });
     </script>
 {% endif %}
@@ -69,22 +72,28 @@
                 {% endif %}
             </p>
             <div class="tags">
-                <button type="button" class="btn btn-topic disabled">
-                    <i class="fa fa-tag"></i>
-                    {% if result.topic.name and result.topic.name|length > 0 %}
+                {% if result.topic.name and result.topic.name|length > 0 %}
+                    <button type="button" class="btn btn-topic">
+                        <i class="fa fa-tag"></i>
                         {{ result.topic.name }}
-                    {% else %}
+                    </button>
+                {% else %}
+                    <button type="button" class="btn btn-default without-topic">
+                        <i class="fa fa-tag"></i>
                         Sin tema
-                    {% endif %}
-                </button>
-                <button type="button" class="btn btn-subtopic disabled ">
-                    <i class="fa fa-tags"></i>
-                    {% if result.subtopic.name and result.subtopic.name|length > 0 %}
+                    </button>
+                {% endif %}
+                {% if result.subtopic.name and result.subtopic.name|length > 0 %}
+                    <button type="button" class="btn btn-subtopic">
+                        <i class="fa fa-tags"></i>
                         {{ result.subtopic.name }}
-                    {% else %}
+                    </button>
+                {% else %}
+                    <button type="button" class="btn btn-default without-subtopic">
+                        <i class="fa fa-tags"></i>
                         Sin subtema
-                    {% endif %}
-                </button>
+                    </button>
+                {% endif %}
             </div>
             <p>
                 {% if result.answerer and result.answerer.name|length > 0 %}

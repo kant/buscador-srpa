@@ -4,25 +4,11 @@ from flask.ext.wtf import Form
 from wtforms import validators, IntegerField, TextAreaField, BooleanField, SelectField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from flask_user.translations import lazy_gettext as _
-from models import MAX_TEXT_LENGTH, Question, Report, Topic, SubTopic, Author, Answerer
+from models import MAX_TEXT_LENGTH, Question, Report, Topic, SubTopic, Author, Answerer, get_or_create
 import time
 import datetime
 from helpers import SpreadSheetReader
 from flask import render_template, redirect, url_for
-
-
-def get_or_create(session, model, **kwargs):
-    """ Imita el get_or_create de django
-        URL: http://stackoverflow.com/questions/2546207/does-sqlalchemy-have-an-equivalent-of-djangos-get-or-create
-    """
-    instance = session.query(model).filter_by(**kwargs).first()
-    if instance:
-        return instance.id
-    else:
-        instance = model(**kwargs)
-        session.add(instance)
-        session.commit()
-        return instance.id
 
 
 class QuestionForm(Form):
@@ -165,6 +151,7 @@ class ProcessSpreadsheetForm(Form):
                 if i == 0 and self.discard_first_row.data:
                     continue
                 args = self.collect_args(row, columns)
+                args = self._get_ids(args, db_session)
                 question = Question(**args)
                 db_session.add(question)
             db_session.commit()
@@ -181,7 +168,25 @@ class ProcessSpreadsheetForm(Form):
             (self.topic.data, 'topic'),
             (self.subtopic.data, 'subtopic')
         ]
-        return [(int(tuple[0]), tuple[1]) for tuple in columns if len(tuple[0]) > 0]
+        return [(int(tuple[0]), tuple[1]) for tuple in columns
+                if len(tuple[0]) > 0]
+
+    def _get_ids(self, question_args, db_session):
+        #  TODO> Le agrego una fecha a mano aca para que no tire error.
+        if 'report' in question_args.keys():
+            question_args['report_id'] = get_or_create(
+                db_session, Report, name=question_args['report'],
+                date=datetime.date(2999, 9, 9))
+        if 'author' in question_args.keys():
+            question_args['author_id'] = get_or_create(
+                db_session, Author, name=question_args['author'])
+        if 'topic' in question_args.keys():
+            question_args['topic_id'] = get_or_create(
+                db_session, Topic, name=question_args['topic'])
+        if 'subtopic' in question_args.keys():
+            question_args['subtopic_id'] = get_or_create(
+                db_session, SubTopic, name=question_args['subtopic'])
+        return question_args
 
     @staticmethod
     def collect_args(row, columns):

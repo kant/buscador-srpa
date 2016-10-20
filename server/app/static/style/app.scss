@@ -5,6 +5,7 @@
 @import 'libs/bootstrap.min.css';
 @import 'libs/poncho.css';
 @import 'libs/select2.min.css';
+@import 'libs/jquery.qtip.min.css';
 
 .container-fluid {
   max-width: 1170px;
@@ -36,6 +37,10 @@
     display: table-cell;
     vertical-align: middle;
   }
+}
+
+button {
+  outline: none!important;
 }
 
 .highlight { background-color: yellow }

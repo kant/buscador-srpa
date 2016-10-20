@@ -85,7 +85,7 @@ class TextClassifier():
         if not all(np.in1d(ids, self.ids)):
             raise ValueError("Hay ids de textos que no se encuentran \
                               almacenados.")
-        setattr(self, name, LinearSVC())
+        setattr(self, name, SGDClassifier())
         classifier = getattr(self, name)
         indices = np.searchsorted(self.ids, ids)
         classifier.fit(self.tfidf_mat[indices, :], labels)
@@ -110,6 +110,8 @@ class TextClassifier():
         except AttributeError:
             raise AttributeError("No hay ningun clasificador con ese nombre.")
         indices = np.in1d(self.ids, ids)
+        if isinstance(labels, basestring):
+            labels = [labels]
         classifier.partial_fit(self.tfidf_mat[indices, :], labels)
 
     def classify(self, classifier_name, examples, max_labels=None,
@@ -145,25 +147,24 @@ class TextClassifier():
                 El tamaño de la matriz es de (N, T) donde N es la cantidad de
                 ejemplos y T es la cantidad de términos en el vocabulario.
         """
-        if type(examples) is str:
+        if isinstance(examples, basestring):
             if examples in self.ids:
                 textvec = self.tfidf_mat[self.ids == examples, :]
             else:
                 textvec = self.vectorizer.transform([examples])
                 textvec = self.transformer.transform(textvec)
-                return textvec
         elif type(examples) is list:
             if all(np.in1d(examples, self.ids)):
-                return self.tfidf_mat[np.in1d(self.ids, examples)]
+                textvec = self.tfidf_mat[np.in1d(self.ids, examples)]
             elif not any(np.in1d(examples, self.ids)):
                 textvec = self.vectorizer.transform(examples)
                 textvec = self.transformer.transform(textvec)
-                return textvec
             else:
                 raise ValueError("Las listas de ejemplos deben ser todos ids\
                                   de textos almacenados o todos textos planos")
         else:
             raise TypeError("Los ejemplos no son del tipo de dato adecuado.")
+        return textvec
 
     def get_similar(self, example, max_similars=3, similarity_cutoff=None,
                     term_diff_cutoff=0.6):
