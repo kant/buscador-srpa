@@ -30,14 +30,6 @@
                 <p class="question-body">“ {{ result.body }} ”</p>
                 <small>
                     {{ result.author.name if result.author.name and result.author.name|length > 0 else 'Sin autor' }}
-                    <span class="date">
-                        <i class="fa fa-calendar"></i>
-                        {% if result.report %}
-                            {{ result.report.date.strftime("%Y/%m/%d") }}
-                        {% else %}
-                            Sin fecha
-                        {% endif %}
-                    </span>
                     <span class="number">
                         <i class="fa fa-hashtag" aria-hidden="true"></i>
                         {% if result.number %}

@@ -52,7 +52,7 @@ class QuestionForm(Form):
 
     def save_question(self, db_session):
         #  TODO> Le agrego una fecha a mano aca para que no tire error.
-        report_id = get_or_create(db_session, Report, name=self.report.data, date=datetime.date(2999, 9, 9))
+        report_id = get_or_create(db_session, Report, name=self.report.data)
         author_id = get_or_create(db_session, Author, name=self.author.data)
         topic_id = get_or_create(db_session, Topic, name=self.topic.data)
         subtopic_id = get_or_create(db_session, SubTopic, name=self.subtopic.data)
