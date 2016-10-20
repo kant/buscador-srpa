@@ -52,8 +52,8 @@ class Question(db.Model):
     body = db.Column(db.Text(MAX_TEXT_LENGTH))
     justification = db.Column(db.Text(MAX_TEXT_LENGTH))
     context = db.Column(db.Text(MAX_TEXT_LENGTH))
-    answerers = db.relationship('Answerer', secondary='question_answerers', backref=db.backref('questions', lazy='dynamic'))
     keywords = db.relationship('Keyword', secondary='question_keywords', backref=db.backref('questions', lazy='dynamic'))
+    answerer_id = db.Column(db.Integer, db.ForeignKey('answerer.id'))
     report_id = db.Column(db.Integer, db.ForeignKey('report.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
     topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'))
@@ -64,7 +64,7 @@ class Question(db.Model):
         self.body = kwargs.get('body', '')
         self.justification = kwargs.get('justification', '')
         self.context = kwargs.get('context', '')
-        self.answerers = kwargs.get('answerers', [])
+        self.answerer_id = kwargs.get('answerer_id', None)
         self.keywords = kwargs.get('keywords', [])
         self.report_id = kwargs.get('report_id', None)
         self.author_id = kwargs.get('author_id', None)
@@ -131,12 +131,7 @@ class Author(db.Model):
 class Answerer(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     name = db.Column(db.String(MAX_NAME_LENGTH), unique=True)
-
-
-class QuestionAnswerers(db.Model):
-    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
-    answerer_id = db.Column(db.Integer, db.ForeignKey('answerer.id'))
+    questions = db.relationship('Question', backref='answerer')
 
 
 # class RelatedQuestions(db.Model):
