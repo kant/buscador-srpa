@@ -16,11 +16,13 @@
                 </li>
             </ul>
 
-            <form id="upload_form" method="post" action="{{ url_for('question_upload') }}" class="form-tab" enctype="multipart/form-data">
+            <form id="upload_form" method="post" action="{{ url_for('question_upload') }}" class="form-tab"
+                  enctype="multipart/form-data">
                 {{ upload_form.csrf_token }}
 
-                <div class="form-group row">
-                    {{ render_field(upload_form.spreadsheet) }}
+                <div class="form-group">
+                    <p>Seleccione una planilla (formatos soportados: csv)</p>
+                    <input class="" id="spreadsheet" name="spreadsheet" type="file">
                 </div>
                 <input type=submit value="Subir" class="btn btn-success">
             </form>

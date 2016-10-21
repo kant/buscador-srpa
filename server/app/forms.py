@@ -51,16 +51,16 @@ class QuestionForm(Form):
     )
 
     def save_question(self, db_session):
-        report_id = get_or_create(db_session, Report, name=self.report.data)
-        author_id = get_or_create(db_session, Author, name=self.author.data)
-        topic_id = get_or_create(db_session, Topic, name=self.topic.data)
-        subtopic_id = get_or_create(db_session, SubTopic, name=self.subtopic.data)
-        answerer_id = get_or_create(db_session, Answerer, name=self.subtopic.data)
+        report_id = get_or_create(db_session, Report, name=self.report.data.strip())
+        author_id = get_or_create(db_session, Author, name=self.author.data.strip())
+        topic_id = get_or_create(db_session, Topic, name=self.topic.data.strip())
+        subtopic_id = get_or_create(db_session, SubTopic, name=self.subtopic.data.strip())
+        answerer_id = get_or_create(db_session, Answerer, name=self.subtopic.data.strip())
         question = Question(
             number=self.number.data,
-            body=self.body.data,
-            justification=self.justification.data,
-            context=self.context.data,
+            body=self.body.data.strip(),
+            justification=self.justification.data.strip(),
+            context=self.context.data.strip(),
             answerer=answerer_id,
             report_id=report_id,
             author_id=author_id,

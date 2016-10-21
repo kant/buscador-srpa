@@ -11,4 +11,6 @@
     {% with results = similar_results, results_name = 'preguntas similares' %}
         {% include 'search/results_list.html' %}
     {% endwith %}
+
+    {% include 'forms/question_edit.html' %}
 {% endblock %}

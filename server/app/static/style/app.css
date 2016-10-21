@@ -2,6 +2,7 @@
 /* latin */
 @import url(libs/bootstrap.min.css);
 @import url(libs/poncho.css);
+@import url(libs/select2.min.css);
 @import url(libs/jquery.qtip.min.css);
 @font-face {
   font-family: 'Droid Serif';
@@ -2353,6 +2354,9 @@
 button {
   outline: none !important; }
 
+.no-padding {
+  padding: 0; }
+
 .highlight {
   background-color: yellow; }
 
@@ -2378,9 +2382,8 @@ button {
     color: #ef4d3d; }
 #search_results .result blockquote {
   margin: 10px; }
-#search_results .result .date {
+#search_results .result .date, #search_results .result .number {
   margin-left: 2em;
-  font-weight: 400;
   transition: none; }
 #search_results .result button.btn-topic,
 #search_results .result button.btn-subtopic {
@@ -2391,6 +2394,9 @@ button {
 #search_results .result .more-info {
   text-align: right;
   color: #aaa; }
+#search_results .result .disabled {
+  opacity: 0.5;
+  pointer-events: none; }
 #search_results .pagination {
   display: block;
   text-align: center; }
@@ -2420,14 +2426,55 @@ button {
 
 .qtip-jgm {
   height: 400px;
+  width: 300px;
   overflow: scroll;
-  border-color: transparent;
+  border-color: #ddd;
   background-color: #fafafa;
   border-radius: 4px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-  margin-left: 10px; }
-  .qtip-jgm button {
-    padding: 8px;
-    width: 100%; }
+  margin-left: 10px;
+  overflow: hidden; }
+  .qtip-jgm .qtip-content {
+    position: static;
+    padding: 0;
+    height: 100%; }
+    .qtip-jgm .qtip-content .tag-suggester {
+      height: 100%;
+      position: relative;
+      padding: 10px 10px 50px 10px; }
+    .qtip-jgm .qtip-content .menu {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      left: 0;
+      text-align: center; }
+      .qtip-jgm .qtip-content .menu button {
+        width: 46%;
+        padding: 4px;
+        font-size: 14px; }
+        .qtip-jgm .qtip-content .menu button.btn-success {
+          margin-left: 8px; }
+    .qtip-jgm .qtip-content .tag-list {
+      overflow-x: hidden;
+      overflow-y: scroll;
+      height: 100%; }
+      .qtip-jgm .qtip-content .tag-list button {
+        padding: 8px;
+        width: 100%; }
+
+.process-spreadsheet-form form {
+  margin-bottom: 20px; }
+.process-spreadsheet-form .field-label-container {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  text-align: right; }
+  .process-spreadsheet-form .field-label-container.header-checkbox {
+    text-align: left; }
+.process-spreadsheet-form select.form-control {
+  font-size: 14px;
+  height: 34px;
+  padding: 6px 12px; }
+.process-spreadsheet-form .submit-container {
+  text-align: right; }
 
 /*# sourceMappingURL=app.css.map */

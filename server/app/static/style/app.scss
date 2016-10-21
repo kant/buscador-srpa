@@ -4,6 +4,7 @@
 @import 'libs/fontawesome/font-awesome';
 @import 'libs/bootstrap.min.css';
 @import 'libs/poncho.css';
+@import 'libs/select2.min.css';
 @import 'libs/jquery.qtip.min.css';
 
 .container-fluid {
@@ -42,7 +43,12 @@ button {
   outline: none!important;
 }
 
+.no-padding {
+  padding: 0;
+}
+
 .highlight { background-color: yellow }
 
 @import 'search';
 @import 'question';
+@import 'forms';

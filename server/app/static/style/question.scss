@@ -1,5 +1,6 @@
 #search_results {
   .result {
+    // Generic
     .question-actions {
       text-align: right;
       .edit:hover {
@@ -15,9 +16,8 @@
     blockquote {
       margin: 10px;
     }
-    .date {
+    .date, .number {
       margin-left: 2em;
-      font-weight: 400;
       transition: none;
     }
     button.btn-topic,
@@ -31,6 +31,11 @@
       text-align: right;
       color: #aaa;
     }
+
+    .disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
   }
 
   .pagination {
@@ -40,9 +45,11 @@
       display: inline-block;
     }
   }
+
 }
 
 .result {
+  // Delete
   .panel-default {
     position: relative;
   }
@@ -75,15 +82,52 @@
 
 .qtip-jgm {
   height: 400px;
+  width: 300px;
   overflow: scroll;
-  border-color: transparent;
+  border-color: #ddd;
   background-color: #fafafa;
   border-radius: 4px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   margin-left: 10px;
+  overflow: hidden;
 
-  button {
-    padding: 8px;
-    width: 100%;
+  .qtip-content {
+    position: static;
+    padding: 0;
+    height: 100%;
+
+    .tag-suggester {
+      height: 100%;
+      position: relative;
+      padding: 10px 10px 50px 10px;
+    }
+
+    .menu {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      left: 0;
+      text-align: center;
+
+      button {
+        width: 46%;
+        padding: 4px;
+        font-size: 14px;
+        &.btn-success {
+          margin-left: 8px;
+        }
+      }
+    }
+
+    .tag-list {
+      overflow-x: hidden;
+      overflow-y: scroll;
+      height: 100%;
+
+      button {
+        padding: 8px;
+        width: 100%;
+      }
+    }
   }
 }

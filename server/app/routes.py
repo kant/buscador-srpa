@@ -43,6 +43,12 @@ def init_routes(app, db_session, searcher):
         result = searcher.search_from_url()
         return render_template('search/results.html', results=result, query=query, url_maker=searcher.url_maker)
 
+    @app.route('/pregunta/<int:question_id>.json')
+    @login_required
+    def see_question_json(question_id):
+        question = searcher.get_question(question_id)
+        return jsonify(question)
+
     @app.route('/pregunta/<int:question_id>')
     @login_required
     def see_question(question_id):
