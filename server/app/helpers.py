@@ -83,14 +83,15 @@ class Searcher:
         if len(all_questions) > 0:
             ids = [str(q.id) for q in all_questions]
             texts = [q.body for q in all_questions]
-            topics = [str(q.topic_id) for q in all_questions]
-            subtopics = [str(q.subtopic_id) for q in all_questions]
-            ids_filt_topics = [ids[i] for i, x in enumerate(topics)
-                               if len(x) > 0]
-            ids_filt_subtopics = [ids[i] for i, x in enumerate(subtopics)
-                                  if len(x) > 0]
-            filtered_topics = filter(lambda x: len(x) > 0, topics)
-            filtered_subtopics = filter(lambda x: len(x) > 0, subtopics)
+            topics_ids = [str(q.topic_id) for q in all_questions]
+            subtopics_ids = [str(q.subtopic_id) for q in all_questions]
+            ids_filt_topics = [ids[i] for i, x in enumerate(topics_ids)
+                               if x != '1']
+            ids_filt_subtopics = [ids[i] for i, x in enumerate(subtopics_ids)
+                                  if x != '1']
+            filtered_topics = filter(lambda x: x != '1', topics_ids)
+            filtered_subtopics = filter(lambda x: x != '1', subtopics_ids)
+            print("Entrenando con {:d}".format(len(ids_filt_topics)))
             try:
                 self.text_classifier = TextClassifier(texts, ids)
                 self.text_classifier.make_classifier(
@@ -114,6 +115,7 @@ class Searcher:
         else:
             results = models.Question.query.all()
             results = [(result, []) for result in results]
+        results = self._filter_results(results, query['filters'])
         return self._paginate(results, query)
 
     def _paginate(self, results, query):
@@ -122,13 +124,39 @@ class Searcher:
             'total_pages': int(math.ceil(len(results) / float(self.per_page))),
             'total_results': len(results)
         }
-        from_position = (pagination['current_page']-1) * self.per_page
+        from_position = (pagination['current_page'] - 1) * self.per_page
         to_position = pagination['current_page'] * self.per_page
         return {
             'pagination': pagination,
             'result_list': results[from_position:to_position],
             'query': query
         }
+
+    @staticmethod
+    def _filt_fun(result, filter_ids):
+        """Recives an item of the resut list [(result, best_words)]
+            and a dict of filter_ids and decides whether that element is
+            accepted by the filter or not.
+        """
+        result_only = result[0]
+        comparators = [True if getattr(result_only, k) == v[0].id else False
+                       for k, v in filter_ids.iteritems() if len(v)>0]
+        if all(comparators):
+            return True
+        else:
+            return False
+
+
+    def _filter_results(self, results, filters):
+        filt_models = {'tema': ('topic_id', models.Topic),
+                       'subtema': ('subtopic_id', models.SubTopic),
+                       'autor': ('author_id', models.Author),
+                       'informe': ('report_id', models.Report),
+                       'organismo-requerido': ('answerer_id', models.Answerer),
+                       }
+        filt_ids = {v[0]: v[1].query.filter_by(name=filters[k]).all()
+                    for k, v in filt_models.iteritems() if k in filters.keys()}
+        return filter(lambda x: self._filt_fun(x, filt_ids), results)
 
     def get_similar_to(self, question_id):
         query = self.query_from_url()
@@ -153,17 +181,23 @@ class Searcher:
             myModel = models.SubTopic
         else:
             raise(ValueError, "No such model")
-        tag_obj = myModel.query.filter(myModel.id.in_(tags)).all()
-        tag_names = [t.name for t in tag_obj]
+        tag_names = [myModel.query.get(idt).name for idt in tags]
         sorted_tags = [x for (y, x) in sorted(zip(vals.tolist()[0], tag_names))]
-        return sorted_tags
+        return list(reversed(sorted_tags))
 
     def query_from_url(self):
+        filter_titles = ['tema',
+                         'subtema',
+                         'autor',
+                         'informe',
+                         'organismo-requerido',
+                         'pregunta']
         return {
             'text': request.args.get('q'),
             'current_page': int(request.args.get('pagina', 1)),
             'can_add_more_filters': True,
-            'filters': []
+            'filters': {t: request.args.get(t).lower() for t in filter_titles
+                        if request.args.get(t) is not None}
         }
 
     def url_maker(self, query, page=None):

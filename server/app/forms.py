@@ -196,6 +196,8 @@ class ProcessSpreadsheetForm(Form):
             position = col[0]
             if position < len(row):
                 value = row[col[0]].strip()
+                if col[1] in ['topic', 'subtopic']:
+                    value = value.lower()
             else:
                 value = ''
             d[col[1]] = value
