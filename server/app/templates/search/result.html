@@ -13,14 +13,16 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="question-actions">
-                <span class="edit">
-                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                    editar
-                </span>
-                <span class="delete">
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                    eliminar
-                </span>
+                {% if not hide_actions %}
+                    <span class="edit">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        editar
+                    </span>
+                    <span class="delete">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        eliminar
+                    </span>
+                {% endif %}
             </div>
             <p class="text-muted">
                 Informe
@@ -50,9 +52,15 @@
                 {% endif %}
             </p>
             <blockquote>
-                <p class="question-body">“ {{ result.body }} ”</p>
+                <p class="question-body">
+                    {% if result.body and result.body|length > 0 %}
+                        “ {{ result.body }} ”
+                    {% else %}
+                        Pregunta sin texto
+                    {% endif %}
+                </p>
                 <small>
-                    {{ result.author.name if result.author.name and result.author.name|length > 0 else 'Sin autor' }}
+                    {{ result.author.name if result.author and result.author.name and result.author.name|length > 0 else 'Sin autor' }}
                 </small>
             </blockquote>
             <p class="text-muted">
@@ -64,7 +72,7 @@
                 {% endif %}
             </p>
             <div class="tags">
-                {% if result.topic.name and result.topic.name|length > 0 %}
+                {% if result.topic and result.topic.name and result.topic.name|length > 0 %}
                     <button type="button" class="btn btn-topic">
                         <i class="fa fa-tag"></i>
                         {{ result.topic.name }}
@@ -75,7 +83,7 @@
                         Sin tema
                     </button>
                 {% endif %}
-                {% if result.subtopic.name and result.subtopic.name|length > 0 %}
+                {% if result.subtopic and result.subtopic.name and result.subtopic.name|length > 0 %}
                     <button type="button" class="btn btn-subtopic">
                         <i class="fa fa-tags"></i>
                         {{ result.subtopic.name }}

@@ -2354,6 +2354,9 @@
 button {
   outline: none !important; }
 
+.no-padding {
+  padding: 0; }
+
 .highlight {
   background-color: yellow; }
 
@@ -2458,5 +2461,20 @@ button {
       .qtip-jgm .qtip-content .tag-list button {
         padding: 8px;
         width: 100%; }
+
+.process-spreadsheet-form form {
+  margin-bottom: 20px; }
+.process-spreadsheet-form .field-label-container {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  text-align: right; }
+  .process-spreadsheet-form .field-label-container.header-checkbox {
+    text-align: left; }
+.process-spreadsheet-form select.form-control {
+  font-size: 14px;
+  height: 34px;
+  padding: 6px 12px; }
+.process-spreadsheet-form .submit-container {
+  text-align: right; }
 
 /*# sourceMappingURL=app.css.map */

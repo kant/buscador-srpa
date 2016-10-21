@@ -43,7 +43,12 @@ button {
   outline: none!important;
 }
 
+.no-padding {
+  padding: 0;
+}
+
 .highlight { background-color: yellow }
 
 @import 'search';
 @import 'question';
+@import 'forms';

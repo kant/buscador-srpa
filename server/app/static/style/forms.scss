@@ -1,0 +1,21 @@
+.process-spreadsheet-form {
+  form {
+    margin-bottom: 20px;
+  }
+  .field-label-container {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    text-align: right;
+    &.header-checkbox {
+      text-align: left;
+    }
+  }
+  select.form-control {
+    font-size: 14px;
+    height: 34px;
+    padding: 6px 12px;
+  }
+  .submit-container {
+    text-align: right;
+  }
+}

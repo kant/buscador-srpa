@@ -3,7 +3,7 @@
 {% from "forms/_formhelpers.html" import render_field, render_label %}
 
 {% block main %}
-    <div class="container-fluid">
+    <div class="container-fluid process-spreadsheet-form">
         <div class="col-md-8 col-md-offset-2">
             <h1>Procesar planilla</h1>
 
@@ -19,62 +19,129 @@
             <form id="upload_form" method="post" action="{{ url_for('process_spreadsheet', filename=filename) }}" class="form-tab" enctype="multipart/form-data">
                 {{ process_spreadsheet_form.csrf_token }}
 
-                <div class="form-group row">
+                <div class="form-group container-fluid">
                     <div class="col-xs-12">
-                        {{ process_spreadsheet_form.discard_first_row.label() }}
-                        {{ process_spreadsheet_form.discard_first_row() }}
+                        <div class="col-xs-12 col-sm-6 field-label-container">
+                            {{ process_spreadsheet_form.discard_first_row.label() }}
+                        </div>
+                        <div class="col-xs-12 col-sm-6 field-label-container header-checkbox">
+                            {{ process_spreadsheet_form.discard_first_row() }}
+                        </div>
                     </div>
+
+                    <div class="col-xs-12 no-padding">
+                        <div class="col-xs-12 col-sm-6 field-label-container">
+                            {{ process_spreadsheet_form.number.label() }}
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            {{ process_spreadsheet_form.number(class_='form-control') }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 no-padding">
+                        <div class="col-xs-12 col-sm-6 field-label-container">
+                            {{ process_spreadsheet_form.report.label() }}
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            {{ process_spreadsheet_form.report(class_='form-control') }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 no-padding">
+                        <div class="col-xs-12 col-sm-6 field-label-container">
+                            {{ process_spreadsheet_form.body.label() }}
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            {{ process_spreadsheet_form.body(class_='form-control') }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 no-padding">
+                        <div class="col-xs-12 col-sm-6 field-label-container">
+                            {{ process_spreadsheet_form.author.label() }}
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            {{ process_spreadsheet_form.author(class_='form-control') }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 no-padding">
+                        <div class="col-xs-12 col-sm-6 field-label-container">
+                            {{ process_spreadsheet_form.justification.label() }}
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            {{ process_spreadsheet_form.justification(class_='form-control') }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 no-padding">
+                        <div class="col-xs-12 col-sm-6 field-label-container">
+                            {{ process_spreadsheet_form.context.label() }}
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            {{ process_spreadsheet_form.context(class_='form-control') }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 no-padding">
+                        <div class="col-xs-12 col-sm-6 field-label-container">
+                            {{ process_spreadsheet_form.topic.label() }}
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            {{ process_spreadsheet_form.topic(class_='form-control') }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 no-padding">
+                        <div class="col-xs-12 col-sm-6 field-label-container">
+                            {{ process_spreadsheet_form.subtopic.label() }}
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            {{ process_spreadsheet_form.subtopic(class_='form-control') }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 no-padding">
+                        <div class="col-xs-12 col-sm-6 field-label-container">
+                            {{ process_spreadsheet_form.answerer.label() }}
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            {{ process_spreadsheet_form.answerer(class_='form-control') }}
+                        </div>
+                    </div>
+
+                    <script>
+                        window.jgm = window.jgm || {};
+                        window.jgm.spreadsheet_summary = {
+                            best_row: {{ spreadsheet_summary.best_row|tojson|safe }}
+                        };
+                    </script>
+                    <div class="col-xs-12 no-padding preview-container">
+                        {% with result = {}, hide_more_info_link = True, hide_actions = True %}
+                            {% include 'search/result.html' %}
+                        {% endwith %}
+                    </div>
+
+                    <div class="col-xs-12 no-padding submit-container">
+                        <input type=submit value="Procesar" class="btn btn-success">
+                    </div>
+
                 </div>
-
-                <div class="form-group row">
-                    <div class="col-xs-12">
-                        {{ render_label(process_spreadsheet_form.number) }}
-                        {{ render_field(process_spreadsheet_form.number) }}
-                    </div>
-
-                    <div class="col-xs-12">
-                        {{ render_label(process_spreadsheet_form.report) }}
-                        {{ render_field(process_spreadsheet_form.report) }}
-                    </div>
-
-                    <div class="col-xs-12">
-                        {{ render_label(process_spreadsheet_form.body) }}
-                        {{ render_field(process_spreadsheet_form.body) }}
-                    </div>
-
-                    <div class="col-xs-12">
-                        {{ render_label(process_spreadsheet_form.author) }}
-                        {{ render_field(process_spreadsheet_form.author) }}
-                    </div>
-
-                    <div class="col-xs-12">
-                        {{ render_label(process_spreadsheet_form.justification) }}
-                        {{ render_field(process_spreadsheet_form.justification) }}
-                    </div>
-
-                    <div class="col-xs-12">
-                        {{ render_label(process_spreadsheet_form.context) }}
-                        {{ render_field(process_spreadsheet_form.context) }}
-                    </div>
-
-                    <div class="col-xs-12">
-                        {{ render_label(process_spreadsheet_form.topic) }}
-                        {{ render_field(process_spreadsheet_form.topic) }}
-                    </div>
-
-                    <div class="col-xs-12">
-                        {{ render_label(process_spreadsheet_form.subtopic) }}
-                        {{ render_field(process_spreadsheet_form.subtopic) }}
-                    </div>
-
-                    <div class="col-xs-12">
-                        {{ render_label(process_spreadsheet_form.answerer) }}
-                        {{ render_field(process_spreadsheet_form.answerer) }}
-                    </div>
-
-                </div>
-                <input type=submit value="Procesar" class="btn btn-success">
             </form>
         </div>
     </div>
+
+    <script>
+        $(function () {
+            $('.process-spreadsheet-form select').on('change', function (e) {
+                var selects = $('.process-spreadsheet-form select');
+                var question = {};
+                for (var i=0; i<selects.length; i++) {
+                    var select = $(selects[i]);
+                    question[select.attr('id')] = parseInt(select.find('option:selected').val());
+                }
+                console.log(question);
+            })
+        })
+    </script>
 {% endblock %}
