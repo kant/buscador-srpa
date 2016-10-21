@@ -36,6 +36,13 @@ $(function () {
         }).qtip('show')
     }
 
+    var selectTag = function (e) {
+        $(e.currentTarget).addClass('active')
+            .siblings().removeClass('active')
+            .parents('.qtip-jgm').find('.btn-success').removeClass('disabled');
+
+    };
+
     var showTags = function (api, questionId, tagType) {
         var url;
         if (tagType == 'topic') {
@@ -54,7 +61,7 @@ $(function () {
     };
 
     var submitTags = function (e) {
-        var $button = $(e.currentTarget);
+        var $button = $(e.currentTarget).parents('.qtip-jgm').find('.btn-primary.active');
         var questionId = $button.data('question-id');
         var tagText = $button.text();
         var tagType = $button.data('tag-type');
@@ -67,11 +74,14 @@ $(function () {
         }).then(function (response) {
             $button.parents('.qtip-jgm').remove();
             $('.result[data-question-id=' + questionId + ']').replaceWith($(response));
-            window.jgm.results.highlight(questionId, window.jgm.best_words[questionId]);
+            if (window.jgm.best_words) {
+                window.jgm.results.highlight(questionId, window.jgm.best_words[questionId]);
+            }
         })
     }
 
-    $('body').on('click', '.qtip-jgm button.btn-primary', submitTags);
+    $('body').on('click', '.qtip-jgm button.btn-primary', selectTag);
+    $('body').on('click', '.qtip-jgm button.btn-success', submitTags);
     $('body').on('click', '.result .btn.without-topic', function (e) {
         loadTags(e, 'topic');
     });

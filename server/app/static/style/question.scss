@@ -89,6 +89,7 @@
   border-radius: 4px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   margin-left: 10px;
+  overflow: hidden;
 
   .qtip-content {
     position: static;
@@ -119,7 +120,8 @@
     }
 
     .tag-list {
-      overflow: scroll;
+      overflow-x: hidden;
+      overflow-y: scroll;
       height: 100%;
 
       button {
