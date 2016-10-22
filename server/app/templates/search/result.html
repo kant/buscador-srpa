@@ -12,6 +12,7 @@
 <div class="col-xs-12 result" data-question-id="{{ result.id }}">
     <div class="panel panel-default">
         <div class="panel-body">
+
             <div class="question-actions">
                 {% if not hide_actions %}
                     <span class="edit">
@@ -24,26 +25,37 @@
                     </span>
                 {% endif %}
             </div>
+
             <p class="text-muted">
-                Informe
-                <span class="resport-name">
+                <span class="resport-name"
+                      data-attribute-name="report"
+                      data-attribute-default="Informe sin nombre"
+                      data-attribute-display-template="Informe $">
                     {% if result.report %}
-                        {{ result.report.name }}
+                        Informe {{ result.report.name }}
                     {% else %}
-                        sin nombre
+                        Informe sin nombre
                     {% endif %}
                 </span>
-                <span class="number">
-                    Pregunta
+
+                <span class="number"
+                      data-attribute-name="number"
+                      data-attribute-default="Pregunta sin número"
+                      data-attribute-display-template="Pregunta <i class='fa fa-hashtag' aria-hidden='true'></i> $">
                     {% if result.number %}
+                        Pregunta
                         <i class="fa fa-hashtag" aria-hidden="true"></i>
                         {{ result.number }}
                     {% else %}
-                        sin numero
+                        Pregunta sin número
                     {% endif %}
                 </span>
             </p>
-            <p class="text-muted">
+
+            <p class="text-muted"
+               data-attribute-name="context"
+               data-attribute-default="Sin contexto"
+               data-attribute-display-template="Contexto: $">
                 {% if result.context|length > 0 %}
                     Contexto:
                     {{ result.context }}
@@ -51,19 +63,35 @@
                     Sin contexto
                 {% endif %}
             </p>
+
             <blockquote>
-                <p class="question-body">
+                <p class="question-body"
+                   data-attribute-name="body"
+                   data-attribute-default="Pregunta sin texto"
+                   data-attribute-display-template="“ $ ”">
                     {% if result.body and result.body|length > 0 %}
                         “ {{ result.body }} ”
                     {% else %}
                         Pregunta sin texto
                     {% endif %}
                 </p>
-                <small>
-                    {{ result.author.name if result.author and result.author.name and result.author.name|length > 0 else 'Sin autor' }}
+
+                <small data-attribute-name="author"
+                       data-attribute-default="Sin autor"
+                       data-attribute-display-template="Autor: $">
+                    {%- if result.author and result.author.name and result.author.name|length > 0 -%}
+                        Autor:
+                        {{ result.author.name }}
+                    {%- else -%}
+                        Sin autor
+                    {%- endif -%}
                 </small>
             </blockquote>
-            <p class="text-muted">
+
+            <p class="text-muted"
+               data-attribute-name="justification"
+               data-attribute-default="Sin justificación"
+               data-attribute-display-template="Justificación: $">
                 {% if result.justification|length > 0 %}
                     Justificación:
                     {{ result.justification }}
@@ -71,42 +99,39 @@
                     Sin justificación
                 {% endif %}
             </p>
+
             <div class="tags">
-                {% if result.topic and result.topic.name and result.topic.name|length > 0 %}
-                    <button type="button" class="btn btn-topic btn-sm">
+                {% for tag_name in ['topic', 'subtopic'] %}
+                    {% set has_tag = result[tag_name] and result[tag_name].name and result[tag_name].name|length > 0 %}
+                    <button type="button"
+                            class="btn btn-sm
+                                {{ 'btn-' + tag_name if has_tag else 'btn-default without-' + tag_name }}
+                                {{ 'no-actions' if hide_actions else '' }}"
+                            data-attribute-name="{{ tag_name }}"
+                            data-attribute-default="<i class='fa fa-tag'></i> Sin {{ 'tema' if tag_name == 'topic' else 'subtema' }}"
+                            data-attribute-display-template="<i class='fa fa-tag'></i> $">
                         <i class="fa fa-tag"></i>
-                        {{ result.topic.name }}
+                        {% if has_tag %}
+                            {{ result[tag_name].name }}
+                        {% else %}
+                            Sin {{ 'tema' if tag_name == 'topic' else 'subtema' }}
+                        {% endif %}
                     </button>
-                {% else %}
-                    <button type="button" class="btn btn-default btn-sm without-topic">
-                        <i class="fa fa-tag"></i>
-                        Sin tema
-                    </button>
-                {% endif %}
-                {% if result.subtopic and result.subtopic.name and result.subtopic.name|length > 0 %}
-                    <button type="button" class="btn btn-subtopic btn-sm">
-                        <i class="fa fa-tags"></i>
-                        {{ result.subtopic.name }}
-                    </button>
-                {% else %}
-                    <button type="button" class="btn btn-default btn-sm without-subtopic">
-                        <i class="fa fa-tags"></i>
-                        Sin subtema
-                    </button>
-                {% endif %}
+                {% endfor %}
             </div>
-            <p>
-                {% if result.answerer and result.answerer.name|length > 0 %}
+
+            <p class="text-muted"
+               data-attribute-name="answerer"
+               data-attribute-default="Sin asignado a responder"
+               data-attribute-display-template="Responde: $">
+                {%- if result.answerer and result.answerer.name|length > 0 -%}
                     Responde:
-                    <span class="text-muted">
-                        {{ result.answerer.name }}
-                    </span>
-                {% else %}
-                    <span class="text-muted">
-                        Sin asignado a responder
-                    </span>
-                {% endif %}
+                    {{ result.answerer.name }}
+                {%- else -%}
+                    Sin asignado a responder
+                {%- endif -%}
             </p>
+
             {% if not hide_more_info_link %}
                 <div class="more-info">
                     <a href="{{ url_for('see_question', question_id=result.id) }}">
