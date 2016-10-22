@@ -6,6 +6,16 @@
 @import 'libs/poncho.css';
 @import 'libs/select2.min.css';
 @import 'libs/jquery.qtip.min.css';
+@import 'libs/nprogress.css';
+
+#nprogress {
+  .bar {
+    height: 3px;
+  }
+  .spinner-icon {
+    border-width: 3px;
+  }
+}
 
 .container-fluid {
   max-width: 1170px;

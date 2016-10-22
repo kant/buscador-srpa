@@ -6,3 +6,13 @@ window.jgm.results = {
         questionText.highlight(words);
     }
 };
+
+$(function () {
+    $(document).ajaxStart(NProgress.start);
+    $(document).ajaxStop(NProgress.done);
+    $(window).on('beforeunload', function() {
+        NProgress.start();
+        return undefined;
+    })
+})
+

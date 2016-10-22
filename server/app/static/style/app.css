@@ -4,6 +4,7 @@
 @import url(libs/poncho.css);
 @import url(libs/select2.min.css);
 @import url(libs/jquery.qtip.min.css);
+@import url(libs/nprogress.css);
 @font-face {
   font-family: 'Droid Serif';
   font-style: normal;
@@ -2329,6 +2330,11 @@
   margin: 0;
   overflow: visible;
   clip: auto; }
+
+#nprogress .bar {
+  height: 3px; }
+#nprogress .spinner-icon {
+  border-width: 3px; }
 
 .container-fluid {
   max-width: 1170px; }
