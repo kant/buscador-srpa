@@ -73,23 +73,23 @@
             </p>
             <div class="tags">
                 {% if result.topic and result.topic.name and result.topic.name|length > 0 %}
-                    <button type="button" class="btn btn-topic">
+                    <button type="button" class="btn btn-topic btn-sm">
                         <i class="fa fa-tag"></i>
                         {{ result.topic.name }}
                     </button>
                 {% else %}
-                    <button type="button" class="btn btn-default without-topic">
+                    <button type="button" class="btn btn-default btn-sm without-topic">
                         <i class="fa fa-tag"></i>
                         Sin tema
                     </button>
                 {% endif %}
                 {% if result.subtopic and result.subtopic.name and result.subtopic.name|length > 0 %}
-                    <button type="button" class="btn btn-subtopic">
+                    <button type="button" class="btn btn-subtopic btn-sm">
                         <i class="fa fa-tags"></i>
                         {{ result.subtopic.name }}
                     </button>
                 {% else %}
-                    <button type="button" class="btn btn-default without-subtopic">
+                    <button type="button" class="btn btn-default btn-sm without-subtopic">
                         <i class="fa fa-tags"></i>
                         Sin subtema
                     </button>
@@ -119,8 +119,8 @@
             <div class="center-vertical-table">
                 <div class="center-vertical-cell">
                     <p class="confirmation-text">¿Está seguro de querer borrar esta pregunta?</p>
-                    <button type="button" class="btn btn-default cancel-delete">Cancelar</button>
-                    <button type="button" class="btn btn-danger confirm-delete">Borrar</button>
+                    <button type="button" class="btn btn-default btn-sm cancel-delete">Cancelar</button>
+                    <button type="button" class="btn btn-danger btn-sm confirm-delete">Borrar</button>
                 </div>
             </div>
         </div>

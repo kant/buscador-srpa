@@ -57,14 +57,15 @@ $(function () {
             var content = tagsTemplate(response, questionId, tagType);
             api.set('content.text', content);
         })
-        return 'Cargando...'
+        return ''
     };
 
     var submitTags = function (e) {
-        var $button = $(e.currentTarget).parents('.qtip-jgm').find('.btn-primary.active');
-        var questionId = $button.data('question-id');
-        var tagText = $button.text();
-        var tagType = $button.data('tag-type');
+        var $submitButton = $(e.currentTarget).text('Procesando...').addClass('disabled');
+        var $tagButton = $submitButton.parents('.qtip-jgm').find('.btn-primary.active');
+        var questionId = $tagButton.data('question-id');
+        var tagText = $tagButton.text();
+        var tagType = $tagButton.data('tag-type');
         var data = {};
         data[tagType] = tagText;
         $.ajax({
@@ -72,7 +73,7 @@ $(function () {
             method: 'POST',
             data: data
         }).then(function (response) {
-            $button.parents('.qtip-jgm').remove();
+            $tagButton.parents('.qtip-jgm').remove();
             $('.result[data-question-id=' + questionId + ']').replaceWith($(response));
             if (window.jgm.best_words) {
                 window.jgm.results.highlight(questionId, window.jgm.best_words[questionId]);
