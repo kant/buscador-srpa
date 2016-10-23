@@ -81,8 +81,3 @@ def init_routes(app, db_session, searcher):
     def update_question(question_id):
         result = Question.update(question_id, db_session, request.values)
         return render_template('/search/result.html', result=result, best_words=False)
-
-    @app.route('/gestion_de_entidades')
-    @login_required
-    def management():
-        return render_template('management.html')
