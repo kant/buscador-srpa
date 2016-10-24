@@ -2368,17 +2368,33 @@ button {
 .highlight {
   background-color: yellow; }
 
-#search_filters .panel:hover, #search_filters .panel:focus {
-  color: inherit;
-  background-color: white; }
-  #search_filters .panel:hover .close, #search_filters .panel:focus .close {
-    opacity: 0.6; }
-#search_filters .close {
-  position: absolute;
-  top: 0.5em;
-  right: 1em; }
-#search_filters .add-filter {
-  margin: auto; }
+#search-filters {
+  padding-bottom: 0; }
+  #search-filters .panel {
+    margin-bottom: 10px; }
+    #search-filters .panel:hover, #search-filters .panel:focus {
+      color: inherit;
+      background-color: white; }
+      #search-filters .panel:hover .close, #search-filters .panel:focus .close {
+        opacity: 0.6; }
+    #search-filters .panel .close {
+      position: absolute;
+      top: 0.5em;
+      right: 1em; }
+    #search-filters .panel blockquote {
+      margin: 5px 30px; }
+  #search-filters .add-filter {
+    margin-left: auto; }
+  #search-filters #filter-picker label {
+    margin-right: 10px; }
+  #search-filters #filter-picker #filter-type {
+    width: 200px; }
+  #search-filters #filter-picker .filter-value-picker {
+    width: 300px; }
+  #search-filters #filter-picker .actions {
+    text-align: right; }
+    #search-filters #filter-picker .actions button {
+      margin-bottom: 0; }
 
 #search_results .result .question-actions {
   text-align: right; }

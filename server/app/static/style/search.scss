@@ -1,5 +1,8 @@
-#search_filters {
+#search-filters {
+  padding-bottom: 0;
+
   .panel {
+    margin-bottom: 10px;
     &:hover, &:focus {
       color: inherit;
       background-color: white;
@@ -7,14 +10,35 @@
         opacity: 0.6;
       }
     }
-  }
-  .close {
-    position: absolute;
-    top: 0.5em;
-    right: 1em;
+    .close {
+      position: absolute;
+      top: 0.5em;
+      right: 1em;
+    }
+    blockquote {
+      margin: 5px 30px;
+    }
   }
 
   .add-filter {
-    margin: auto;
+    margin-left: auto;
+  }
+
+  #filter-picker {
+    label {
+      margin-right: 10px;
+    }
+    #filter-type {
+      width: 200px;
+    }
+    .filter-value-picker {
+      width: 300px;
+    }
+    .actions {
+      text-align: right;
+      button {
+        margin-bottom: 0;
+      }
+    }
   }
 }

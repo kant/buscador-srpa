@@ -1,8 +1,8 @@
-<section class="container-fluid" id="search_filters">
+<section class="container-fluid" id="search-filters">
     <div class="row panels-row">
         {% if query.text and query.text|length > 0 %}
             <div class="col-xs-12 filter text-query">
-                <a class="panel panel-default" href="#">
+                <a class="panel panel-default filter-link" href="#" data-filter-link-type="remove" data-filter-name="q">
                     <div class="panel-body">
                         <h3>Buscando similares a:</h3>
                         <blockquote>
@@ -13,12 +13,132 @@
                 </a>
             </div>
         {% endif %}
+        {% for filter_name in query.filters %}
+            <div class="col-xs-12 filter text-query">
+                <a class="panel panel-default filter-link" href="#" data-filter-link-type="remove" data-filter-name="{{ filter_name }}">
+                    <div class="panel-body">
+                        <h3>Filtrando por {{ filter_name }}: {{ query.filters[filter_name] }}</h3>
+                    </div>
+                    <i class="fa fa-times fa-2x close" aria-hidden="true"></i>
+                </a>
+            </div>
+        {% endfor %}
+
+
         {% if query.can_add_more_filters %}
-            <div class="col-xs-12">
+            <div class="col-xs-12 add-filter-container">
                 <button type="button" class="btn btn-success btn-sm add-filter">
                     <i class="fa fa-filter" aria-hidden="true"></i> Agregar filtro
                 </button>
             </div>
+            <div id="filter-picker" class="col-xs-12 hidden">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="col-xs-12">
+                            <label>
+                                Tipo de filtro
+                                <select id="filter-type">
+                                    {% for model_name in other_models.keys() %}
+                                        <option value="{{ model_name }}">
+                                            {% trans %}{{ model_name }}{% endtrans %}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                            {% for model_name in other_models.keys() %}
+                                <label class="filter-value hidden" data-filter-type="{{ model_name }}">
+                                    Valor del filtro
+                                    <select class="filter-value-picker">
+                                        {% for model_instance in other_models[model_name] %}
+                                            <option value="{{ model_instance.name }}">{{ model_instance.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                            {% endfor %}
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-sm btn-default cancel-filter">Cancelar</button>
+                            <a href="" id="apply-filter" class="filter-link" data-filter-link-type="add">
+                                <button class="btn btn-sm btn-success">Aplicar filtro</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% endif %}
     </div>
+
+    <script>
+        $(function() {
+            window.jgm = window.jgm || {};
+            window.jgm.query = {{ query|tojson|safe }};
+
+            $('#search-filters .add-filter').on('click', function() {
+                $('#search-filters .add-filter-container').addClass('hidden');
+                $('#filter-picker').removeClass('hidden');
+            })
+            $('#search-filters .cancel-filter').on('click', function() {
+                $('#search-filters .add-filter-container').removeClass('hidden');
+                $('#filter-picker').addClass('hidden');
+            })
+            var showValuePicker = function() {
+                var optionSelected = $('#search-filters #filter-type option:selected').val();
+                $('#search-filters .filter-value').addClass('hidden').removeClass('active');
+                $('#search-filters .filter-value[data-filter-type="' + optionSelected + '"]').removeClass('hidden').addClass('active');
+            }
+
+            var urlConstructor = function (args) {
+                var getArgs = [];
+                for (var key in args) {
+                    getArgs.push(encodeURIComponent(key) + '=' + encodeURIComponent(args[key]));
+                }
+                return '/buscar?' + getArgs.join('&');
+            }
+
+            var currentArgs = function () {
+                var args = jQuery.extend({}, window.jgm.query.filters);
+                if (window.jgm.query.text) {
+                    args['q'] = window.jgm.query.text;
+                }
+                return args;
+            }
+
+            var updateRemoveLinks = function () {
+                var links = $('a.filter-link[data-filter-link-type="remove"]');
+                for (var i=0; i<links.length; i++) {
+                    var link = $(links[i]);
+                    var newArgs = currentArgs();
+                    delete newArgs[link.data('filter-name')];
+                    var newHref = urlConstructor(newArgs);
+                    link.attr('href', newHref);
+                }
+            }
+
+            var updateAddLink = function () {
+                var selectedFilterName = $('#search-filters #filter-type option:selected').val();
+                var selectedFilterValue = $('#search-filters .filter-value.active option:selected').val();
+                var link= $('#search-filters #apply-filter');
+                var newArgs = currentArgs();
+                var translations = {
+                    'report': 'informe', 'author': 'autor', 'topic': 'tema',
+                    'subtopic': 'subtema', 'answerer': 'oranismo-requerido'
+                }
+                newArgs[translations[selectedFilterName]] = selectedFilterValue;
+                var newHref = urlConstructor(newArgs);
+                link.attr('href', newHref);
+            }
+
+            $('#search-filters #filter-type').select2({
+                minimumResultsForSearch: Infinity
+            }).on('select2:select', function() {
+                showValuePicker();
+                updateAddLink();
+            });
+            $('#search-filters .filter-value-picker').select2().on('select2:select', updateAddLink);
+
+            showValuePicker();
+            updateRemoveLinks();
+            updateAddLink();
+        })
+    </script>
 </section>

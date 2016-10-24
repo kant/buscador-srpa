@@ -101,6 +101,16 @@ class Searcher:
             except Exception as e:
                 print e
 
+    @staticmethod
+    def list_models():
+        return {
+            'author': models.Author.query.all(),
+            'answerer': models.Answerer.query.all(),
+            'report': models.Report.query.all(),
+            'subtopic': models.SubTopic.query.all(),
+            'topic': models.Topic.query.all(),
+        }
+
     def get_question(self, question_id):
         question = models.Question.query.get(question_id)
         return question
@@ -145,7 +155,6 @@ class Searcher:
             return True
         else:
             return False
-
 
     def _filter_results(self, results, filters):
         filt_models = {'tema': ('topic_id', models.Topic),

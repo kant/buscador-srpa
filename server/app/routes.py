@@ -41,7 +41,9 @@ def init_routes(app, db_session, searcher):
     def search():
         query = searcher.query_from_url()
         result = searcher.search_from_url()
-        return render_template('search/results.html', results=result, query=query, url_maker=searcher.url_maker)
+        other_models = searcher.list_models()
+        return render_template('search/results.html', results=result,
+                               query=query, url_maker=searcher.url_maker, other_models=other_models)
 
     @app.route('/pregunta/<int:question_id>.json')
     @login_required
