@@ -54,11 +54,11 @@ msgstr "Autor de la Pregunta"
 
 #: forms.py:58 forms.py:121
 msgid "Question topic"
-msgstr "Tema de la pregunta"
+msgstr "Organo Requerido"
 
 #: forms.py:62 forms.py:122
 msgid "Question subtopic"
-msgstr "Subtema de la pregunta"
+msgstr "Area de Gestion"
 
 #: forms.py:113
 msgid "First row is header"
@@ -82,4 +82,3 @@ msgstr "Texto de busqueda"
 
 #~ msgid "Question number must be a positive integer"
 #~ msgstr ""
-

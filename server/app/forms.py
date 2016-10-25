@@ -21,10 +21,10 @@ class QuestionForm(Form):
         _('Question body'),
         [validators.Length(min=1, max=MAX_TEXT_LENGTH)]
     )
-    justification = TextAreaField(
-        _('Question justification (optional)'),
-        [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
-    )
+    # justification = TextAreaField(
+    #     _('Question justification (optional)'),
+    #     [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
+    # )
     context = TextAreaField(
         _('Question context (optional)'),
         [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
@@ -59,7 +59,7 @@ class QuestionForm(Form):
         question = Question(
             number=self.number.data,
             body=self.body.data.strip(),
-            justification=self.justification.data.strip(),
+            #justification=self.justification.data.strip(),
             context=self.context.data.strip(),
             answerer=answerer_id,
             report_id=report_id,
@@ -102,7 +102,7 @@ class ProcessSpreadsheetForm(Form):
     discard_first_row = BooleanField(_('First row is header'), [validators.DataRequired()])
     number = SelectField(_('Question number'), [validators.DataRequired()])
     body = SelectField(_('Question body'), [validators.DataRequired()])
-    justification = SelectField(_('Question justification'))
+    #justification = SelectField(_('Question justification'))
     context = SelectField(_('Question context'))
     answerer = SelectField(_('Question answerer'))
     report = SelectField(_('Report number'))
@@ -130,7 +130,7 @@ class ProcessSpreadsheetForm(Form):
         choices = [('-1', _('None'))] + choices
         self.number.choices = choices
         self.body.choices = choices
-        self.justification.choices = choices
+        #self.justification.choices = choices
         self.context.choices = choices
         self.answerer.choices = choices
         self.report.choices = choices
@@ -160,7 +160,6 @@ class ProcessSpreadsheetForm(Form):
         columns = [
             (self.number.data, 'number'),
             (self.body.data, 'body'),
-            (self.justification.data, 'justification'),
             (self.context.data, 'context'),
             (self.answerer.data, 'answerer'),
             (self.report.data, 'report'),
@@ -194,7 +193,7 @@ class ProcessSpreadsheetForm(Form):
         d = {}
         for col in columns:
             position = col[0]
-            if position < len(row):
+            if 0 <=position < len(row):
                 value = row[col[0]].strip()
                 if col[1] in ['topic', 'subtopic']:
                     value = value.lower()

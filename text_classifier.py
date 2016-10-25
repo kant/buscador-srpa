@@ -55,7 +55,7 @@ class TextClassifier():
             input='content', encoding=encoding, decode_error='strict',
             strip_accents='ascii', lowercase=True, preprocessor=None,
             tokenizer=None, stop_words=es_stopwords, ngram_range=(1, 1),
-            analyzer='word', max_df=1.0, min_df=3, max_features=None,
+            analyzer='word', max_df=1.0, min_df=1, max_features=None,
             vocabulary=vocabulary, binary=False)
 
         self.transformer = TfidfTransformer()

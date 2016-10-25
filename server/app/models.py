@@ -50,7 +50,7 @@ class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     number = db.Column(db.Integer)
     body = db.Column(db.Text(MAX_TEXT_LENGTH))
-    justification = db.Column(db.Text(MAX_TEXT_LENGTH))
+    #justification = db.Column(db.Text(MAX_TEXT_LENGTH))
     context = db.Column(db.Text(MAX_TEXT_LENGTH))
     keywords = db.relationship('Keyword', secondary='question_keywords', backref=db.backref('questions', lazy='dynamic'))
     answerer_id = db.Column(db.Integer, db.ForeignKey('answerer.id'))
@@ -62,7 +62,7 @@ class Question(db.Model):
     def __init__(self, **kwargs):
         self.number = kwargs.get('number', None)
         self.body = kwargs.get('body', '')
-        self.justification = kwargs.get('justification', '')
+        #self.justification = kwargs.get('justification', '')
         self.context = kwargs.get('context', '')
         self.answerer_id = kwargs.get('answerer_id', None)
         self.keywords = kwargs.get('keywords', [])

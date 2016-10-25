@@ -82,7 +82,7 @@ class Searcher:
         all_questions = models.Question.query.all()
         if len(all_questions) > 0:
             ids = [str(q.id) for q in all_questions]
-            texts = [q.body for q in all_questions]
+            texts = [q.body + q.context for q in all_questions]
             topics_ids = [str(q.topic_id) for q in all_questions]
             subtopics_ids = [str(q.subtopic_id) for q in all_questions]
             ids_filt_topics = [ids[i] for i, x in enumerate(topics_ids)
