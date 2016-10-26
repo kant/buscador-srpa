@@ -175,7 +175,10 @@ class Searcher:
     def _search_similar(self, question_id):
         if self.text_classifier is None:
             return []
-        ids_sim, dist, best_words = self.text_classifier.get_similar(str(question_id), max_similars=self.per_page)
+        if not isinstance(question_id, basestring):
+            question_id = str(question_id)
+        ids_sim, dist, best_words = self.text_classifier.get_similar(
+            question_id, max_similars=self.per_page)
         ids_sim = map(int, ids_sim)
         results = []
         for qid in ids_sim:

@@ -4,7 +4,7 @@ from flask.ext.wtf import Form
 from wtforms import validators, IntegerField, TextAreaField, BooleanField, SelectField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from flask_user.translations import lazy_gettext as _
-from models import MAX_TEXT_LENGTH, Question, Report, Topic, SubTopic, Author, Answerer, get_or_create
+from models import MAX_TEXT_LENGTH, Question, Report, Topic, SubTopic, Author, get_or_create
 import time
 import datetime
 from helpers import SpreadSheetReader
@@ -29,10 +29,6 @@ class QuestionForm(Form):
         _('Question context (optional)'),
         [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
     )
-    answerer = TextAreaField(
-        _('Question answerer'),
-        [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
-    )
     report = TextAreaField(
         _('Report number'),
         [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
@@ -55,13 +51,11 @@ class QuestionForm(Form):
         author_id = get_or_create(db_session, Author, name=self.author.data.strip())
         topic_id = get_or_create(db_session, Topic, name=self.topic.data.strip())
         subtopic_id = get_or_create(db_session, SubTopic, name=self.subtopic.data.strip())
-        answerer_id = get_or_create(db_session, Answerer, name=self.subtopic.data.strip())
         question = Question(
             number=self.number.data,
             body=self.body.data.strip(),
             #justification=self.justification.data.strip(),
             context=self.context.data.strip(),
-            answerer=answerer_id,
             report_id=report_id,
             author_id=author_id,
             topic_id=topic_id,
@@ -99,12 +93,11 @@ class UploadForm(Form):
 
 
 class ProcessSpreadsheetForm(Form):
-    discard_first_row = BooleanField(_('First row is header'), [validators.DataRequired()])
-    number = SelectField(_('Question number'), [validators.DataRequired()])
-    body = SelectField(_('Question body'), [validators.DataRequired()])
+    discard_first_row = BooleanField(_('First row is header'), [validators.DataRequired("Requerido")])
+    number = SelectField(_('Question number'), [validators.DataRequired("Requerido")])
+    body = SelectField(_('Question body'), [validators.DataRequired("Requerido")])
     #justification = SelectField(_('Question justification'))
     context = SelectField(_('Question context'))
-    answerer = SelectField(_('Question answerer'))
     report = SelectField(_('Report number'))
     author = SelectField(_('Question author'))
     topic = SelectField(_('Question topic'))
@@ -114,10 +107,13 @@ class ProcessSpreadsheetForm(Form):
     def handle_request(self, filename, db_session, searcher):
         spreadsheet_summary = SpreadSheetReader.first_read(filename)
         self.update_choices(spreadsheet_summary['first_row'])
+        print(self.validate_on_submit())
         if self.validate_on_submit():
             self.save_models(filename, db_session)
             searcher.restart_text_classifier()
             return redirect(url_for('home_page'))
+        else:
+            print(self.errors)
         return render_template(
             'forms/process_spreadsheet.html',
             filename=filename,
@@ -132,7 +128,6 @@ class ProcessSpreadsheetForm(Form):
         self.body.choices = choices
         #self.justification.choices = choices
         self.context.choices = choices
-        self.answerer.choices = choices
         self.report.choices = choices
         self.author.choices = choices
         self.topic.choices = choices
@@ -161,7 +156,6 @@ class ProcessSpreadsheetForm(Form):
             (self.number.data, 'number'),
             (self.body.data, 'body'),
             (self.context.data, 'context'),
-            (self.answerer.data, 'answerer'),
             (self.report.data, 'report'),
             (self.author.data, 'author'),
             (self.topic.data, 'topic'),
@@ -183,9 +177,6 @@ class ProcessSpreadsheetForm(Form):
         if 'subtopic' in question_args.keys():
             question_args['subtopic_id'] = get_or_create(
                 db_session, SubTopic, name=question_args['subtopic'])
-        if 'answerer' in question_args.keys():
-            question_args['answerer_id'] = get_or_create(
-                db_session, Answerer, name=question_args['answerer'])
         return question_args
 
     @staticmethod
