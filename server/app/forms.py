@@ -190,7 +190,7 @@ class ProcessSpreadsheetForm(Form):
 class FullTextQueryForm(Form):
     main_text = TextAreaField(
         _('Base text to query'),
-        [validators.Length(min=1, max=200)]
+        [validators.Length(min=1, max=2000)]
     )
 
     def handle_request(self):
