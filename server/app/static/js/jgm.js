@@ -1,9 +1,10 @@
 window.jgm = window.jgm || {};
 window.jgm.results = {
     highlight: function (questionId, words) {
-        // TODO: tener en cuenta que words son las palabras procesadas (sin tildes, en minusculas)
-        var questionText = $('.result[data-question-id=' + questionId + '] p.question-body');
-        questionText.highlight(words);
+        var question = $('.result[data-question-id=' + questionId + ']');
+        var options = {accuracy: 'exactly'};
+        question.find('p.question-body').mark(words, options);
+        question.find('p.question-context').mark(words, options);
     }
 };
 
@@ -14,5 +15,5 @@ $(function () {
         NProgress.start();
         return undefined;
     })
-})
+});
 

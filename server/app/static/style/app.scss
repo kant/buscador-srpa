@@ -60,7 +60,10 @@ button {
   padding: 0;
 }
 
-.highlight { background-color: yellow }
+mark {
+  background-color: yellow;
+  padding: 0;
+}
 
 @import 'search';
 @import 'question';

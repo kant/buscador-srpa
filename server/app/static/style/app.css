@@ -2365,8 +2365,9 @@ button {
 .no-padding {
   padding: 0; }
 
-.highlight {
-  background-color: yellow; }
+mark {
+  background-color: yellow;
+  padding: 0; }
 
 #search-filters {
   padding-bottom: 0; }
