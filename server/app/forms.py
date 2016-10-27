@@ -21,10 +21,6 @@ class QuestionForm(Form):
         _('Question body'),
         [validators.Length(min=1, max=MAX_TEXT_LENGTH)]
     )
-    # justification = TextAreaField(
-    #     _('Question justification (optional)'),
-    #     [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
-    # )
     context = TextAreaField(
         _('Question context (optional)'),
         [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
@@ -54,7 +50,6 @@ class QuestionForm(Form):
         question = Question(
             number=self.number.data,
             body=self.body.data.strip(),
-            #justification=self.justification.data.strip(),
             context=self.context.data.strip(),
             report_id=report_id,
             author_id=author_id,
@@ -96,7 +91,6 @@ class ProcessSpreadsheetForm(Form):
     discard_first_row = BooleanField(_('First row is header'), [validators.DataRequired("Requerido")])
     number = SelectField(_('Question number'), [validators.DataRequired("Requerido")])
     body = SelectField(_('Question body'), [validators.DataRequired("Requerido")])
-    #justification = SelectField(_('Question justification'))
     context = SelectField(_('Question context'))
     report = SelectField(_('Report number'))
     author = SelectField(_('Question author'))
@@ -126,7 +120,6 @@ class ProcessSpreadsheetForm(Form):
         choices = [('-1', _('None'))] + choices
         self.number.choices = choices
         self.body.choices = choices
-        #self.justification.choices = choices
         self.context.choices = choices
         self.report.choices = choices
         self.author.choices = choices

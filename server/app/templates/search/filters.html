@@ -76,16 +76,16 @@
             $('#search-filters .add-filter').on('click', function() {
                 $('#search-filters .add-filter-container').addClass('hidden');
                 $('#filter-picker').removeClass('hidden');
-            })
+            });
             $('#search-filters .cancel-filter').on('click', function() {
                 $('#search-filters .add-filter-container').removeClass('hidden');
                 $('#filter-picker').addClass('hidden');
-            })
+            });
             var showValuePicker = function() {
                 var optionSelected = $('#search-filters #filter-type option:selected').val();
                 $('#search-filters .filter-value').addClass('hidden').removeClass('active');
                 $('#search-filters .filter-value[data-filter-type="' + optionSelected + '"]').removeClass('hidden').addClass('active');
-            }
+            };
 
             var urlConstructor = function (args) {
                 var getArgs = [];
@@ -93,7 +93,7 @@
                     getArgs.push(encodeURIComponent(key) + '=' + encodeURIComponent(args[key]));
                 }
                 return '/buscar?' + getArgs.join('&');
-            }
+            };
 
             var currentArgs = function () {
                 var args = jQuery.extend({}, window.jgm.query.filters);
@@ -101,7 +101,7 @@
                     args['q'] = window.jgm.query.text;
                 }
                 return args;
-            }
+            };
 
             var updateRemoveLinks = function () {
                 var links = $('a.filter-link[data-filter-link-type="remove"]');
@@ -112,7 +112,7 @@
                     var newHref = urlConstructor(newArgs);
                     link.attr('href', newHref);
                 }
-            }
+            };
 
             var updateAddLink = function () {
                 var selectedFilterName = $('#search-filters #filter-type option:selected').val();
@@ -120,13 +120,13 @@
                 var link= $('#search-filters #apply-filter');
                 var newArgs = currentArgs();
                 var translations = {
-                    'report': 'informe', 'author': 'autor', 'topic': 'tema',
-                    'subtopic': 'subtema', 'answerer': 'organismo-requerido'
-                }
+                    'report': 'informe', 'author': 'autor',
+                    'topic': 'tema', 'subtopic': 'subtema'
+                };
                 newArgs[translations[selectedFilterName]] = selectedFilterValue;
                 var newHref = urlConstructor(newArgs);
                 link.attr('href', newHref);
-            }
+            };
 
             $('#search-filters #filter-type').select2({
                 minimumResultsForSearch: Infinity

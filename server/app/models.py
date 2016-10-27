@@ -50,10 +50,8 @@ class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     number = db.Column(db.Integer)
     body = db.Column(db.Text(MAX_TEXT_LENGTH))
-    #justification = db.Column(db.Text(MAX_TEXT_LENGTH))
     context = db.Column(db.Text(MAX_TEXT_LENGTH))
     keywords = db.relationship('Keyword', secondary='question_keywords', backref=db.backref('questions', lazy='dynamic'))
-    answerer_id = db.Column(db.Integer, db.ForeignKey('answerer.id'))
     report_id = db.Column(db.Integer, db.ForeignKey('report.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
     topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'))
@@ -62,9 +60,7 @@ class Question(db.Model):
     def __init__(self, **kwargs):
         self.number = kwargs.get('number', None)
         self.body = kwargs.get('body', '')
-        #self.justification = kwargs.get('justification', '')
         self.context = kwargs.get('context', '')
-        self.answerer_id = kwargs.get('answerer_id', None)
         self.keywords = kwargs.get('keywords', [])
         self.report_id = kwargs.get('report_id', None)
         self.author_id = kwargs.get('author_id', None)
@@ -126,17 +122,3 @@ class Author(db.Model):
     questions = db.relationship('Question', backref='author')
     # TODO: agregar origen del autor (prov, ciudad, etc)
     # y bloque al cual pertenece (ver excel)
-
-
-class Answerer(db.Model):
-    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    name = db.Column(db.String(MAX_NAME_LENGTH), unique=True)
-    questions = db.relationship('Question', backref='answerer')
-
-
-# class RelatedQuestions(db.Model):
-#     pass
-#
-#
-# class Answer(db.Model):
-#     pass

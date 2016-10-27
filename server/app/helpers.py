@@ -105,7 +105,6 @@ class Searcher:
     def list_models():
         return {
             'author': models.Author.query.all(),
-            'answerer': models.Answerer.query.all(),
             'report': models.Report.query.all(),
             'subtopic': models.SubTopic.query.all(),
             'topic': models.Topic.query.all(),
@@ -160,9 +159,7 @@ class Searcher:
         filt_models = {'tema': ('topic_id', models.Topic),
                        'subtema': ('subtopic_id', models.SubTopic),
                        'autor': ('author_id', models.Author),
-                       'informe': ('report_id', models.Report),
-                       'organismo-requerido': ('answerer_id', models.Answerer),
-                       }
+                       'informe': ('report_id', models.Report)}
         filt_ids = {v[0]: v[1].query.filter_by(name=filters[k]).all()
                     for k, v in filt_models.iteritems() if k in filters.keys()}
         return filter(lambda x: self._filt_fun(x, filt_ids), results)

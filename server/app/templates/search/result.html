@@ -88,18 +88,6 @@
                 </small>
             </blockquote>
 
-            <p class="text-muted"
-               data-attribute-name="justification"
-               data-attribute-default="Sin justificación"
-               data-attribute-display-template="Justificación: $">
-                {% if result.justification|length > 0 %}
-                    Justificación:
-                    {{ result.justification }}
-                {% else %}
-                    Sin justificación
-                {% endif %}
-            </p>
-
             <div class="tags">
                 {% for tag_name in ['topic', 'subtopic'] %}
                     {% set has_tag = result[tag_name] and result[tag_name].name and result[tag_name].name|length > 0 %}
@@ -119,18 +107,6 @@
                     </button>
                 {% endfor %}
             </div>
-
-            <p class="text-muted"
-               data-attribute-name="answerer"
-               data-attribute-default="Sin asignado a responder"
-               data-attribute-display-template="Responde: $">
-                {%- if result.answerer and result.answerer.name|length > 0 -%}
-                    Responde:
-                    {{ result.answerer.name }}
-                {%- else -%}
-                    Sin asignado a responder
-                {%- endif -%}
-            </p>
 
             {% if not hide_more_info_link %}
                 <div class="more-info">
