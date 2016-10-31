@@ -1,31 +1,16 @@
-{% extends 'base.html' %}
+{% extends 'forms/base_forms.html' %}
 
 {% from "forms/_formhelpers.html" import render_field, render_label %}
 
-{% block main %}
-    <div class="container-fluid">
-        <div class="col-md-8 col-md-offset-2">
-            <h1>Carga de preguntas</h1>
+{% block form %}
+    <form id="upload_form" method="post" action="{{ url_for('question_upload') }}" class="form-tab"
+          enctype="multipart/form-data">
+        {{ form.csrf_token }}
 
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="active">
-                    <a href="#">Subir archivo</a>
-                </li>
-                <li role="presentation">
-                    <a href="{{ url_for('single_question') }}">Carga manual</a>
-                </li>
-            </ul>
-
-            <form id="upload_form" method="post" action="{{ url_for('question_upload') }}" class="form-tab"
-                  enctype="multipart/form-data">
-                {{ upload_form.csrf_token }}
-
-                <div class="form-group">
-                    <p>Seleccione una planilla (formatos soportados: csv)</p>
-                    <input class="" id="spreadsheet" name="spreadsheet" type="file">
-                </div>
-                <input id="submit-btn" type=submit value="Subir" class="btn btn-success btn-sm">
-            </form>
+        <div class="form-group">
+            <p>Seleccione una planilla (formatos soportados: csv)</p>
+            <input class="" id="spreadsheet" name="spreadsheet" type="file">
         </div>
-    </div>
+        <input id="submit-btn" type=submit value="Subir" class="btn btn-success btn-sm">
+    </form>
 {% endblock %}

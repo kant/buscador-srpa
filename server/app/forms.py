@@ -6,7 +6,6 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 from flask_user.translations import lazy_gettext as _
 from models import MAX_TEXT_LENGTH, Question, Report, Topic, SubTopic, Author, get_or_create
 import time
-import datetime
 from helpers import SpreadSheetReader
 from flask import render_template, redirect, url_for
 
@@ -65,7 +64,7 @@ class QuestionForm(Form):
             question = self.save_question(db_session)
             searcher.restart_text_classifier()
             return redirect(url_for('see_question', question_id=question.id))
-        return render_template('forms/single_question_form.html', question_form=self)
+        return render_template('forms/single_question_form.html', form=self)
 
 
 class UploadForm(Form):
@@ -84,7 +83,7 @@ class UploadForm(Form):
         if self.validate_on_submit():
             filename = self.save_spreadsheet()
             return redirect(url_for('process_spreadsheet', filename=filename))
-        return render_template('forms/question_upload_form.html', upload_form=self)
+        return render_template('forms/question_upload_form.html', form=self)
 
 
 class ProcessSpreadsheetForm(Form):
@@ -112,7 +111,7 @@ class ProcessSpreadsheetForm(Form):
             'forms/process_spreadsheet.html',
             filename=filename,
             spreadsheet_summary=spreadsheet_summary,
-            process_spreadsheet_form=self
+            form=self
         )
 
     def update_choices(self, first_row):

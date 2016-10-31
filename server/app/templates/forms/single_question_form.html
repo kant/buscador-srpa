@@ -1,62 +1,51 @@
-{% extends 'base.html' %}
+{% if not standalone %}
+    {% extends 'forms/base_forms.html' %}
+{% endif %}
 
 {% from "forms/_formhelpers.html" import render_field, render_label %}
 
-{% block main %}
-    <div class="container-fluid">
-        <div class="col-md-8 col-md-offset-2">
-            <h1>Carga de preguntas</h1>
-
-            <ul class="nav nav-tabs">
-                <li role="presentation">
-                    <a href="{{ url_for('question_upload') }}">Subir archivo</a>
-                </li>
-                <li role="presentation" class="active">
-                    <a href="#">Carga manual</a>
-                </li>
-            </ul>
-
-            <form id="single_question_form" method=post action="{{ url_for('single_question') }}" class="form-tab" enctype="multipart/form-data">
-               {{ question_form.csrf_token }}
-                <div class="form-group row">
-                    {{ render_label(question_form.number) }}
-                    {{ render_field(question_form.number) }}
-                </div>
-
-                <div class="form-group row">
-                    {{ render_label(question_form.body) }}
-                    {{ render_field(question_form.body) }}
-                </div>
-
-
-                <div class="form-group row">
-                    {{ render_label(question_form.context) }}
-                    {{ render_field(question_form.context) }}
-                </div>
-
-                <div class="form-group row">
-                    {{ render_label(question_form.report) }}
-                    {{ render_field(question_form.report) }}
-                </div>
-
-                <div class="form-group row">
-                    {{ render_label(question_form.author) }}
-                    {{ render_field(question_form.author) }}
-                </div>
-
-                <div class="form-group row">
-                    {{ render_label(question_form.topic) }}
-                    {{ render_field(question_form.topic) }}
-                </div>
-
-                <div class="form-group row">
-                    {{ render_label(question_form.subtopic) }}
-                    {{ render_field(question_form.subtopic) }}
-                </div>
-
-
-                <input id="submit-btn" type=submit value=Guardar class="btn btn-success btn-sm">
-            </form>
+{% block form %}
+    <form id="single_question_form" method=post action="{{ url_for('single_question') }}" class="form-tab"
+          enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        <div class="form-group row">
+            {{ render_label(form.number) }}
+            {{ render_field(form.number) }}
         </div>
-    </div>
+
+        <div class="form-group row">
+            {{ render_label(form.body) }}
+            {{ render_field(form.body) }}
+        </div>
+
+
+        <div class="form-group row">
+            {{ render_label(form.context) }}
+            {{ render_field(form.context) }}
+        </div>
+
+        <div class="form-group row">
+            {{ render_label(form.report) }}
+            {{ render_field(form.report) }}
+        </div>
+
+        <div class="form-group row">
+            {{ render_label(form.author) }}
+            {{ render_field(form.author) }}
+        </div>
+
+        <div class="form-group row">
+            {{ render_label(form.topic) }}
+            {{ render_field(form.topic) }}
+        </div>
+
+        <div class="form-group row">
+            {{ render_label(form.subtopic) }}
+            {{ render_field(form.subtopic) }}
+        </div>
+
+
+        <input id="submit-btn" type=submit value=Guardar class="btn btn-success btn-sm">
+    </form>
+
 {% endblock %}

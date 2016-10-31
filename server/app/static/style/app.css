@@ -2487,19 +2487,19 @@ mark {
         padding: 8px;
         width: 100%; }
 
-.process-spreadsheet-form form {
+form#upload_form {
   margin-bottom: 20px; }
-.process-spreadsheet-form .field-label-container {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  text-align: right; }
-  .process-spreadsheet-form .field-label-container.header-checkbox {
-    text-align: left; }
-.process-spreadsheet-form select.form-control {
-  font-size: 14px;
-  height: 34px;
-  padding: 6px 12px; }
-.process-spreadsheet-form .submit-container {
-  text-align: right; }
+  form#upload_form .field-label-container {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    text-align: right; }
+    form#upload_form .field-label-container.header-checkbox {
+      text-align: left; }
+  form#upload_form select.form-control {
+    font-size: 14px;
+    height: 34px;
+    padding: 6px 12px; }
+  form#upload_form .submit-container {
+    text-align: right; }
 
 /*# sourceMappingURL=app.css.map */
