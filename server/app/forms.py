@@ -41,6 +41,15 @@ class QuestionForm(Form):
         [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
     )
 
+    def populate_question(self, question):
+        self.number.data = question.number
+        self.body.data = question.body
+        self.context.data = question.context
+        self.report.data = question.report.name
+        self.author.data = question.author.name
+        self.topic.data = question.topic.name
+        self.subtopic.data = question.subtopic.name
+
     def save_question(self, db_session):
         report_id = get_or_create(db_session, Report, name=self.report.data.strip())
         author_id = get_or_create(db_session, Author, name=self.author.data.strip())
@@ -59,12 +68,34 @@ class QuestionForm(Form):
         db_session.commit()
         return question
 
-    def handle_request(self, db_session, searcher):
+    def update_question(self, question, db_session):
+        question.number = self.number.data
+        question.body = self.body.data.strip()
+        question.context = self.context.data.strip()
+        question.report_id = get_or_create(db_session, Report, name=self.report.data.strip())
+        question.author_id = get_or_create(db_session, Author, name=self.author.data.strip())
+        question.topic_id = get_or_create(db_session, Topic, name=self.topic.data.strip())
+        question.subtopic_id = get_or_create(db_session, SubTopic, name=self.subtopic.data.strip())
+        db_session.add(question)
+        db_session.commit()
+
+    def handle_create_request(self, db_session, searcher):
         if self.validate_on_submit():
             question = self.save_question(db_session)
             searcher.restart_text_classifier()
             return redirect(url_for('see_question', question_id=question.id))
         return render_template('forms/single_question_form.html', form=self)
+
+    def handle_edit_request(self, request, db_session, searcher, question_id):
+        question = searcher.get_question(question_id)
+        if self.validate_on_submit():
+            self.update_question(question, db_session)
+            searcher.restart_text_classifier()
+            return redirect(url_for('see_question', question_id=question.id))
+        self.populate_question(question)
+        standalone = request.args.get('standalone', False)
+        return render_template('forms/single_question_form.html',
+                               form=self, question=question, standalone=standalone)
 
 
 class UploadForm(Form):

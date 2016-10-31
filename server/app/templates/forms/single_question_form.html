@@ -5,19 +5,18 @@
 {% from "forms/_formhelpers.html" import render_field, render_label %}
 
 {% block form %}
-    <form id="single_question_form" method=post action="{{ url_for('single_question') }}" class="form-tab"
+    <form id="single_question_form" method=post action="" class="form-tab"
           enctype="multipart/form-data">
         {{ form.csrf_token }}
+        <div class="form-group row">
+            {{ render_label(form.report) }}
+            {{ render_field(form.report) }}
+        </div>
+
         <div class="form-group row">
             {{ render_label(form.number) }}
             {{ render_field(form.number) }}
         </div>
-
-        <div class="form-group row">
-            {{ render_label(form.body) }}
-            {{ render_field(form.body) }}
-        </div>
-
 
         <div class="form-group row">
             {{ render_label(form.context) }}
@@ -25,8 +24,8 @@
         </div>
 
         <div class="form-group row">
-            {{ render_label(form.report) }}
-            {{ render_field(form.report) }}
+            {{ render_label(form.body) }}
+            {{ render_field(form.body) }}
         </div>
 
         <div class="form-group row">

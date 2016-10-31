@@ -22,7 +22,7 @@ def init_routes(app, db_session, searcher):
     @login_required
     def single_question():
         single_question_form = QuestionForm()
-        return single_question_form.handle_request(db_session, searcher)
+        return single_question_form.handle_create_request(db_session, searcher)
 
     @app.route('/carga_de_preguntas/procesar_planilla/<filename>', methods=['GET', 'POST'])
     @login_required
@@ -58,6 +58,12 @@ def init_routes(app, db_session, searcher):
         similar_results = searcher.get_similar_to(question_id)
         return render_template('question.html', question=question, similar_results=similar_results,
                                url_maker=searcher.url_maker)
+
+    @app.route('/pregunta/<int:question_id>/editar', methods=['GET', 'POST'])
+    @login_required
+    def edit_question(question_id):
+        single_question_form = QuestionForm()
+        return single_question_form.handle_edit_request(request, db_session, searcher, question_id)
 
     @app.route('/pregunta/<int:question_id>/borrar', methods=['POST'])
     @login_required
