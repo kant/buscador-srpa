@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% from "forms/_formhelpers.html" import render_field, render_label %}
+
+{% block main %}
+    <div class="container-fluid">
+        <div class="col-md-8 col-md-offset-2">
+            <h1>Carga de preguntas</h1>
+            <ul class="nav nav-tabs">
+
+                {% set form_class = form.__class__.__name__ %}
+                <li role="presentation" class="{{ 'active' if form_class in ['UploadForm', 'ProcessSpreadsheetForm'] else '' }}">
+                    <a href="{{ url_for('question_upload') if form_class not in ['UploadForm', 'ProcessSpreadsheetForm'] else '#' }}">
+                        Subir archivo
+                    </a>
+                </li>
+
+                <li role="presentation" class="{{ 'active' if form_class == 'QuestionForm' else '' }}">
+                    <a href="{{ url_for('single_question') if form_class != 'QuestionForm' else '#' }}">
+                        Carga manual
+                    </a>
+                </li>
+            </ul>
+
+            {% block form %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

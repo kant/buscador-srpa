@@ -1,121 +1,107 @@
-{% extends 'base.html' %}
+{% extends 'forms/base_forms.html' %}
 
 {% from "forms/_formhelpers.html" import render_field, render_label %}
 
-{% block main %}
-    <div class="container-fluid process-spreadsheet-form">
-        <div class="col-md-8 col-md-offset-2">
-            <h1>Procesar planilla</h1>
+{% block form %}
+    <form id="upload_form" method="post" action="{{ url_for('process_spreadsheet', filename=filename) }}"
+          class="form-tab" enctype="multipart/form-data">
+        {{ form.csrf_token }}
 
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="active">
-                    <a href="#">Subir archivo</a>
-                </li>
-                <li role="presentation">
-                    <a href="{{ url_for('single_question') }}">Carga manual</a>
-                </li>
-            </ul>
-
-            <form id="upload_form" method="post" action="{{ url_for('process_spreadsheet', filename=filename) }}" class="form-tab" enctype="multipart/form-data">
-                {{ process_spreadsheet_form.csrf_token }}
-
-                <div class="form-group container-fluid">
-                    <div class="col-xs-12">
-                        <div class="col-xs-12 col-sm-6 field-label-container">
-                            {{ process_spreadsheet_form.discard_first_row.label() }}
-                        </div>
-                        <div class="col-xs-12 col-sm-6 field-label-container header-checkbox">
-                            {{ process_spreadsheet_form.discard_first_row() }}
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 no-padding">
-                        <div class="col-xs-12 col-sm-6 field-label-container">
-                            {{ process_spreadsheet_form.report.label() }}
-                        </div>
-                        <div class="col-xs-12 col-sm-6">
-                            {{ process_spreadsheet_form.report(class_='form-control') }}
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 no-padding">
-                        <div class="col-xs-12 col-sm-6 field-label-container">
-                            {{ process_spreadsheet_form.number.label() }}
-                        </div>
-                        <div class="col-xs-12 col-sm-6">
-                            {{ process_spreadsheet_form.number(class_='form-control') }}
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 no-padding">
-                        <div class="col-xs-12 col-sm-6 field-label-container">
-                            {{ process_spreadsheet_form.context.label() }}
-                        </div>
-                        <div class="col-xs-12 col-sm-6">
-                            {{ process_spreadsheet_form.context(class_='form-control') }}
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 no-padding">
-                        <div class="col-xs-12 col-sm-6 field-label-container">
-                            {{ process_spreadsheet_form.body.label() }}
-                        </div>
-                        <div class="col-xs-12 col-sm-6">
-                            {{ process_spreadsheet_form.body(class_='form-control') }}
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 no-padding">
-                        <div class="col-xs-12 col-sm-6 field-label-container">
-                            {{ process_spreadsheet_form.author.label() }}
-                        </div>
-                        <div class="col-xs-12 col-sm-6">
-                            {{ process_spreadsheet_form.author(class_='form-control') }}
-                        </div>
-                    </div>
-
-
-                    <div class="col-xs-12 no-padding">
-                        <div class="col-xs-12 col-sm-6 field-label-container">
-                            {{ process_spreadsheet_form.topic.label() }}
-                        </div>
-                        <div class="col-xs-12 col-sm-6">
-                            {{ process_spreadsheet_form.topic(class_='form-control') }}
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 no-padding">
-                        <div class="col-xs-12 col-sm-6 field-label-container">
-                            {{ process_spreadsheet_form.subtopic.label() }}
-                        </div>
-                        <div class="col-xs-12 col-sm-6">
-                            {{ process_spreadsheet_form.subtopic(class_='form-control') }}
-                        </div>
-                    </div>
-
-
-                    <div class="col-xs-12 no-padding preview-container">
-                        <h5>Previsualización</h5>
-                        {% with result = {}, hide_more_info_link = True, hide_actions = True %}
-                            {% include 'search/result.html' %}
-                        {% endwith %}
-                    </div>
-
-                    <div class="col-xs-12 no-padding submit-container">
-                        <input id="submit-btn" type=submit value="Procesar" class="btn btn-success btn-sm">
-                    </div>
-
+        <div class="form-group container-fluid">
+            <div class="col-xs-12">
+                <div class="col-xs-12 col-sm-6 field-label-container">
+                    {{ form.discard_first_row.label() }}
                 </div>
-            </form>
+                <div class="col-xs-12 col-sm-6 field-label-container header-checkbox">
+                    {{ form.discard_first_row() }}
+                </div>
+            </div>
+
+            <div class="col-xs-12 no-padding">
+                <div class="col-xs-12 col-sm-6 field-label-container">
+                    {{ form.report.label() }}
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    {{ form.report(class_='form-control') }}
+                </div>
+            </div>
+
+            <div class="col-xs-12 no-padding">
+                <div class="col-xs-12 col-sm-6 field-label-container">
+                    {{ form.number.label() }}
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    {{ form.number(class_='form-control') }}
+                </div>
+            </div>
+
+            <div class="col-xs-12 no-padding">
+                <div class="col-xs-12 col-sm-6 field-label-container">
+                    {{ form.context.label() }}
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    {{ form.context(class_='form-control') }}
+                </div>
+            </div>
+
+            <div class="col-xs-12 no-padding">
+                <div class="col-xs-12 col-sm-6 field-label-container">
+                    {{ form.body.label() }}
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    {{ form.body(class_='form-control') }}
+                </div>
+            </div>
+
+            <div class="col-xs-12 no-padding">
+                <div class="col-xs-12 col-sm-6 field-label-container">
+                    {{ form.author.label() }}
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    {{ form.author(class_='form-control') }}
+                </div>
+            </div>
+
+
+            <div class="col-xs-12 no-padding">
+                <div class="col-xs-12 col-sm-6 field-label-container">
+                    {{ form.topic.label() }}
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    {{ form.topic(class_='form-control') }}
+                </div>
+            </div>
+
+            <div class="col-xs-12 no-padding">
+                <div class="col-xs-12 col-sm-6 field-label-container">
+                    {{ form.subtopic.label() }}
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    {{ form.subtopic(class_='form-control') }}
+                </div>
+            </div>
+
+
+            <div class="col-xs-12 no-padding preview-container">
+                <h5>Previsualización</h5>
+                {% with result = {}, hide_more_info_link = True, hide_actions = True %}
+                    {% include 'search/result.html' %}
+                {% endwith %}
+            </div>
+
+            <div class="col-xs-12 no-padding submit-container">
+                <input id="submit-btn" type=submit value="Procesar" class="btn btn-success btn-sm">
+            </div>
+
         </div>
-    </div>
+    </form>
 
     <script>
         $(function () {
             var bestRowFromSpreadsheet = {{ spreadsheet_summary.best_row|tojson|safe }};
             var selects = $('.process-spreadsheet-form select');
             selects.on('change', function () {
-                for (var i=0; i<selects.length; i++) {
+                for (var i = 0; i < selects.length; i++) {
                     var $select = $(selects[i]);
                     var attributeName = $select.attr('id');
                     var $attributePreviewElement = $('.result [data-attribute-name="' + attributeName + '"]');
