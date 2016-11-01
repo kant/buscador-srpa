@@ -43,10 +43,15 @@ class QuestionForm(Form):
     )
 
     def save_question(self, db_session):
-        report_id = get_or_create(db_session, Report, name=self.report.data.strip())
-        author_id = get_or_create(db_session, Author, name=self.author.data.strip())
-        topic_id = get_or_create(db_session, Topic, name=self.topic.data.strip())
-        subtopic_id = get_or_create(db_session, SubTopic, name=self.subtopic.data.strip())
+        report_id = get_or_create(
+            db_session, Report, name=self.report.data.strip())
+        author_id = get_or_create(
+            db_session, Author, name=self.author.data.strip())
+        topic_id = get_or_create(
+            db_session, Topic, name=self.topic.data.strip())
+        subtopic_id = get_or_create(
+            db_session, SubTopic, topic_id=topic_id,
+            name=self.subtopic.data.strip())
         question = Question(
             number=self.number.data,
             body=self.body.data.strip(),
@@ -169,7 +174,8 @@ class ProcessSpreadsheetForm(Form):
                 db_session, Topic, name=question_args['topic'])
         if 'subtopic' in question_args.keys():
             question_args['subtopic_id'] = get_or_create(
-                db_session, SubTopic, name=question_args['subtopic'])
+                db_session, SubTopic, name=question_args['subtopic'],
+                topic_id=question_args['topic_id'])
         return question_args
 
     @staticmethod
@@ -177,9 +183,9 @@ class ProcessSpreadsheetForm(Form):
         d = {}
         for col in columns:
             position = col[0]
-            if 0 <=position < len(row):
+            if 0 <= position < len(row):
                 value = row[col[0]].strip()
-                if col[1] in ['topic', 'subtopic']:
+                if col[1] in ['author', 'report', 'topic', 'subtopic']:
                     value = value.lower()
             else:
                 value = ''

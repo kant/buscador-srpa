@@ -83,23 +83,35 @@ class Searcher:
         if len(all_questions) > 0:
             ids = [str(q.id) for q in all_questions]
             texts = [q.body + q.context for q in all_questions]
-            topics_ids = [str(q.topic_id) for q in all_questions]
-            subtopics_ids = [str(q.subtopic_id) for q in all_questions]
-            ids_filt_topics = [ids[i] for i, x in enumerate(topics_ids)
-                               if x != '1']
-            ids_filt_subtopics = [ids[i] for i, x in enumerate(subtopics_ids)
-                                  if x != '1']
-            filtered_topics = filter(lambda x: x != '1', topics_ids)
-            filtered_subtopics = filter(lambda x: x != '1', subtopics_ids)
-            print("Entrenando con {:d}".format(len(ids_filt_topics)))
             try:
                 self.text_classifier = TextClassifier(texts, ids)
-                self.text_classifier.make_classifier(
-                    "topics", ids_filt_topics, filtered_topics)
-                self.text_classifier.make_classifier(
-                    "subtopics", ids_filt_subtopics, filtered_subtopics)
+                self.restart_suggesters(all_questions)
             except Exception as e:
                 print e
+
+    def restart_suggesters(self, questions):
+        ids = [str(q.id) for q in questions]
+        topics = [q.topic.name for q in questions]
+        subtopics = [q.subtopic.name for q in questions]
+        topics_ids = [str(q.topic_id) for q in questions]
+        subtopic_ids = [str(q.subtopic_id) for q in questions]
+        good_topics = [i for i, t in enumerate(topics) if len(t) > 2]
+        ids_good_topics = [ids[i] for i in good_topics]
+        good_topics_ids = [topics_ids[i] for i in good_topics]
+        self.text_classifier.make_classifier(
+            "topics", ids_good_topics, good_topics_ids)
+        all_topics = models.Topic.query.all()
+        for topic in all_topics:
+            if len(topic.name) < 2:
+                continue
+            ids_within_topic = [ids[i] for i, t in enumerate(zip(topics, subtopics))
+                                if t[0] == topic.name and len(t[1]) > 2]
+            subtopic_ids_within_topic = [subtopic_ids[i] for i, t in enumerate(zip(topics, subtopics))
+                                         if t[0] == topic.name and len(t[1]) > 2]
+            if len(set(subtopic_ids_within_topic)) > 2:
+                self.text_classifier.make_classifier(str(topic.id) + "_subtopics",
+                                                     ids_within_topic,
+                                                     subtopic_ids_within_topic)
 
     @staticmethod
     def list_models():
@@ -143,17 +155,14 @@ class Searcher:
 
     @staticmethod
     def _filt_fun(result, filter_ids):
-        """Recives an item of the resut list [(result, best_words)]
+        """Recives an item of the results list [(result, best_words)]
             and a dict of filter_ids and decides whether that element is
             accepted by the filter or not.
         """
         result_only = result[0]
         comparators = [True if getattr(result_only, k) == v[0].id else False
-                       for k, v in filter_ids.iteritems() if len(v)>0]
-        if all(comparators):
-            return True
-        else:
-            return False
+                       for k, v in filter_ids.iteritems() if len(v) > 0]
+        return all(comparators)
 
     def _filter_results(self, results, filters):
         filt_models = {'tema': ('topic_id', models.Topic),
@@ -182,11 +191,20 @@ class Searcher:
             results.append(models.Question.query.get(qid))
         return zip(results, best_words)
 
-    def suggest_tags(self, tag_type, question_id):
-        tags, vals = self.text_classifier.classify(tag_type, [str(question_id)])
+    def suggest_tags(self, tag_type, question_id, topic=None):
+        if tag_type in dir(self.text_classifier):
+            tags, vals = self.text_classifier.classify(tag_type,
+                                                       [str(question_id)])
+        else:
+            try:
+                subtopics = models.Topic.query.get(topic).subtopics
+                return [x.name for x in subtopics]
+            except Exception as e:
+                print(e)
+                print("No such model")
         if tag_type == 'topics':
             myModel = models.Topic
-        elif tag_type == 'subtopics':
+        elif 'subtopics' in tag_type:
             myModel = models.SubTopic
         else:
             raise(ValueError, "No such model")
@@ -206,13 +224,16 @@ class Searcher:
             'current_page': int(request.args.get('pagina', 1)),
             'can_add_more_filters': True,
             'filters': {t: request.args.get(t).lower() for t in filter_titles
-                        if request.args.get(t) is not None}
+                        if request.args.get(t) is not None},
+            'topic_id': request.args.get('topic_id')
         }
 
     def url_maker(self, query, page=None):
         args = {}
         if 'text' in query and query['text'] is not None:
             args['q'] = query['text']
+        for title, value in query['filters'].iteritems():
+            args[title] = value
         if page is not None:
             args['pagina'] = page
         return url_for('search', **args)
