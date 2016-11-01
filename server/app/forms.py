@@ -50,8 +50,11 @@ class QuestionForm(Form):
         topic_id = get_or_create(
             db_session, Topic, name=self.topic.data.strip())
         subtopic_id = get_or_create(
-            db_session, SubTopic, topic_id=topic_id,
-            name=self.subtopic.data.strip())
+            db_session, SubTopic, name=self.subtopic.data.strip())
+        mytopic = Topic.query.get(topic_id)
+        mysubtopic = SubTopic.query.get(subtopic_id)
+        mytopic.subtopics.append(mysubtopic)
+
         question = Question(
             number=self.number.data,
             body=self.body.data.strip(),
@@ -174,8 +177,11 @@ class ProcessSpreadsheetForm(Form):
                 db_session, Topic, name=question_args['topic'])
         if 'subtopic' in question_args.keys():
             question_args['subtopic_id'] = get_or_create(
-                db_session, SubTopic, name=question_args['subtopic'],
-                topic_id=question_args['topic_id'])
+                db_session, SubTopic, name=question_args['subtopic'])
+            mytopic = Topic.query.get(question_args['topic_id'])
+            mysubtopic = SubTopic.query.get(question_args['subtopic_id'])
+            mytopic.subtopics.append(mysubtopic)
+            db_session.commit()
         return question_args
 
     @staticmethod

@@ -197,6 +197,7 @@ class Searcher:
                                                        [str(question_id)])
         else:
             try:
+                print(topic)
                 subtopics = models.Topic.query.get(topic).subtopics
                 return [x.name for x in subtopics]
             except Exception as e:
