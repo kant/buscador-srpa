@@ -38,6 +38,8 @@ class SpreadSheetReader:
                     summary['first_row'] = row
                 else:
                     summary['best_row'] = cls._best_row(summary['best_row'], row)
+            if i == 0:
+                summary['best_row'] = cls._best_row(summary['best_row'], row)
             return summary
 
     @classmethod

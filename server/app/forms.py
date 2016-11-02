@@ -118,7 +118,7 @@ class UploadForm(Form):
 
 
 class ProcessSpreadsheetForm(Form):
-    discard_first_row = BooleanField(_('First row is header'), [validators.DataRequired("Requerido")])
+    discard_first_row = BooleanField(_('First row is header'), default=True)
     number = SelectField(_('Question number'), [validators.DataRequired("Requerido")])
     body = SelectField(_('Question body'), [validators.DataRequired("Requerido")])
     context = SelectField(_('Question context'))
@@ -126,16 +126,14 @@ class ProcessSpreadsheetForm(Form):
     author = SelectField(_('Question author'))
     topic = SelectField(_('Question topic'))
     subtopic = SelectField(_('Question subtopic'))
-    # keywords ?
 
     def handle_request(self, filename, db_session, searcher):
         spreadsheet_summary = SpreadSheetReader.first_read(filename)
         self.update_choices(spreadsheet_summary['first_row'])
-        print(self.validate_on_submit())
         if self.validate_on_submit():
             self.save_models(filename, db_session)
             searcher.restart_text_classifier()
-            return redirect(url_for('home_page'))
+            return redirect(url_for('search'))
         else:
             print(self.errors)
         return render_template(
