@@ -99,7 +99,7 @@
     <script>
         $(function () {
             var bestRowFromSpreadsheet = {{ spreadsheet_summary.best_row|tojson|safe }};
-            var selects = $('.process-spreadsheet-form select');
+            var selects = $('form select');
             selects.on('change', function () {
                 for (var i = 0; i < selects.length; i++) {
                     var $select = $(selects[i]);
