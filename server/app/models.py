@@ -55,7 +55,7 @@ class Question(db.Model):
     report_id = db.Column(db.Integer, db.ForeignKey('report.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
     topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'))
-    subtopic_id = db.Column(db.Integer, db.ForeignKey('sub_topic.id'))
+    subtopic_id = db.Column(db.Integer, db.ForeignKey('subtopic.id'))
 
     def __init__(self, **kwargs):
         self.number = kwargs.get('number', None)
@@ -101,19 +101,28 @@ class Report(db.Model):
     date = db.Column(db.Date())
     questions = db.relationship('Question', backref='report')
 
+association_table = db.Table(
+    'association',
+    db.Column('topic_id', db.Integer, db.ForeignKey('topic.id')),
+    db.Column('subtopic_id', db.Integer, db.ForeignKey('subtopic.id'))
+)
+
 
 class Topic(db.Model):
+    __tablename__ = 'topic'
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     name = db.Column(db.String(MAX_NAME_LENGTH), unique=True)
     questions = db.relationship('Question', backref='topic')
-    subtopics = db.relationship('SubTopic', backref='topic')
+    subtopics = db.relationship("SubTopic",
+                                secondary=association_table,
+                                backref=db.backref('topics', lazy='dynamic'))
 
 
 class SubTopic(db.Model):
+    __tablename__ = 'subtopic'
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     name = db.Column(db.String(MAX_NAME_LENGTH), unique=True)
     questions = db.relationship('Question', backref='subtopic')
-    topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'))
 
 
 class Author(db.Model):

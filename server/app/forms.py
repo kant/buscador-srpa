@@ -51,10 +51,18 @@ class QuestionForm(Form):
         self.subtopic.data = question.subtopic.name
 
     def save_question(self, db_session):
-        report_id = get_or_create(db_session, Report, name=self.report.data.strip())
-        author_id = get_or_create(db_session, Author, name=self.author.data.strip())
-        topic_id = get_or_create(db_session, Topic, name=self.topic.data.strip())
-        subtopic_id = get_or_create(db_session, SubTopic, name=self.subtopic.data.strip())
+        report_id = get_or_create(
+            db_session, Report, name=self.report.data.strip())
+        author_id = get_or_create(
+            db_session, Author, name=self.author.data.strip())
+        topic_id = get_or_create(
+            db_session, Topic, name=self.topic.data.strip())
+        subtopic_id = get_or_create(
+            db_session, SubTopic, name=self.subtopic.data.strip())
+        mytopic = Topic.query.get(topic_id)
+        mysubtopic = SubTopic.query.get(subtopic_id)
+        mytopic.subtopics.append(mysubtopic)
+
         question = Question(
             number=self.number.data,
             body=self.body.data.strip(),
@@ -198,6 +206,10 @@ class ProcessSpreadsheetForm(Form):
         if 'subtopic' in question_args.keys():
             question_args['subtopic_id'] = get_or_create(
                 db_session, SubTopic, name=question_args['subtopic'])
+            mytopic = Topic.query.get(question_args['topic_id'])
+            mysubtopic = SubTopic.query.get(question_args['subtopic_id'])
+            mytopic.subtopics.append(mysubtopic)
+            db_session.commit()
         return question_args
 
     @staticmethod
@@ -205,9 +217,9 @@ class ProcessSpreadsheetForm(Form):
         d = {}
         for col in columns:
             position = col[0]
-            if 0 <=position < len(row):
+            if 0 <= position < len(row):
                 value = row[col[0]].strip()
-                if col[1] in ['topic', 'subtopic']:
+                if col[1] in ['author', 'report', 'topic', 'subtopic']:
                     value = value.lower()
             else:
                 value = ''
