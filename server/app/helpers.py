@@ -191,24 +191,20 @@ class Searcher:
             results.append(models.Question.query.get(qid))
         return zip(results, best_words)
 
-    def suggest_tags(self, tag_type, question_id, topic=None):
-        if tag_type in dir(self.text_classifier):
-            tags, vals = self.text_classifier.classify(tag_type,
+    def suggest_tags(self, tag_type, question_id):
+        question = models.Question.query.get(question_id)
+        classifier_name = str(question.topic_id) + "_" + tag_type
+        if classifier_name in dir(self.text_classifier):
+            tags, vals = self.text_classifier.classify(classifier_name,
                                                        [str(question_id)])
-        else:
-            try:
-                print(topic)
-                subtopics = models.Topic.query.get(topic).subtopics
-                return [x.name for x in subtopics]
-            except Exception as e:
-                print(e)
-                print("No such model")
-        if tag_type == 'topics':
-            myModel = models.Topic
-        elif 'subtopics' in tag_type:
             myModel = models.SubTopic
-        else:
-            raise(ValueError, "No such model")
+        elif 'subtopics' in tag_type:
+            subtopics = question.topic.subtopics
+            return list(sorted([x.name for x in subtopics]))
+        elif tag_type == 'topics':
+            tags, vals = self.text_classifier.classify('topics',
+                                                       [str(question_id)])
+            myModel = models.Topic
         tag_names = [myModel.query.get(idt).name for idt in tags]
         sorted_tags = [x for (y, x) in sorted(zip(vals.tolist()[0], tag_names))]
         return list(reversed(sorted_tags))
@@ -226,7 +222,6 @@ class Searcher:
             'can_add_more_filters': True,
             'filters': {t: request.args.get(t).lower() for t in filter_titles
                         if request.args.get(t) is not None},
-            'topic_id': request.args.get('topic_id')
         }
 
     def url_maker(self, query, page=None):

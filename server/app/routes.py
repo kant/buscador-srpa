@@ -78,13 +78,10 @@ def init_routes(app, db_session, searcher):
         tags = searcher.suggest_tags("topics", question_id)
         return jsonify(tags)
 
-    @app.route('/pregunta/<int:question_id>/sugerir_subtema', methods=['GET', 'POST'])
+    @app.route('/pregunta/<int:question_id>/sugerir_subtema', methods=['GET'])
     @login_required
     def suggest_subtopic(question_id):
-        query = searcher.query_from_url()
-        if query['topic_id'] is None:
-            return jsonify([])
-        tags = searcher.suggest_tags("subtopics", question_id, query['topic_id'])
+        tags = searcher.suggest_tags("subtopics", question_id)
         return jsonify(tags)
 
     @app.route('/pregunta/<int:question_id>/actualizar', methods=['POST'])
