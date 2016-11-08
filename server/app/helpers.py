@@ -162,8 +162,8 @@ class Searcher:
             accepted by the filter or not.
         """
         result_only = result[0]
-        comparators = [True if getattr(result_only, k) == v[0].id else False
-                       for k, v in filter_ids.iteritems() if len(v) > 0]
+        comparators = [True if len(v) > 0 and getattr(result_only, k) == v[0].id else False
+                       for k, v in filter_ids.iteritems()]
         return all(comparators)
 
     def _filter_results(self, results, filters):

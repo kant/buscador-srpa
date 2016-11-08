@@ -5,7 +5,7 @@
     {% if pagination['total_results'] > 0 %}
         <h2>Se encontraron {{ pagination['total_results'] }} {{ results_name }}</h2>
     {% else %}
-        <h2>No se encontrar {{ results_name }}</h2>
+        <h2>No se encontraron {{ results_name }}</h2>
     {% endif %}
     <div class="row panels-row">
         {% for result, best_words in result_list %}
