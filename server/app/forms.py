@@ -153,7 +153,7 @@ class ProcessSpreadsheetForm(Form):
 
     def update_choices(self, first_row):
         choices = [(str(i), first_row[i]) for i in range(len(first_row))]
-        choices = [('-1', _('None'))] + choices
+        choices = [('', _('None'))] + choices
         self.number.choices = choices
         self.body.choices = choices
         self.context.choices = choices

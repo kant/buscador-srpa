@@ -81,6 +81,14 @@
                 </div>
             </div>
 
+            <div class="col-xs-10 col-xs-offset-1">
+                {% if form.number.errors %}
+                    <p>Debe seleccionar columna para el numero de pregunta</p>
+                {% endif %}
+                {% if form.body.errors %}
+                    <p>Debe seleccionar columna para el texto de la pregunta</p>
+                {% endif %}
+            </div>
 
             <div class="col-xs-12 no-padding preview-container">
                 <h5>Previsualización</h5>
