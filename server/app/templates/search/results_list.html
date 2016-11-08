@@ -2,7 +2,9 @@
     {% set result_list = results['result_list'] %}
     {% set pagination = results['pagination'] %}
 
-    {% if pagination['total_results'] > 0 %}
+    {% if 'creado-en' in query.filters %}
+        <h2>Se cargaron exitosamente {{ pagination['total_results'] }} preguntas</h2>
+    {% elif pagination['total_results'] > 0 %}
         <h2>Se encontraron {{ pagination['total_results'] }} {{ results_name }}</h2>
     {% else %}
         <h2>No se encontraron {{ results_name }}</h2>

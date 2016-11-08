@@ -1,5 +1,6 @@
 from . import db
 from flask_user import UserMixin
+from datetime import datetime
 
 
 # TODO: chequear longitudes de los campos de texto
@@ -51,11 +52,12 @@ class Question(db.Model):
     number = db.Column(db.Integer)
     body = db.Column(db.Text(MAX_TEXT_LENGTH))
     context = db.Column(db.Text(MAX_TEXT_LENGTH))
-    keywords = db.relationship('Keyword', secondary='question_keywords', backref=db.backref('questions', lazy='dynamic'))
     report_id = db.Column(db.Integer, db.ForeignKey('report.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
     topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'))
     subtopic_id = db.Column(db.Integer, db.ForeignKey('subtopic.id'))
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    modified_at = db.Column(db.DateTime, default=datetime.now)
 
     def __init__(self, **kwargs):
         self.number = kwargs.get('number', None)
@@ -84,22 +86,13 @@ class Question(db.Model):
         return question
 
 
-class Keyword(db.Model):
-    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    name = db.Column(db.String(MAX_NAME_LENGTH), unique=True)
-
-
-class QuestionKeywords(db.Model):
-    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
-    question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
-    keyword_id = db.Column(db.Integer, db.ForeignKey('keyword.id'))
-
-
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     name = db.Column(db.String(MAX_NAME_LENGTH), unique=True)
     date = db.Column(db.Date())
     questions = db.relationship('Question', backref='report')
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    modified_at = db.Column(db.DateTime, default=datetime.now)
 
 association_table = db.Table(
     'association',
@@ -116,6 +109,8 @@ class Topic(db.Model):
     subtopics = db.relationship("SubTopic",
                                 secondary=association_table,
                                 backref=db.backref('topics', lazy='dynamic'))
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    modified_at = db.Column(db.DateTime, default=datetime.now)
 
 
 class SubTopic(db.Model):
@@ -123,11 +118,15 @@ class SubTopic(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     name = db.Column(db.String(MAX_NAME_LENGTH), unique=True)
     questions = db.relationship('Question', backref='subtopic')
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    modified_at = db.Column(db.DateTime, default=datetime.now)
 
 
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     name = db.Column(db.String(MAX_NAME_LENGTH), unique=True)
     questions = db.relationship('Question', backref='author')
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    modified_at = db.Column(db.DateTime, default=datetime.now)
     # TODO: agregar origen del autor (prov, ciudad, etc)
     # y bloque al cual pertenece (ver excel)

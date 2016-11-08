@@ -13,6 +13,7 @@ parentdir = os.path.dirname(currentdir)
 parentdir2 = os.path.dirname(parentdir)
 sys.path.insert(0, parentdir2)
 from text_classifier import TextClassifier
+from datetime import datetime
 
 
 class SpreadSheetReader:
@@ -173,7 +174,11 @@ class Searcher:
                        'informe': ('report_id', models.Report)}
         filt_ids = {v[0]: v[1].query.filter_by(name=filters[k]).all()
                     for k, v in filt_models.iteritems() if k in filters.keys()}
-        return filter(lambda x: self._filt_fun(x, filt_ids), results)
+        filtered_questions = filter(lambda x: self._filt_fun(x, filt_ids), results)
+        if 'creado-en' in filters:
+            created_at = datetime.strptime(filters['creado-en'], '%Y-%m-%d %H:%M:%S')
+            filtered_questions = filter(lambda x: x[0].created_at == created_at, filtered_questions)
+        return filtered_questions
 
     def get_similar_to(self, question_id):
         query = self.query_from_url()
@@ -217,7 +222,8 @@ class Searcher:
                          'autor',
                          'informe',
                          'organismo-requerido',
-                         'pregunta']
+                         'pregunta',
+                         'creado-en']
         return {
             'text': request.args.get('q'),
             'current_page': int(request.args.get('pagina', 1)),

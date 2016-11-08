@@ -8,6 +8,7 @@ from models import MAX_TEXT_LENGTH, Question, Report, Topic, SubTopic, Author, g
 import time
 from helpers import SpreadSheetReader
 from flask import render_template, redirect, url_for
+from datetime import datetime
 
 
 class QuestionForm(Form):
@@ -139,9 +140,10 @@ class ProcessSpreadsheetForm(Form):
         spreadsheet_summary = SpreadSheetReader.first_read(filename)
         self.update_choices(spreadsheet_summary['first_row'])
         if self.validate_on_submit():
-            self.save_models(filename, db_session)
+            created_at = self.save_models(filename, db_session)
             searcher.restart_text_classifier()
-            return redirect(url_for('search'))
+            kwargs = {'creado-en': str(created_at)}
+            return redirect(url_for('search', **kwargs))
         else:
             print(self.errors)
         return render_template(
@@ -171,14 +173,18 @@ class ProcessSpreadsheetForm(Form):
                 spreadsheet = SpreadSheetReader.read_csv(spreadsheet_file)
             # TODO: leer xls y xlsx
 
+            created_at = datetime.now().replace(microsecond=0)
+
             for i, row in spreadsheet:
                 if i == 0 and self.discard_first_row.data:
                     continue
                 args = self.collect_args(row, columns)
                 args = self._get_ids(args, db_session)
                 question = Question(**args)
+                question.created_at = created_at
                 db_session.add(question)
             db_session.commit()
+        return created_at
 
     def _collect_columns(self):
         columns = [
