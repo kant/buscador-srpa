@@ -120,8 +120,8 @@
                 var link= $('#search-filters #apply-filter');
                 var newArgs = currentArgs();
                 var translations = {
-                    'report': 'informe', 'author': 'autor',
-                    'topic': 'tema', 'subtopic': 'subtema'
+                    'Informe': 'informe', 'Autor': 'autor',
+                    'Ministerio': 'tema', 'Área de Gestión': 'subtema'
                 };
                 newArgs[translations[selectedFilterName]] = selectedFilterValue;
                 var newHref = urlConstructor(newArgs);

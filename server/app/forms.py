@@ -52,13 +52,13 @@ class QuestionForm(Form):
 
     def save_question(self, db_session):
         report_id = get_or_create(
-            db_session, Report, name=self.report.data.strip())
+            db_session, Report, name=self.report.data.strip().lower())
         author_id = get_or_create(
-            db_session, Author, name=self.author.data.strip())
+            db_session, Author, name=self.author.data.strip().lower())
         topic_id = get_or_create(
-            db_session, Topic, name=self.topic.data.strip())
+            db_session, Topic, name=self.topic.data.strip().lower())
         subtopic_id = get_or_create(
-            db_session, SubTopic, name=self.subtopic.data.strip())
+            db_session, SubTopic, name=self.subtopic.data.strip().lower())
         mytopic = Topic.query.get(topic_id)
         mysubtopic = SubTopic.query.get(subtopic_id)
         mytopic.subtopics.append(mysubtopic)
@@ -80,10 +80,10 @@ class QuestionForm(Form):
         question.number = self.number.data
         question.body = self.body.data.strip()
         question.context = self.context.data.strip()
-        question.report_id = get_or_create(db_session, Report, name=self.report.data.strip())
-        question.author_id = get_or_create(db_session, Author, name=self.author.data.strip())
-        question.topic_id = get_or_create(db_session, Topic, name=self.topic.data.strip())
-        question.subtopic_id = get_or_create(db_session, SubTopic, name=self.subtopic.data.strip())
+        question.report_id = get_or_create(db_session, Report, name=self.report.data.strip().lower())
+        question.author_id = get_or_create(db_session, Author, name=self.author.data.strip().lower())
+        question.topic_id = get_or_create(db_session, Topic, name=self.topic.data.strip().lower())
+        question.subtopic_id = get_or_create(db_session, SubTopic, name=self.subtopic.data.strip().lower())
         db_session.add(question)
         db_session.commit()
 

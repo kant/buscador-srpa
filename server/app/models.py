@@ -3,7 +3,7 @@ from flask_user import UserMixin
 
 
 # TODO: chequear longitudes de los campos de texto
-MAX_TEXT_LENGTH = 1000
+MAX_TEXT_LENGTH = 10000
 MAX_NAME_LENGTH = 255
 
 def get_or_create(session, model, **kwargs):

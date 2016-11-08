@@ -118,10 +118,10 @@ class Searcher:
     @staticmethod
     def list_models():
         return {
-            'author': models.Author.query.all(),
-            'report': models.Report.query.all(),
-            'subtopic': models.SubTopic.query.all(),
-            'topic': models.Topic.query.all(),
+            u'Autor': models.Author.query.all(),
+            u'Informe': models.Report.query.all(),
+            u'Área de Gestión': models.SubTopic.query.all(),
+            u'Ministerio': models.Topic.query.all(),
         }
 
     def get_question(self, question_id):
