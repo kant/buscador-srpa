@@ -2,7 +2,7 @@
     {% set result_list = results['result_list'] %}
     {% set pagination = results['pagination'] %}
 
-    {% if 'creado-en' in query.filters %}
+    {% if query and 'creado-en' in query.filters %}
         <h2>Se cargaron exitosamente {{ pagination['total_results'] }} preguntas</h2>
     {% elif pagination['total_results'] > 0 %}
         <h2>Se encontraron {{ pagination['total_results'] }} {{ results_name }}</h2>
@@ -19,3 +19,12 @@
 
     {% include 'forms/question_edit_modal.html' %}
 </section>
+
+<script>
+    $(function () {
+        $('.undisplay').on('click', function (e) {
+            var question = $(e.currentTarget).parents('.result');
+            question.hide();
+        });
+    });
+</script>

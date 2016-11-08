@@ -2405,6 +2405,9 @@ mark {
   #search_results .result .question-actions .delete:hover {
     cursor: pointer;
     color: #ef4d3d; }
+  #search_results .result .question-actions .undisplay:hover {
+    cursor: pointer;
+    color: #0695d6; }
 #search_results .result blockquote {
   margin: 10px; }
 #search_results .result .date, #search_results .result .number {

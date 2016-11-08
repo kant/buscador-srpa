@@ -4,7 +4,7 @@
             window.jgm = window.jgm || {};
             window.jgm.best_words = window.jgm.best_words || {};
             window.jgm.best_words[{{ result.id }}] = {{ best_words|tojson|safe }}
-            window.jgm.results.highlight({{ result.id }}, window.jgm.best_words[{{ result.id }}]);
+                    window.jgm.results.highlight({{ result.id }}, window.jgm.best_words[{{ result.id }}]);
         });
     </script>
 {% endif %}
@@ -15,6 +15,12 @@
 
             <div class="question-actions">
                 {% if not hide_actions %}
+                    {% if not hide_more_info_link %}
+                        <span class="undisplay">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                        ocultar
+                    </span>
+                    {% endif %}
                     <span class="edit">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         editar
