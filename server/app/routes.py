@@ -45,6 +45,12 @@ def init_routes(app, db_session, searcher):
         return render_template('search/results.html', results=result,
                                query=query, url_maker=searcher.url_maker, other_models=other_models)
 
+    @app.route('/buscar', methods=['DELETE'])
+    @login_required
+    def delete_all():
+        searcher.delete_results_from_url(db_session)
+        return jsonify({'success': True})
+
     @app.route('/pregunta/<int:question_id>.json')
     @login_required
     def see_question_json(question_id):

@@ -133,6 +133,14 @@ class Searcher:
         query = self.query_from_url()
         return self.search(query)
 
+    def delete_results_from_url(self, db_session):
+        results = self.search_from_url()
+        result_list = results['result_list']
+        for question, keywords in result_list:
+            db_session.delete(question)
+        db_session.commit()
+        return
+
     def search(self, query):
         if query['text'] is not None:
             results = self._search_similar(query['text'])
