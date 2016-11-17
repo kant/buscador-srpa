@@ -42,3 +42,28 @@
     }
   }
 }
+
+.search-results {
+  .results-title {
+    position: relative;
+    padding-right: 120px;
+    .delete-all {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      margin-top: -11px;
+      &:hover {
+        cursor: pointer;
+        color: #ef4d3d;
+      }
+    }
+  }
+}
+
+#question-delete-all {
+  .modal-header,
+  .modal-footer {
+    text-align: center;
+    border: none;
+  }
+}

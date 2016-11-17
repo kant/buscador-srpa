@@ -1,14 +1,25 @@
-<section class="container-fluid" id="search_results">
+<section class="container-fluid search-results">
     {% set result_list = results['result_list'] %}
     {% set pagination = results['pagination'] %}
 
-    {% if query and 'creado-en' in query.filters %}
-        <h2>Se cargaron exitosamente {{ pagination['total_results'] }} preguntas</h2>
-    {% elif pagination['total_results'] > 0 %}
-        <h2>Se encontraron {{ pagination['total_results'] }} {{ results_name }}</h2>
-    {% else %}
-        <h2>No se encontraron {{ results_name }}</h2>
-    {% endif %}
+    <div class="results-title">
+        <h2>
+            {% if query and 'creado-en' in query.filters %}
+                Se cargaron exitosamente {{ pagination['total_results'] }} preguntas
+            {% elif pagination['total_results'] > 0 %}
+                Se encontraron {{ pagination['total_results'] }} {{ results_name }}
+            {% else %}
+                No se encontraron {{ results_name }}
+            {% endif %}
+        </h2>
+        {% if pagination['total_results'] > 0 %}
+            <span class="delete-all" data-toggle="modal" data-target="#question-delete-all">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                eliminar resultados
+            </span>
+        {% endif %}
+    </div>
+
     <div class="row panels-row">
         {% for result, best_words in result_list %}
             {% include 'search/result.html' %}
@@ -16,8 +27,8 @@
     </div>
 
     {% include 'search/pagination.html' %}
-
     {% include 'forms/question_edit_modal.html' %}
+    {% include 'forms/delete_all_modal.html' %}
 </section>
 
 <script>

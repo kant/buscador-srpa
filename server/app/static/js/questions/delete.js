@@ -1,22 +1,24 @@
 $(function () {
-    $('.main').on('click', '.result .delete', function (e) {
+    function deleteQuestion(e) {
         $(e.currentTarget).closest('.result').addClass('confirm-delete')
-    });
-    $('.main').on('click', '.result .cancel-delete', function (e) {
+    }
+
+    function cancelDelete(e) {
         $(e.currentTarget).closest('.result').removeClass('confirm-delete')
-    });
-    $('.main').on('click', '.result .confirm-delete', function (e) {
+    }
+
+    function confirmDelete(e) {
         var questionId = $(e.currentTarget).closest('.result').data('question-id');
         var url = '/pregunta/' + questionId + '/borrar';
         var callback = function (response) {
             if (response && response.success) {
-                if (window.location.pathname.substr(0, 9) == '/pregunta') {
-                    window.location.pathname = '/buscar'
-                } else {
-                    location.reload();
-                }
+                location.reload();
             }
         };
         $.post(url, {}, callback);
-    })
-})
+    }
+
+    $('.main').on('click', '.result .delete', deleteQuestion)
+        .on('click', '.result .cancel-delete', cancelDelete)
+        .on('click', '.result .confirm-delete', confirmDelete)
+});

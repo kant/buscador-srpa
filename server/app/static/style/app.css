@@ -2397,38 +2397,55 @@ mark {
     #search-filters #filter-picker .actions button {
       margin-bottom: 0; }
 
-#search_results .result .question-actions {
+.search-results .results-title {
+  position: relative;
+  padding-right: 120px; }
+  .search-results .results-title .delete-all {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    margin-top: -11px; }
+    .search-results .results-title .delete-all:hover {
+      cursor: pointer;
+      color: #ef4d3d; }
+
+#question-delete-all .modal-header,
+#question-delete-all .modal-footer {
+  text-align: center;
+  border: none; }
+
+.search-results .result .question-actions {
   text-align: right; }
-  #search_results .result .question-actions .edit:hover {
+  .search-results .result .question-actions .edit:hover {
     cursor: pointer;
     color: #0695d6; }
-  #search_results .result .question-actions .delete:hover {
+  .search-results .result .question-actions .delete:hover {
     cursor: pointer;
     color: #ef4d3d; }
-  #search_results .result .question-actions .undisplay:hover {
+  .search-results .result .question-actions .undisplay:hover {
     cursor: pointer;
     color: #0695d6; }
-#search_results .result blockquote {
+.search-results .result blockquote {
   margin: 10px; }
-#search_results .result .date, #search_results .result .number {
+.search-results .result .date, .search-results .result .number {
   margin-left: 2em;
   transition: none; }
-#search_results .result button.btn-topic,
-#search_results .result button.btn-subtopic {
+.search-results .result button.btn-topic,
+.search-results .result button.btn-subtopic {
   background-color: #0695d6;
   cursor: inherit;
   color: white;
   opacity: 1; }
-#search_results .result .more-info {
+.search-results .result .more-info {
   text-align: right;
   color: #aaa; }
-#search_results .result .disabled {
+.search-results .result .disabled {
   opacity: 0.5;
   pointer-events: none; }
-#search_results .pagination {
+.search-results .pagination {
   display: block;
   text-align: center; }
-  #search_results .pagination li {
+  .search-results .pagination li {
     display: inline-block; }
 
 .result .panel-default {
