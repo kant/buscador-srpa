@@ -134,21 +134,25 @@ class Searcher:
         return self.search(query)
 
     def delete_results_from_url(self, db_session):
-        results = self.search_from_url()
-        result_list = results['result_list']
-        for question, keywords in result_list:
+        query = self.query_from_url()
+        results = self._search_questions(query)
+        for question, keywords in results:
             db_session.delete(question)
         db_session.commit()
         return
 
     def search(self, query):
+        results = self._search_questions(query)
+        return self._paginate(results, query)
+
+    def _search_questions(self, query):
         if query['text'] is not None:
             results = self._search_similar(query['text'])
         else:
             results = models.Question.query.all()
             results = [(result, []) for result in results]
         results = self._filter_results(results, query['filters'])
-        return self._paginate(results, query)
+        return results
 
     def _paginate(self, results, query):
         pagination = {
