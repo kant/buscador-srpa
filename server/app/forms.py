@@ -46,10 +46,14 @@ class QuestionForm(Form):
         self.number.data = question.number
         self.body.data = question.body
         self.context.data = question.context
-        self.report.data = question.report.name
-        self.author.data = question.author.name
-        self.topic.data = question.topic.name
-        self.subtopic.data = question.subtopic.name
+        if question.report:
+            self.report.data = question.report.name
+        if question.author:
+            self.author.data = question.author.name
+        if question.topic:
+            self.topic.data = question.topic.name
+        if question.subtopic:
+            self.subtopic.data = question.subtopic.name
 
     def save_question(self, db_session):
         report_id = get_or_create(
