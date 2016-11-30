@@ -35,8 +35,16 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="col-xs-12">
+                            <span class="filter-desc">
+                                Ver preguntas que 
+                            </span> 
                             <label>
-                                Tipo de filtro
+                                <select id="filter-behaviour">
+                                    <option value="has-value">tengan</option>
+                                    <option value="without-value">no tengan</option>
+                                </select>
+                            </label>
+                            <label>
                                 <select id="filter-type">
                                     {% for model_name in other_models.keys() %}
                                         <option value="{{ model_name }}">
@@ -45,9 +53,14 @@
                                     {% endfor %}
                                 </select>
                             </label>
+                            <label id="filter-comparision-container">
+                                <select id="filter-comparision">
+                                    <option value="equal-to">igual a</option>
+                                    <option value="different-to">distinto a</option>
+                                </select>
+                            </label>
                             {% for model_name in other_models.keys() %}
                                 <label class="filter-value hidden" data-filter-type="{{ model_name }}">
-                                    Valor del filtro
                                     <select class="filter-value-picker">
                                         {% for model_instance in other_models[model_name] %}
                                             <option value="{{ model_instance.name }}">{{ model_instance.name }}</option>
@@ -69,76 +82,8 @@
     </div>
 
     <script>
-        $(function() {
-            window.jgm = window.jgm || {};
-            window.jgm.query = {{ query|tojson|safe }};
-
-            $('#search-filters .add-filter').on('click', function() {
-                $('#search-filters .add-filter-container').addClass('hidden');
-                $('#filter-picker').removeClass('hidden');
-            });
-            $('#search-filters .cancel-filter').on('click', function() {
-                $('#search-filters .add-filter-container').removeClass('hidden');
-                $('#filter-picker').addClass('hidden');
-            });
-            var showValuePicker = function() {
-                var optionSelected = $('#search-filters #filter-type option:selected').val();
-                $('#search-filters .filter-value').addClass('hidden').removeClass('active');
-                $('#search-filters .filter-value[data-filter-type="' + optionSelected + '"]').removeClass('hidden').addClass('active');
-            };
-
-            var urlConstructor = function (args) {
-                var getArgs = [];
-                for (var key in args) {
-                    getArgs.push(encodeURIComponent(key) + '=' + encodeURIComponent(args[key]));
-                }
-                return '/buscar?' + getArgs.join('&');
-            };
-
-            var currentArgs = function () {
-                var args = jQuery.extend({}, window.jgm.query.filters);
-                if (window.jgm.query.text) {
-                    args['q'] = window.jgm.query.text;
-                }
-                return args;
-            };
-
-            var updateRemoveLinks = function () {
-                var links = $('a.filter-link[data-filter-link-type="remove"]');
-                for (var i=0; i<links.length; i++) {
-                    var link = $(links[i]);
-                    var newArgs = currentArgs();
-                    delete newArgs[link.data('filter-name')];
-                    var newHref = urlConstructor(newArgs);
-                    link.attr('href', newHref);
-                }
-            };
-
-            var updateAddLink = function () {
-                var selectedFilterName = $('#search-filters #filter-type option:selected').val();
-                var selectedFilterValue = $('#search-filters .filter-value.active option:selected').val();
-                var link= $('#search-filters #apply-filter');
-                var newArgs = currentArgs();
-                var translations = {
-                    'Informe': 'informe', 'Autor': 'autor',
-                    'Ministerio': 'tema', 'Área de Gestión': 'subtema'
-                };
-                newArgs[translations[selectedFilterName]] = selectedFilterValue;
-                var newHref = urlConstructor(newArgs);
-                link.attr('href', newHref);
-            };
-
-            $('#search-filters #filter-type').select2({
-                minimumResultsForSearch: Infinity
-            }).on('select2:select', function() {
-                showValuePicker();
-                updateAddLink();
-            });
-            $('#search-filters .filter-value-picker').select2().on('select2:select', updateAddLink);
-
-            showValuePicker();
-            updateRemoveLinks();
-            updateAddLink();
-        })
+        window.jgm = window.jgm || {};
+        window.jgm.query = {{ query|tojson|safe }};
     </script>
+    <script src="{{ url_for('static', filename='js/filters.js') }}"></script>
 </section>

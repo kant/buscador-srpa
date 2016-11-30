@@ -8,6 +8,7 @@ from flask import request, url_for
 import os
 import sys
 import inspect
+from sqlalchemy import func
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 parentdir2 = os.path.dirname(parentdir)
@@ -117,12 +118,18 @@ class Searcher:
                                                      subtopic_ids_within_topic)
 
     @staticmethod
-    def list_models():
+    def list_models(db_session):
+        def instances_with_at_least_one_question(model):
+            return db_session.query(model). \
+                join(models.Question). \
+                group_by(model). \
+                having(func.count(models.Question.id) > 0). \
+                all()
         return {
-            u'Autor': models.Author.query.all(),
-            u'Informe': models.Report.query.all(),
-            u'Área de Gestión': models.SubTopic.query.all(),
-            u'Ministerio': models.Topic.query.all(),
+            u'autor': instances_with_at_least_one_question(models.Author),
+            u'informe': instances_with_at_least_one_question(models.Report),
+            u'área de gestión': instances_with_at_least_one_question(models.SubTopic),
+            u'ministerio': instances_with_at_least_one_question(models.Topic)
         }
 
     def get_question(self, question_id):

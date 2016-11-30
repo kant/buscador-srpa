@@ -2386,8 +2386,13 @@ mark {
       margin: 5px 30px; }
   #search-filters .add-filter {
     margin-left: auto; }
-  #search-filters #filter-picker label {
-    margin-right: 10px; }
+  #search-filters #filter-picker .filter-desc {
+    vertical-align: middle;
+    margin: 0 5px; }
+  #search-filters #filter-picker #filter-behaviour {
+    width: 120px; }
+  #search-filters #filter-picker #filter-comparision {
+    width: 120px; }
   #search-filters #filter-picker #filter-type {
     width: 200px; }
   #search-filters #filter-picker .filter-value-picker {

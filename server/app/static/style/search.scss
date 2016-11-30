@@ -25,8 +25,15 @@
   }
 
   #filter-picker {
-    label {
-      margin-right: 10px;
+    .filter-desc {
+      vertical-align: middle;
+      margin: 0 5px;
+    }
+    #filter-behaviour {
+      width: 120px;
+    }
+    #filter-comparision {
+      width: 120px;
     }
     #filter-type {
       width: 200px;
