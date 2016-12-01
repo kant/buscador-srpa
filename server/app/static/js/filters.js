@@ -43,21 +43,37 @@ $(function() {
             var link = $(links[i]);
             var newArgs = currentArgs();
             delete newArgs[link.data('filter-name')];
+            delete newArgs[link.data('filter-name') + '-comparacion']
             var newHref = urlConstructor(newArgs);
             link.attr('href', newHref);
         }
     };
 
     var updateAddLink = function () {
+        var selectedBehaviour = $('#search-filters #filter-behaviour option:selected').val();
         var selectedFilterName = $('#search-filters #filter-type option:selected').val();
-        var selectedFilterValue = $('#search-filters .filter-value.active option:selected').val();
-        var link= $('#search-filters #apply-filter');
         var newArgs = currentArgs();
         var translations = {
             'informe': 'informe', 'autor': 'autor',
             'ministerio': 'tema', 'área de gestión': 'subtema'
         };
-        newArgs[translations[selectedFilterName]] = selectedFilterValue;
+
+        if (selectedBehaviour == 'has-value') {
+            var selectedFilterValue = $('#search-filters .filter-value.active option:selected').val();
+            newArgs[translations[selectedFilterName]] = selectedFilterValue;
+
+            var selectedComparision = $('#search-filters #filter-comparision option:selected').val();
+            var comparisionTranslation = {
+                'different-to': 'diferencia',
+                'equal-to': 'igualdad'
+            }
+            newArgs[translations[selectedFilterName] + '-comparacion'] = comparisionTranslation[selectedComparision];
+        } else {
+            newArgs[translations[selectedFilterName]] = '';
+        }
+
+        
+        var link= $('#search-filters #apply-filter');
         var newHref = urlConstructor(newArgs);
         link.attr('href', newHref);
     };

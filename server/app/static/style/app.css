@@ -2398,6 +2398,7 @@ mark {
   #search-filters #filter-picker .filter-value-picker {
     width: 300px; }
   #search-filters #filter-picker .actions {
+    margin-top: 10px;
     text-align: right; }
     #search-filters #filter-picker .actions button {
       margin-bottom: 0; }

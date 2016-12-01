@@ -176,24 +176,46 @@ class Searcher:
         }
 
     @staticmethod
-    def _filt_fun(result, filter_ids):
+    def _pass_filter(result, filters):
         """Recives an item of the results list [(result, best_words)]
             and a dict of filter_ids and decides whether that element is
             accepted by the filter or not.
         """
         result_only = result[0]
-        comparators = [True if len(v) > 0 and getattr(result_only, k) == v[0].id else False
-                       for k, v in filter_ids.iteritems()]
-        return all(comparators)
+        comparisions = []
+        for filter_attr, filter_value in filters.iteritems():
+            if filter_value['filter_by'] == 'igualdad' and filter_value['filter_value']:
+                comparisions.append(getattr(result_only, filter_attr) == filter_value['filter_value'][0].id)
+            elif filter_value['filter_by'] == 'igualdad':
+                comparisions.append(getattr(result_only, filter_attr) == filter_value['filter_value'])
+            else:
+                comparisions.append(getattr(result_only, filter_attr) != filter_value['filter_value'])
+        return all(comparisions)
+
+    @staticmethod
+    def _collect_filter_values(filters):
+        filter_models = {
+            'tema': ('topic_id', models.Topic),
+            'subtema': ('subtopic_id', models.SubTopic),
+            'autor': ('author_id', models.Author),
+            'informe': ('report_id', models.Report)
+        }
+        filter_values = {}
+        for filter_name, filter_model in filter_models.iteritems():
+            if filter_name in filters.keys(): 
+                comparision_key = filter_name + '-comparacion'
+                filter_info = {
+                    'filter_by': comparision_key in filters and filters[comparision_key] or 'igualdad',
+                    'filter_value': None
+                }
+                if len(filters[filter_name]) > 0:
+                    filter_info['filter_value'] = filter_model[1].query.filter_by(name=filters[filter_name]).all()
+                filter_values[filter_model[0]] = filter_info
+        return filter_values
 
     def _filter_results(self, results, filters):
-        filt_models = {'tema': ('topic_id', models.Topic),
-                       'subtema': ('subtopic_id', models.SubTopic),
-                       'autor': ('author_id', models.Author),
-                       'informe': ('report_id', models.Report)}
-        filt_ids = {v[0]: v[1].query.filter_by(name=filters[k]).all()
-                    for k, v in filt_models.iteritems() if k in filters.keys()}
-        filtered_questions = filter(lambda x: self._filt_fun(x, filt_ids), results)
+        filter_values = self._collect_filter_values(filters)
+        filtered_questions = filter(lambda result: self._pass_filter(result, filter_values), results)
         if 'creado-en' in filters:
             created_at = datetime.strptime(filters['creado-en'], '%Y-%m-%d %H:%M:%S')
             filtered_questions = filter(lambda x: x[0].created_at == created_at, filtered_questions)
@@ -236,13 +258,14 @@ class Searcher:
         return list(reversed(sorted_tags))
 
     def query_from_url(self):
-        filter_titles = ['tema',
-                         'subtema',
-                         'autor',
-                         'informe',
-                         'organismo-requerido',
-                         'pregunta',
-                         'creado-en']
+        filter_titles = [
+            'tema', 'tema-comparacion',
+            'subtema', 'subtema-comparacion', 
+            'autor', 'autor-comparacion', 
+            'informe', 'informe-comparacion', 
+            'organismo-requerido',
+            'pregunta', 'creado-en'
+        ]
         return {
             'text': request.args.get('q'),
             'current_page': int(request.args.get('pagina', 1)),
