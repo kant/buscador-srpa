@@ -41,4 +41,21 @@
             </li>
         {% endif %}
     </ul>
+{% elif query['see-more-button'] %}
+    <div class="see-more-container">
+        <a href="" id="see-more-similar">
+            <button class="btn btn-success btn-sm">
+                Ver mas preguntas similares
+            </button>
+        </a>
+
+        <script>
+            $(function() {
+                var query = {{ query|tojson|safe }};
+                var currentLocation = location.href.indexOf('?') ? location.href.split('?')[0] : location.href;
+                var currentPaginationSize = query['por-pagina'] ? parseInt(query['por-pagina']) : 10;
+                $('#see-more-similar').attr('href', currentLocation + '?por-pagina=' + (currentPaginationSize + 10).toString());
+            })
+        </script>
+    </div>
 {% endif  %}

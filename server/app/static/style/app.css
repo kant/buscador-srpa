@@ -2420,6 +2420,9 @@ mark {
   text-align: center;
   border: none; }
 
+.see-more-container {
+  text-align: center; }
+
 .search-results .result .question-actions {
   text-align: right; }
   .search-results .result .question-actions .edit:hover {

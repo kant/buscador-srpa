@@ -155,7 +155,7 @@ class Searcher:
 
     def _search_questions(self, query):
         if query['text'] is not None:
-            results = self._search_similar(query['text'])
+            results = self._search_similar(query)
         else:
             results = models.Question.query.all()
             results = [(result, []) for result in results]
@@ -163,13 +163,14 @@ class Searcher:
         return results
 
     def _paginate(self, results, query):
+        per_page = 'por-pagina' in query and int(query['por-pagina']) or self.per_page
         pagination = {
             'current_page': query['current_page'],
-            'total_pages': int(math.ceil(len(results) / float(self.per_page))),
+            'total_pages': int(math.ceil(len(results) / float(per_page))),
             'total_results': len(results)
         }
-        from_position = (pagination['current_page'] - 1) * self.per_page
-        to_position = pagination['current_page'] * self.per_page
+        from_position = (pagination['current_page'] - 1) * per_page
+        to_position = pagination['current_page'] * per_page
         return {
             'pagination': pagination,
             'result_list': results[from_position:to_position],
@@ -225,15 +226,17 @@ class Searcher:
     def get_similar_to(self, question_id):
         query = self.query_from_url()
         query['text'] = question_id
+        query['see-more-button'] = True
         return self.search(query)
 
-    def _search_similar(self, question_id):
+    def _search_similar(self, query):
+        question_id = query['text']
         if self.text_classifier is None:
             return []
         if not isinstance(question_id, basestring):
             question_id = str(question_id)
-        ids_sim, dist, best_words = self.text_classifier.get_similar(
-            question_id, max_similars=self.per_page)
+        per_page = 'por-pagina' in query and int(query['por-pagina']) or self.per_page
+        ids_sim, dist, best_words = self.text_classifier.get_similar(question_id, max_similars=per_page)
         ids_sim = map(int, ids_sim)
         results = []
         for qid in ids_sim:
@@ -268,13 +271,16 @@ class Searcher:
             'organismo-requerido',
             'pregunta', 'creado-en'
         ]
-        return {
+        query = {
             'text': request.args.get('q'),
             'current_page': int(request.args.get('pagina', 1)),
             'can_add_more_filters': True,
             'filters': {t: request.args.get(t).lower() for t in filter_titles
                         if request.args.get(t) is not None},
         }
+        if request.args.get('por-pagina'):
+            query['por-pagina'] = request.args.get('por-pagina')
+        return query
 
     @staticmethod
     def url_maker(query, page=None):

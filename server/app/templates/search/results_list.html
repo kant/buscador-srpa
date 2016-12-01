@@ -6,13 +6,15 @@
         <h2>
             {% if query and 'creado-en' in query.filters %}
                 Se cargaron exitosamente {{ pagination['total_results'] }} preguntas
+            {% elif results_name == 'preguntas similares' %}
+                Preguntas similares
             {% elif pagination['total_results'] > 0 %}
                 Se encontraron {{ pagination['total_results'] }} {{ results_name }}
             {% else %}
                 No se encontraron {{ results_name }}
             {% endif %}
         </h2>
-        {% if pagination['total_results'] > 0 %}
+        {% if pagination['total_results'] > 0 and not hide_delete_massive %}
             <span class="delete-all" data-toggle="modal" data-target="#question-delete-all">
                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                 eliminar resultados
