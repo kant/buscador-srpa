@@ -132,7 +132,8 @@ class Searcher:
             u'ministerio': instances_with_at_least_one_question(models.Topic)
         }
 
-    def get_question(self, question_id):
+    @staticmethod
+    def get_question(question_id):
         question = models.Question.query.get(question_id)
         return question
 
@@ -257,7 +258,8 @@ class Searcher:
         sorted_tags = [x for (y, x) in sorted(zip(vals.tolist()[0], tag_names))]
         return list(reversed(sorted_tags))
 
-    def query_from_url(self):
+    @staticmethod
+    def query_from_url():
         filter_titles = [
             'tema', 'tema-comparacion',
             'subtema', 'subtema-comparacion', 
@@ -274,7 +276,8 @@ class Searcher:
                         if request.args.get(t) is not None},
         }
 
-    def url_maker(self, query, page=None):
+    @staticmethod
+    def url_maker(query, page=None):
         args = {}
         if 'text' in query and query['text'] is not None:
             args['q'] = query['text']

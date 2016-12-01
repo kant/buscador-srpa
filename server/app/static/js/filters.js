@@ -1,23 +1,25 @@
 $(function() {
-    $('#search-filters .add-filter').on('click', function() {
-        $('#search-filters .add-filter-container').addClass('hidden');
+    var searchFilters = $('#search-filters');
+
+    searchFilters.find('.add-filter').on('click', function() {
+        searchFilters.find('.add-filter-container').addClass('hidden');
         $('#filter-picker').removeClass('hidden');
     });
-    $('#search-filters .cancel-filter').on('click', function() {
-        $('#search-filters .add-filter-container').removeClass('hidden');
+    searchFilters.find('.cancel-filter').on('click', function() {
+        searchFilters.find('.add-filter-container').removeClass('hidden');
         $('#filter-picker').addClass('hidden');
     });
     var showValuePicker = function() {
-        var behaviourSelected = $('#search-filters #filter-behaviour option:selected').val()
-        var optionSelected = $('#search-filters #filter-type option:selected').val();
-        $('#search-filters .filter-value').addClass('hidden').removeClass('active');
+        var behaviourSelected = searchFilters.find('#filter-behaviour option:selected').val();
+        var optionSelected = searchFilters.find('#filter-type option:selected').val();
+        searchFilters.find('.filter-value').addClass('hidden').removeClass('active');
 
         if (behaviourSelected == 'has-value') {
-            $('#search-filters .filter-value[data-filter-type="' + optionSelected + '"]').removeClass('hidden').addClass('active');
-            $('#search-filters #filter-comparision-container').removeClass('hidden');
+            searchFilters.find('.filter-value[data-filter-type="' + optionSelected + '"]').removeClass('hidden').addClass('active');
+            searchFilters.find('#filter-comparision-container').removeClass('hidden');
         } else if (behaviourSelected == 'without-value') {
-            $('#search-filters #filter-comparision-container').addClass('hidden');
-            $('#search-filters .filter-value').addClass('hidden');
+            searchFilters.find('#filter-comparision-container').addClass('hidden');
+            searchFilters.find('.filter-value').addClass('hidden');
         }
     };
 
@@ -43,15 +45,15 @@ $(function() {
             var link = $(links[i]);
             var newArgs = currentArgs();
             delete newArgs[link.data('filter-name')];
-            delete newArgs[link.data('filter-name') + '-comparacion']
+            delete newArgs[link.data('filter-name') + '-comparacion'];
             var newHref = urlConstructor(newArgs);
             link.attr('href', newHref);
         }
     };
 
     var updateAddLink = function () {
-        var selectedBehaviour = $('#search-filters #filter-behaviour option:selected').val();
-        var selectedFilterName = $('#search-filters #filter-type option:selected').val();
+        var selectedBehaviour = searchFilters.find('#filter-behaviour option:selected').val();
+        var selectedFilterName = searchFilters.find('#filter-type option:selected').val();
         var newArgs = currentArgs();
         var translations = {
             'informe': 'informe', 'autor': 'autor',
@@ -59,41 +61,40 @@ $(function() {
         };
 
         if (selectedBehaviour == 'has-value') {
-            var selectedFilterValue = $('#search-filters .filter-value.active option:selected').val();
-            newArgs[translations[selectedFilterName]] = selectedFilterValue;
+            newArgs[translations[selectedFilterName]] = searchFilters.find('.filter-value.active option:selected').val();
 
-            var selectedComparision = $('#search-filters #filter-comparision option:selected').val();
+            var selectedComparision = searchFilters.find('#filter-comparision option:selected').val();
             var comparisionTranslation = {
                 'different-to': 'diferencia',
                 'equal-to': 'igualdad'
-            }
+            };
             newArgs[translations[selectedFilterName] + '-comparacion'] = comparisionTranslation[selectedComparision];
         } else {
             newArgs[translations[selectedFilterName]] = '';
         }
 
         
-        var link= $('#search-filters #apply-filter');
+        var link = searchFilters.find('#apply-filter');
         var newHref = urlConstructor(newArgs);
         link.attr('href', newHref);
     };
 
-    $('#search-filters #filter-behaviour').select2({
+    searchFilters.find('#filter-behaviour').select2({
         minimumResultsForSearch: Infinity
-    })
-    $('#search-filters #filter-comparision').select2({
+    });
+    searchFilters.find('#filter-comparision').select2({
         minimumResultsForSearch: Infinity
-    })
-    $('#search-filters #filter-type').select2({
+    });
+    searchFilters.find('#filter-type').select2({
         minimumResultsForSearch: Infinity
-    })
-    $('#search-filters .filter-value-picker').select2()
-    $('#search-filters').on('select2:select', function () {
+    });
+    searchFilters.find('.filter-value-picker').select2();
+    searchFilters.on('select2:select', function () {
         showValuePicker();
         updateAddLink();
-    })
+    });
 
     showValuePicker();
     updateRemoveLinks();
     updateAddLink();
-})
+});
