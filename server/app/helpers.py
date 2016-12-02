@@ -186,12 +186,14 @@ class Searcher:
         result_only = result[0]
         comparisions = []
         for filter_attr, filter_value in filters.iteritems():
-            if filter_value['filter_by'] == 'igualdad' and filter_value['filter_value']:
-                comparisions.append(getattr(result_only, filter_attr) == filter_value['filter_value'][0].id)
-            elif filter_value['filter_by'] == 'igualdad':
-                comparisions.append(getattr(result_only, filter_attr) == filter_value['filter_value'])
+            if filter_value['filter_value'] and len(filter_value['filter_value']) > 0:
+                compare_to = filter_value['filter_value'][0].id
             else:
-                comparisions.append(getattr(result_only, filter_attr) != filter_value['filter_value'])
+                compare_to = filter_value['filter_value']
+            if filter_value['filter_by'] == 'igualdad':
+                comparisions.append(getattr(result_only, filter_attr) == compare_to)
+            else:
+                comparisions.append(getattr(result_only, filter_attr) != compare_to)
         return all(comparisions)
 
     @staticmethod
