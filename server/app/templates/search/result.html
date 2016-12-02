@@ -102,13 +102,13 @@
                                 {{ 'btn-' + tag_name if has_tag else 'btn-default without-' + tag_name }}
                                 {{ 'no-actions' if hide_actions else '' }}"
                             data-attribute-name="{{ tag_name }}"
-                            data-attribute-default="<i class='fa fa-tag'></i> Sin {{ 'tema' if tag_name == 'topic' else 'subtema' }}"
+                            data-attribute-default="<i class='fa fa-tag'></i> Sin {{ 'ministerio' if tag_name == 'topic' else 'área de gestión' }}"
                             data-attribute-display-template="<i class='fa fa-tag'></i> $">
                         <i class="fa fa-tag"></i>
                         {% if has_tag %}
                             {{ result[tag_name].name }}
                         {% else %}
-                            Sin {{ 'tema' if tag_name == 'topic' else 'subtema' }}
+                            Sin {{ 'ministerio' if tag_name == 'topic' else 'área de gestión' }}
                         {% endif %}
                     </button>
                 {% endfor %}

@@ -199,8 +199,8 @@ class Searcher:
     @staticmethod
     def _collect_filter_values(filters):
         filter_models = {
-            'tema': ('topic_id', models.Topic),
-            'subtema': ('subtopic_id', models.SubTopic),
+            'ministerio': ('topic_id', models.Topic),
+            'area': ('subtopic_id', models.SubTopic),
             'autor': ('author_id', models.Author),
             'informe': ('report_id', models.Report)
         }
@@ -266,8 +266,8 @@ class Searcher:
     @staticmethod
     def query_from_url():
         filter_titles = [
-            'tema', 'tema-comparacion',
-            'subtema', 'subtema-comparacion', 
+            'ministerio', 'ministerio-comparacion',
+            'area', 'area-comparacion',
             'autor', 'autor-comparacion', 
             'informe', 'informe-comparacion', 
             'organismo-requerido',

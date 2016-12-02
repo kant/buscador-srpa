@@ -78,13 +78,13 @@ def init_routes(app, db_session, searcher):
         searcher.restart_text_classifier()
         return jsonify({'success': True})
 
-    @app.route('/pregunta/<int:question_id>/sugerir_tema', methods=['GET'])
+    @app.route('/pregunta/<int:question_id>/sugerir_ministerio', methods=['GET'])
     @login_required
     def suggest_topic(question_id):
         tags = searcher.suggest_tags("topics", question_id)
         return jsonify(tags)
 
-    @app.route('/pregunta/<int:question_id>/sugerir_subtema', methods=['GET'])
+    @app.route('/pregunta/<int:question_id>/sugerir_area', methods=['GET'])
     @login_required
     def suggest_subtopic(question_id):
         tags = searcher.suggest_tags("subtopics", question_id)

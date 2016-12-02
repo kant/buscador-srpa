@@ -57,7 +57,7 @@ $(function() {
         var newArgs = currentArgs();
         var translations = {
             'informe': 'informe', 'autor': 'autor',
-            'ministerio': 'tema', 'área de gestión': 'subtema'
+            'ministerio': 'ministerio', 'área de gestión': 'area'
         };
 
         if (selectedBehaviour == 'has-value') {
