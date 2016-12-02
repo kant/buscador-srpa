@@ -2403,17 +2403,14 @@ mark {
     #search-filters #filter-picker .actions button {
       margin-bottom: 0; }
 
-.search-results .results-title {
-  position: relative;
-  padding-right: 120px; }
-  .search-results .results-title .delete-all {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    margin-top: -11px; }
-    .search-results .results-title .delete-all:hover {
-      cursor: pointer;
-      color: #ef4d3d; }
+.search-results .results-title .results-actions {
+  float: right;
+  margin-bottom: 20px; }
+.search-results .results-title .delete-all {
+  margin-right: 20px; }
+  .search-results .results-title .delete-all:hover {
+    cursor: pointer;
+    color: #ef4d3d; }
 
 #question-delete-all .modal-header,
 #question-delete-all .modal-footer {

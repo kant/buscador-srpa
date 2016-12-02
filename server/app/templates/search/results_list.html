@@ -2,7 +2,7 @@
     {% set result_list = results['result_list'] %}
     {% set pagination = results['pagination'] %}
 
-    <div class="results-title">
+    <div class="results-title clearfix">
         <h2>
             {% if query and 'creado-en' in query.filters %}
                 Se cargaron exitosamente {{ pagination['total_results'] }} preguntas
@@ -14,12 +14,21 @@
                 No se encontraron {{ results_name }}
             {% endif %}
         </h2>
-        {% if pagination['total_results'] > 0 and not hide_delete_massive %}
-            <span class="delete-all" data-toggle="modal" data-target="#question-delete-all">
-                <i class="fa fa-trash-o" aria-hidden="true"></i>
-                eliminar resultados
-            </span>
-        {% endif %}
+        <div class="results-actions">
+            {% if pagination['total_results'] > 0 and not hide_delete_massive %}
+                <span class="delete-all" data-toggle="modal" data-target="#question-delete-all">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    eliminar resultados
+                </span>
+            {% endif %}
+            {% if pagination['total_results'] > 0 and not hide_order and not query['text'] %}
+                ordenar segun
+                <select title="order" id="order">
+                    <option value="asc" {{ "selected=selected" if query['order'] == 'asc' }}>numero de informe (asc)</option>
+                    <option value="desc" {{ "selected=selected" if query['order'] == 'desc' }}>numero de informe (desc)</option>
+                </select>
+            {% endif %}
+        </div>
     </div>
 
     <div class="row panels-row">
@@ -39,5 +48,15 @@
             var question = $(e.currentTarget).parents('.result');
             question.hide();
         });
+
+        $('#order').on('change', function () {
+            var order = $('#order').val();
+            var args = jQuery.extend({}, window.jgm.query.filters);
+            var getArgs = ['orden=' + order];
+            for (var key in args) {
+                getArgs.push(encodeURIComponent(key) + '=' + encodeURIComponent(args[key]));
+            }
+            window.location.href = '/buscar?' + getArgs.join('&');
+        })
     });
 </script>

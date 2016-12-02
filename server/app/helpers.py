@@ -158,9 +158,17 @@ class Searcher:
             results = self._search_similar(query)
         else:
             results = models.Question.query.all()
+            results = self._order_results(results, query)
             results = [(result, []) for result in results]
         results = self._filter_results(results, query['filters'])
         return results
+
+    @staticmethod
+    def _order_results(results, query):
+        if query['order'] in ('asc', 'desc'):
+            return sorted(results, key=lambda x: (x.report.name, x.number), reverse=query['order'] == 'desc')
+        else:
+            return results
 
     def _paginate(self, results, query):
         per_page = 'por-pagina' in query and int(query['por-pagina']) or self.per_page
@@ -206,7 +214,7 @@ class Searcher:
         }
         filter_values = {}
         for filter_name, filter_model in filter_models.iteritems():
-            if filter_name in filters.keys(): 
+            if filter_name in filters.keys():
                 comparision_key = filter_name + '-comparacion'
                 filter_info = {
                     'filter_by': comparision_key in filters and filters[comparision_key] or 'igualdad',
@@ -268,8 +276,8 @@ class Searcher:
         filter_titles = [
             'ministerio', 'ministerio-comparacion',
             'area', 'area-comparacion',
-            'autor', 'autor-comparacion', 
-            'informe', 'informe-comparacion', 
+            'autor', 'autor-comparacion',
+            'informe', 'informe-comparacion',
             'organismo-requerido',
             'pregunta', 'creado-en'
         ]
@@ -277,6 +285,7 @@ class Searcher:
             'text': request.args.get('q'),
             'current_page': int(request.args.get('pagina', 1)),
             'can_add_more_filters': True,
+            'order': request.args.get('orden', 'asc'),
             'filters': {t: request.args.get(t).lower() for t in filter_titles
                         if request.args.get(t) is not None},
         }
