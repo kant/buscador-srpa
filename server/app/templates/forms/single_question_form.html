@@ -2,49 +2,92 @@
     {% extends 'forms/base_forms.html' %}
 {% endif %}
 
-{% from "forms/_formhelpers.html" import render_field, render_label %}
+{% macro render_errors(field) %}
+    {% if field.errors %}
+        <ul class=errors>
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}
+
+{% macro render_select(field, class_="") %}
+    <div>
+        <select id="{{ field.id }}" name="{{ field.id }}" class="{{ class_ }}">
+            {% if not field.data %}
+                <option value="" selected disabled="disabled"></option>
+            {% endif %}
+            {% for choice in field.choices %}
+                <option value="{{ choice[1] }}" {{ 'selected' if choice[1] == field.data }}>{{ choice[1] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+{% endmacro %}
 
 {% block form %}
     <form id="single_question_form" method=post action="" class="form-tab"
           enctype="multipart/form-data">
         {{ form.csrf_token }}
-        <div class="form-group row">
-            {{ render_label(form.report) }}
-            {{ render_field(form.report) }}
+        <div class="container-fluid">
+            <div class="col-xs-12 col-sm-6">
+                {{ form.report.label(class_="field-label report") }}
+                {{ render_select(form.report, class_="field report") }}
+                {{ render_errors(form.report) }}
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                {{ form.number.label(class_="field-label number ") }}
+                {{ form.number(class_="field number") }}
+                {{ render_errors(form.number) }}
+            </div>
+
+            <div class="col-xs-12">
+                {{ form.context.label(class_="field-label context ") }}
+                {{ form.context(class_="field context") }}
+                {{ render_errors(form.context) }}
+            </div>
+
+            <div class="col-xs-12">
+                {{ form.body.label(class_="field-label body ") }}
+                {{ form.body(class_="field body") }}
+                {{ render_errors(form.body) }}
+            </div>
+
+            <div class="col-xs-12">
+                {{ form.author.label(class_="field-label author ") }}
+                {{ render_select(form.author, class_="field author") }}
+                {{ render_errors(form.author) }}
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                {{ form.topic.label(class_="field-label topic ") }}
+                {{ render_select(form.topic, class_="field topic") }}
+                {{ render_errors(form.topic) }}
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                {{ form.subtopic.label(class_="field-label subtopic ") }}
+                {{ render_select(form.subtopic, class_="field subtopic") }}
+                {{ render_errors(form.subtopic) }}
+            </div>
+
+
+            <div class="col-xs-12 actions">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+                <input id="submit-btn" type=submit value=Guardar class="btn btn-success btn-sm">
+            </div>
         </div>
-
-        <div class="form-group row">
-            {{ render_label(form.number) }}
-            {{ render_field(form.number) }}
-        </div>
-
-        <div class="form-group row">
-            {{ render_label(form.context) }}
-            {{ render_field(form.context) }}
-        </div>
-
-        <div class="form-group row">
-            {{ render_label(form.body) }}
-            {{ render_field(form.body) }}
-        </div>
-
-        <div class="form-group row">
-            {{ render_label(form.author) }}
-            {{ render_field(form.author) }}
-        </div>
-
-        <div class="form-group row">
-            {{ render_label(form.topic) }}
-            {{ render_field(form.topic) }}
-        </div>
-
-        <div class="form-group row">
-            {{ render_label(form.subtopic) }}
-            {{ render_field(form.subtopic) }}
-        </div>
-
-
-        <input id="submit-btn" type=submit value=Guardar class="btn btn-success btn-sm">
     </form>
+
+    <script>$(function() {
+        autosize($('#single_question_form textarea'));
+        setTimeout(function () {
+            autosize.update($('#single_question_form textarea'));
+        }, 100);
+        $('#report, #author, #topic, #subtopic').select2({
+            tags: true
+        });
+    })</script>
 
 {% endblock %}

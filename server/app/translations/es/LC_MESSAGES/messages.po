@@ -46,7 +46,7 @@ msgstr "Responsable de la respuesta"
 
 #: forms.py:50 forms.py:119
 msgid "Report number"
-msgstr "Numero de informe"
+msgstr "Informe"
 
 #: forms.py:54 forms.py:120
 msgid "Question author"
@@ -82,3 +82,4 @@ msgstr "Texto de busqueda"
 
 #~ msgid "Question number must be a positive integer"
 #~ msgstr ""
+

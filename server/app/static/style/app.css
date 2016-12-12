@@ -2528,4 +2528,24 @@ form#upload_form {
   form#upload_form .submit-container {
     text-align: right; }
 
+form#single_question_form .field {
+  vertical-align: middle;
+  border-radius: 4px;
+  border: solid 1px #aaa;
+  display: block;
+  width: 100%;
+  resize: none; }
+form#single_question_form .select2 {
+  width: 100% !important; }
+form#single_question_form .field-label {
+  display: block;
+  width: 100%;
+  margin-top: 15px; }
+form#single_question_form .actions {
+  margin-top: 30px;
+  text-align: right; }
+
+#question-editor #single_question_form {
+  border: none; }
+
 /*# sourceMappingURL=app.css.map */

@@ -25,22 +25,25 @@ class QuestionForm(Form):
         _('Question context (optional)'),
         [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
     )
-    report = TextAreaField(
-        _('Report number'),
-        [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
-    )
-    author = TextAreaField(
-        _('Question author'),
-        [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
-    )
-    topic = TextAreaField(
-        _('Question topic'),
-        [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
-    )
-    subtopic = TextAreaField(
-        _('Question subtopic'),
-        [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
-    )
+    report = SelectField(_('Report number'), default="")
+    author = SelectField(_('Question author'), default="")
+    topic = SelectField(_('Question topic'), default="")
+    subtopic = SelectField(_('Question subtopic'), default="")
+
+    def update_choices(self, db_session, searcher):
+        other_models = searcher.list_models(db_session)
+        if u'informe' in other_models:
+            instances = other_models[u'informe']
+            self.report.choices = [(instance.id, instance.name) for instance in instances]
+        if u'autor' in other_models:
+            instances = other_models[u'autor']
+            self.author.choices = [(instance.id, instance.name) for instance in instances]
+        if u'ministerio' in other_models:
+            instances = other_models[u'ministerio']
+            self.topic.choices = [(instance.id, instance.name) for instance in instances]
+        if u'área de gestión' in other_models:
+            instances = other_models[u'área de gestión']
+            self.subtopic.choices = [(instance.id, instance.name) for instance in instances]
 
     def populate_question(self, question):
         self.number.data = question.number
@@ -97,6 +100,7 @@ class QuestionForm(Form):
             question = self.save_question(db_session)
             searcher.restart_text_classifier()
             return redirect(url_for('see_question', question_id=question.id))
+        self.update_choices(db_session, searcher)
         return render_template('forms/single_question_form.html', form=self)
 
     def handle_edit_request(self, request, db_session, searcher, question_id):
@@ -106,6 +110,7 @@ class QuestionForm(Form):
             searcher.restart_text_classifier()
             return redirect(url_for('see_question', question_id=question.id))
         self.populate_question(question)
+        self.update_choices(db_session, searcher)
         standalone = request.args.get('standalone', False)
         return render_template('forms/single_question_form.html',
                                form=self, question=question, standalone=standalone)
