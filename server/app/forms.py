@@ -32,18 +32,21 @@ class QuestionForm(Form):
 
     def update_choices(self, db_session, searcher):
         other_models = searcher.list_models(db_session)
-        if u'informe' in other_models:
-            instances = other_models[u'informe']
-            self.report.choices = [(instance.id, instance.name) for instance in instances]
-        if u'autor' in other_models:
-            instances = other_models[u'autor']
-            self.author.choices = [(instance.id, instance.name) for instance in instances]
-        if u'ministerio' in other_models:
-            instances = other_models[u'ministerio']
-            self.topic.choices = [(instance.id, instance.name) for instance in instances]
-        if u'área de gestión' in other_models:
-            instances = other_models[u'área de gestión']
-            self.subtopic.choices = [(instance.id, instance.name) for instance in instances]
+        attributes = [
+            (u'informe', 'report'),
+            (u'autor', 'author'),
+            (u'ministerio', 'topic'),
+            (u'área de gestión', 'subtopic')
+        ]
+        for attribute_pair in attributes:
+            spanish_name = attribute_pair[0]
+            english_name = attribute_pair[1]
+            if spanish_name in other_models:
+                instances = other_models[spanish_name]
+                form_attribute = self.__getattribute__(english_name)
+                form_attribute.choices = [(instance.name, instance.name) for instance in instances]
+                if form_attribute.data and (form_attribute.data, form_attribute.data) not in form_attribute.choices:
+                    form_attribute.choices.append((form_attribute.data, form_attribute.data))
 
     def populate_question(self, question):
         self.number.data = question.number
@@ -96,21 +99,21 @@ class QuestionForm(Form):
         db_session.commit()
 
     def handle_create_request(self, db_session, searcher):
+        self.update_choices(db_session, searcher)
         if self.validate_on_submit():
             question = self.save_question(db_session)
             searcher.restart_text_classifier()
             return redirect(url_for('see_question', question_id=question.id))
-        self.update_choices(db_session, searcher)
         return render_template('forms/single_question_form.html', form=self)
 
     def handle_edit_request(self, request, db_session, searcher, question_id):
+        self.update_choices(db_session, searcher)
         question = searcher.get_question(question_id)
         if self.validate_on_submit():
             self.update_question(question, db_session)
             searcher.restart_text_classifier()
             return redirect(url_for('see_question', question_id=question.id))
         self.populate_question(question)
-        self.update_choices(db_session, searcher)
         standalone = request.args.get('standalone', False)
         return render_template('forms/single_question_form.html',
                                form=self, question=question, standalone=standalone)
