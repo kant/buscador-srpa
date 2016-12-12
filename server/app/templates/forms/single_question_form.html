@@ -74,7 +74,9 @@
 
 
             <div class="col-xs-12 actions">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+                {% if standalone %}
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+                {% endif %}
                 <input id="submit-btn" type=submit value=Guardar class="btn btn-success btn-sm">
             </div>
         </div>

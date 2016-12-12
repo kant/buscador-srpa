@@ -2537,6 +2537,8 @@ form#single_question_form .field {
   resize: none; }
 form#single_question_form .select2 {
   width: 100% !important; }
+form#single_question_form .field {
+  padding: 0 8px; }
 form#single_question_form .field-label {
   display: block;
   width: 100%;
