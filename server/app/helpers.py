@@ -4,16 +4,8 @@ import csv
 import models
 import math
 from flask import request, url_for
-# HORRIBLE HACK PARA IMPORTAR EL MODULO, ARREGLAR:
-import os
-import sys
-import inspect
 from sqlalchemy import func
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-parentdir2 = os.path.dirname(parentdir)
-sys.path.insert(0, parentdir2)
-from text_classifier import TextClassifier
+from textar import TextClassifier
 from datetime import datetime
 
 
