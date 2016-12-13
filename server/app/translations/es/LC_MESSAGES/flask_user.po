@@ -23,8 +23,8 @@ msgid ""
 "Password must have at least 6 characters with one lowercase letter, one "
 "uppercase letter and one number"
 msgstr ""
-"La contraseña debe tener al menos 4 caracteres y debe contener al menos "
-"una letra y un número"
+"La contraseña debe tener al menos 6 caracteres y debe contener al menos "
+"una letra minuscula, una letra mayuscula y un número"
 
 #: flask_user/forms.py:41
 msgid "Username must be at least 3 characters long"
