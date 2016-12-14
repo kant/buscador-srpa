@@ -1,5 +1,7 @@
+import os
+
+
 class Config(object):
-    DEBUG = False
     TESTING = False
     CSRF_ENABLED = False
     USER_APP_NAME = "PreguntasJGM"
@@ -9,16 +11,13 @@ class Config(object):
     BABEL_DEFAULT_LOCALE = 'es'
     WERKZEUG_DEBUG_PIN = '123456'
 
-class DevelopmentConfig(Config):
-    DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///db.sqlite'
     SECRET_KEY = 'THIS IS AN INSECURE SECRET'
 
-    MAIL_USERNAME = 'noreply@jgm.com'
-    MAIL_DEFAULT_SENDER = 'no-reply <noreply@jgm.com>'
-    MAIL_SERVER = 'localhost'
-    MAIL_PORT = 25
+    MAIL_USERNAME = 'JGM\datos'
+    MAIL_DEFAULT_SENDER = 'datos@modernizacion.gob.ar'
+    MAIL_SERVER = 'owa.jgm.gob.ar'
+    MAIL_PORT = 587
     MAIL_USE_SSL = False
-
-# class ProductionConfig(Config):
-#    DATABASE_URI = 'mysql://user@localhost/foo'
+    MAIL_USE_TLS = True
+    MAIL_PASSWORD = os.environ['SMTP_PASS']

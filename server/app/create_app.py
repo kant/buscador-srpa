@@ -7,7 +7,7 @@ from helpers import Searcher
 
 
 def create_app():
-    app.config.from_object('app.config.DevelopmentConfig')
+    app.config.from_object('app.config.Config')
     Babel(app)
     Mail(app)
     db.create_all()
