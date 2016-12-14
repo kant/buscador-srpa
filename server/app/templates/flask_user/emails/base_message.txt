@@ -1,0 +1,4 @@
+Estimado {{ user.email }}
+
+{% block message %}
+{% endblock %}
