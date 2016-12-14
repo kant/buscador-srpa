@@ -3,6 +3,7 @@ import os
 
 class Config(object):
     TESTING = False
+    DEBUG = True
     CSRF_ENABLED = False
     USER_APP_NAME = "PreguntasJGM"
     USER_ENABLE_CONFIRM_EMAIL = False

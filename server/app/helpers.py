@@ -3,7 +3,7 @@
 import csv
 import models
 import math
-from flask import request, url_for
+from flask import request, url_for, g
 from sqlalchemy import func
 from textar import TextClassifier
 from datetime import datetime
@@ -147,6 +147,7 @@ class Searcher:
 
     def _search_questions(self, query):
         if query['text'] is not None:
+            g.similarity_cutoff = 1.1
             results = self._search_similar(query)
         else:
             results = models.Question.query.all()
@@ -228,7 +229,6 @@ class Searcher:
     def get_similar_to(self, question_id):
         query = self.query_from_url()
         query['text'] = question_id
-        query['see-more-button'] = True
         return self.search(query)
 
     def _search_similar(self, query):
@@ -243,7 +243,7 @@ class Searcher:
         results = []
         for qid in ids_sim:
             results.append(models.Question.query.get(qid))
-        return zip(results, best_words)
+        return zip(results, best_words, dist)
 
     def suggest_tags(self, tag_type, question_id):
         question = models.Question.query.get(question_id)

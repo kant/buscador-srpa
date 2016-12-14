@@ -45,7 +45,7 @@ class QuestionForm(Form):
                 instances = other_models[spanish_name]
                 form_attribute = self.__getattribute__(english_name)
                 form_attribute.choices = [(instance.name, instance.name) for instance in instances]
-                if form_attribute.data and (form_attribute.data, form_attribute.data) not in form_attribute.choices:
+                if form_attribute.data is not None and (form_attribute.data, form_attribute.data) not in form_attribute.choices:
                     form_attribute.choices.append((form_attribute.data, form_attribute.data))
 
     def populate_question(self, question):

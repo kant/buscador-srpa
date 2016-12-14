@@ -41,21 +41,19 @@
             </li>
         {% endif %}
     </ul>
-{% elif query['see-more-button'] %}
+{% elif query['text'] and results['result_list']|length > 0 and results['result_list'][-1][-1] > g.get('similarity_cutoff') %}
     <div class="see-more-container">
-        <a href="" id="see-more-similar">
-            <button class="btn btn-success btn-sm">
-                Ver mas preguntas similares
-            </button>
-        </a>
+        <button id="see-more-similar" class="btn btn-success btn-sm">
+            Ver mas preguntas similares
+        </button>
 
         <script>
-            $(function() {
-                var query = {{ query|tojson|safe }};
-                var currentLocation = location.href.indexOf('?') ? location.href.split('?')[0] : location.href;
-                var currentPaginationSize = query['por-pagina'] ? parseInt(query['por-pagina']) : 10;
-                $('#see-more-similar').attr('href', currentLocation + '?por-pagina=' + (currentPaginationSize + 10).toString());
+            $(function () {
+                $('#see-more-similar').on('click', function () {
+                    $('.result.hidden').removeClass('hidden');
+                    $(this).addClass('hidden');
+                });
             })
         </script>
     </div>
-{% endif  %}
+{% endif %}

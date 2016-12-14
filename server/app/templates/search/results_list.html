@@ -6,12 +6,12 @@
         <h2>
             {% if query and 'creado-en' in query.filters %}
                 Se cargaron exitosamente {{ pagination['total_results'] }} preguntas
-            {% elif results_name == 'preguntas similares' %}
+            {% elif pagination['total_results'] > 0 and results['query']['text'] %}
                 Preguntas similares
             {% elif pagination['total_results'] > 0 %}
-                Se encontraron {{ pagination['total_results'] }} {{ results_name }}
+                Se encontraron {{ pagination['total_results'] }} preguntas
             {% else %}
-                No se encontraron {{ results_name }}
+                No se encontraron preguntas
             {% endif %}
         </h2>
         <div class="results-actions">
@@ -24,15 +24,30 @@
             {% if pagination['total_results'] > 0 and not hide_order and not query['text'] %}
                 ordenar segun
                 <select title="order" id="order">
-                    <option value="asc" {{ "selected=selected" if query['order'] == 'asc' }}>numero de informe (asc)</option>
-                    <option value="desc" {{ "selected=selected" if query['order'] == 'desc' }}>numero de informe (desc)</option>
+                    <option value="asc" {{ "selected=selected" if query['order'] == 'asc' }}>numero de informe (asc)
+                    </option>
+                    <option value="desc" {{ "selected=selected" if query['order'] == 'desc' }}>numero de informe
+                        (desc)
+                    </option>
                 </select>
             {% endif %}
         </div>
     </div>
 
+    {% if results['query']['text'] and result_list|length > 0 and result_list[0][-1] > g.similarity_cutoff %}
+        <p>
+            No encontramos preguntas *muy parecidas* pero de todas formas podes forzar resultados
+            aprendando en el botón debajo.
+        </p>
+    {% endif %}
+
     <div class="row panels-row">
-        {% for result, best_words in result_list %}
+        {% for result_tutple in result_list %}
+            {% if results['query']['text'] %}
+                {% set result, best_words, distance = result_tutple %}
+            {% else %}
+                {% set result, best_words = result_tutple %}
+            {% endif %}
             {% include 'search/result.html' %}
         {% endfor %}
     </div>

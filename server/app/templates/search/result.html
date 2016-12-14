@@ -9,7 +9,8 @@
     </script>
 {% endif %}
 
-<div class="col-xs-12 result" data-question-id="{{ result.id }}">
+<div class="col-xs-12 result {{ 'hidden' if distance and distance > g.get('similarity_cutoff') }}"
+     data-question-id="{{ result.id }}" {{ 'data-distance=' + distance|string if distance }}>
     <div class="panel panel-default">
         <div class="panel-body">
 
