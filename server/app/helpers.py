@@ -114,28 +114,19 @@ class Searcher:
                 print e
 
     def restart_suggesters(self, questions):
-        ids = [str(q.id) for q in questions]
-        topics = [q.topic.name for q in questions]
-        subtopics = [q.subtopic.name for q in questions]
-        topics_ids = [str(q.topic_id) for q in questions]
-        subtopic_ids = [str(q.subtopic_id) for q in questions]
-        good_topics = [i for i, t in enumerate(topics) if len(t) > 2]
-        ids_good_topics = [ids[i] for i in good_topics]
-        good_topics_ids = [topics_ids[i] for i in good_topics]
-        self.text_classifier.make_classifier(
-            "topics", ids_good_topics, good_topics_ids)
+        ids = [str(q.id) for q in questions if q.topic is not None]
+        topic_ids = [str(q.topic.id) for q in questions if q.topic is not None]
+        self.text_classifier.make_classifier("topics", ids, topic_ids)
         all_topics = models.Topic.query.all()
         for topic in all_topics:
             if len(topic.name) < 2:
                 continue
-            ids_within_topic = [ids[i] for i, t in enumerate(zip(topics, subtopics))
-                                if t[0] == topic.name and len(t[1]) > 2]
-            subtopic_ids_within_topic = [subtopic_ids[i] for i, t in enumerate(zip(topics, subtopics))
-                                         if t[0] == topic.name and len(t[1]) > 2]
-            if len(set(subtopic_ids_within_topic)) > 2:
-                self.text_classifier.make_classifier(str(topic.id) + "_subtopics",
-                                                     ids_within_topic,
-                                                     subtopic_ids_within_topic)
+            questions_with_topic = models.Question.query.filter_by(topic=topic).all()
+            if len(set(questions_with_topic)) > 2:
+                questions_with_topic_ids = [str(q.id) for q in questions_with_topic if q.subtopic is not None]
+                subtopic_ids = [str(q.subtopic.id) for q in questions_with_topic if q.subtopic is not None]
+                classifier_name = str(topic.id) + "_subtopics"
+                self.text_classifier.make_classifier(classifier_name, questions_with_topic_ids, subtopic_ids)
 
     @staticmethod
     def list_models(db_session):
@@ -275,19 +266,23 @@ class Searcher:
 
     def suggest_tags(self, tag_type, question_id):
         question = models.Question.query.get(question_id)
-        classifier_name = str(question.topic_id) + "_" + tag_type
-        if classifier_name in dir(self.text_classifier):
-            tags, vals = self.text_classifier.classify(classifier_name,
-                                                       [str(question_id)])
-            myModel = models.SubTopic
-        elif 'subtopics' in tag_type:
-            subtopics = question.topic.subtopics
-            return list(sorted([x.name for x in subtopics]))
-        elif tag_type == 'topics':
-            tags, vals = self.text_classifier.classify('topics',
-                                                       [str(question_id)])
-            myModel = models.Topic
-        tag_names = [myModel.query.get(idt).name for idt in tags]
+        if tag_type == 'topics':
+            tags, vals = self.text_classifier.classify('topics', [str(question_id)])
+            model = models.Topic
+        else:
+            classifier_name = str(question.topic_id) + "_" + tag_type
+            model = models.SubTopic
+
+            if classifier_name in dir(self.text_classifier):
+                tags, vals = self.text_classifier.classify(classifier_name, [str(question_id)])
+            elif question.topic is not None:
+                subtopics = question.topic.subtopics
+                return list(sorted([x.name for x in subtopics]))
+            else:
+                subtopics = models.SubTopic.query.all()
+                return list(sorted([s.name for s in subtopics]))
+
+        tag_names = [model.query.get(idt).name for idt in tags]
         sorted_tags = [x for (y, x) in sorted(zip(vals.tolist()[0], tag_names))]
         return list(reversed(sorted_tags))
 
