@@ -14,70 +14,91 @@
                 </div>
                 <div class="col-xs-12 col-sm-6 field-label-container header-checkbox">
                     {{ form.discard_first_row() }}
-                </div>
+                </div
             </div>
 
-            <div class="col-xs-12 no-padding">
+            <div class="col-xs-12 no-padding select-group">
                 <div class="col-xs-12 col-sm-6 field-label-container">
                     {{ form.report.label() }}
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     {{ form.report(class_='form-control') }}
                 </div>
+                <div class="col-xs-12">
+                  <p class="type-warning"></p>
+                </div>
             </div>
 
-            <div class="col-xs-12 no-padding">
+            <div class="col-xs-12 no-padding select-group">
                 <div class="col-xs-12 col-sm-6 field-label-container">
                     {{ form.number.label() }}
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     {{ form.number(class_='form-control') }}
                 </div>
+                <div class="col-xs-12">
+                  <p class="type-warning"></p>
+                </div>
             </div>
 
-            <div class="col-xs-12 no-padding">
+            <div class="col-xs-12 no-padding select-group">
                 <div class="col-xs-12 col-sm-6 field-label-container">
                     {{ form.context.label() }}
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     {{ form.context(class_='form-control') }}
                 </div>
+                <div class="col-xs-12">
+                  <p class="type-warning"></p>
+                </div>
             </div>
 
-            <div class="col-xs-12 no-padding">
+            <div class="col-xs-12 no-padding select-group">
                 <div class="col-xs-12 col-sm-6 field-label-container">
                     {{ form.body.label() }}
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     {{ form.body(class_='form-control') }}
                 </div>
+                <div class="col-xs-12">
+                  <p class="type-warning"></p>
+                </div>
             </div>
 
-            <div class="col-xs-12 no-padding">
+            <div class="col-xs-12 no-padding select-group">
                 <div class="col-xs-12 col-sm-6 field-label-container">
                     {{ form.author.label() }}
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     {{ form.author(class_='form-control') }}
                 </div>
+                <div class="col-xs-12">
+                  <p class="type-warning"></p>
+                </div>
             </div>
 
 
-            <div class="col-xs-12 no-padding">
+            <div class="col-xs-12 no-padding select-group">
                 <div class="col-xs-12 col-sm-6 field-label-container">
                     {{ form.topic.label() }}
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     {{ form.topic(class_='form-control') }}
                 </div>
+                <div class="col-xs-12">
+                  <p class="type-warning"></p>
+                </div>
             </div>
 
-            <div class="col-xs-12 no-padding">
+            <div class="col-xs-12 no-padding select-group">
                 <div class="col-xs-12 col-sm-6 field-label-container">
                     {{ form.subtopic.label() }}
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     {{ form.subtopic(class_='form-control') }}
+                </div>
+                <div class="col-xs-12">
+                  <p class="type-warning"></p>
                 </div>
             </div>
 
@@ -106,6 +127,10 @@
 
     <script>
         $(function () {
+            // Tipo de dato esperado en cada columna
+            var desiredTypes = ['Categoria', 'Numero','Texto', 'Texto', 'Otro', 'Categoria', 'Categoria']
+            var cant_have_empty = [true, true, false, true, true, false, false ]
+            var spreadsheetTypes = {{ spreadsheet_summary.datatypes|tojson|safe }}
             var bestRowFromSpreadsheet = {{ spreadsheet_summary.best_row|tojson|safe }};
             var selects = $('form select');
             selects.on('change', function () {
@@ -118,7 +143,20 @@
                     if (attributeColumnNumber > -1) {
                         var valueTemplate = $attributePreviewElement.data('attribute-display-template');
                         attributeValue = valueTemplate.replace('$', bestRowFromSpreadsheet[attributeColumnNumber]);
-
+                        var warningEl = $(this).parents('.select-group').find('.type-warning');
+                        if (desiredTypes[i] == 'Otro'){
+                          warningEl.text('');
+                        }else if ($.inArray(desiredTypes[i],spreadsheetTypes[attributeColumnNumber]) == -1){
+                          var msg = 'No coincide el tipo de dato. Se esperaba ' +  desiredTypes[i] + ' y fue ' +  spreadsheetTypes[attributeColumnNumber];
+                          console.log(msg)
+                          warningEl.text(msg);
+                        }
+                        else {
+                          warningEl.text('');
+                        }
+                        if (cant_have_empty[i] & $.inArray('Contiene Vacios', spreadsheetTypes[attributeColumnNumber])>=0){
+                          warningEl.text('Hay valores vacios');
+                        }
                     } else {
                         attributeValue = $attributePreviewElement.data('attribute-default');
                     }

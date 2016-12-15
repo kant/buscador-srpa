@@ -30,10 +30,14 @@ class SpreadSheetReader:
                     break
                 elif i == 0:
                     summary['first_row'] = row
+                    data = [[] for col in row]
                 else:
+                    for colnum in range(len(row)):
+                        data[colnum].append(row[colnum])
                     summary['best_row'] = cls._best_row(summary['best_row'], row)
             if i == 0:
                 summary['best_row'] = cls._best_row(summary['best_row'], row)
+            summary['datatypes'] = cls._guess_datatypes(data)
             return summary
 
     @classmethod
@@ -65,6 +69,30 @@ class SpreadSheetReader:
             if first_average > second_average:
                 return first_row
             return second_row
+
+    @staticmethod
+    def _guess_datatypes(data):
+        """ Recibe una lista de listas [col1, col2, col3..] e intenta adivinar
+        el tipo de dato en cada una. Por ahora solo hay 4 tipos:
+        `Numero` `Texto` `Categoria` `Otro`
+        """
+        data_props = [[] for col in data]
+        for i, col in enumerate(data):
+            data_is_empty = map(lambda x: len(x) == 0, col)
+            if any(data_is_empty):
+                data_props[i].append('Contiene Vacios')
+            non_empty = filter(lambda x: len(x) > 0, col)
+            if all(map(lambda x: x.isdigit(), non_empty)):
+                data_props[i].append('Numero')
+                continue
+            if len(set(non_empty)) < (len(non_empty) * 0.5):
+                data_props[i].append('Categoria')
+                continue
+            if sum(map(len, non_empty)) / len(non_empty) > 100:
+                data_props[i].append('Texto')
+            else:
+                data_props[i].append('Otro')
+        return data_props
 
 
 class Searcher:
