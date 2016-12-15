@@ -2,18 +2,24 @@ $(function () {
     var tagsTemplate = function (tagList, questionId, tagType) {
         var content = '';
         for (var i = 0; i < tagList.length; i++) {
-            var button = '<button class="btn btn-primary" data-question-id="qid" data-tag-type="tagtype">text</button>';
-            button = button.replace('text', tagList[i]);
-            button = button.replace('qid', questionId);
-            button = button.replace('tagtype', tagType);
+            var button = '<button class="btn btn-primary" data-question-id="qid" data-tag-type="tagtype" data-sort="dsort">text</button>';
+            button = button.replace('text', tagList[i])
+                .replace('qid', questionId)
+                .replace('tagtype', tagType)
+                .replace('dsort', i.toString());
             content += button;
         }
         content = '<div class="tag-list">' + content + '</div>';
         var cancelButton = '<button class="btn btn-default" data-question-id="' + questionId + '">Cancelar</button>';
         var addButton = '<button class="btn btn-success disabled">Agregar tag</button>';
         content += '<div class="menu">' + cancelButton + addButton + '</div>';
+        var searchField = '<input type="text" placeholder="Busqueda rápida">' ;
+        var orderSelect = '<label>Ordenar según <select id="tag-order"><option value="suggestion">relevancia</option><option value="alphabetically">nombre</option></select></label>';
+        content += '<div class="search-and-order">' + orderSelect + searchField + '</div>';
         content = '<div class="tag-suggester">' + content + '</div>';
-        return $(content);
+        var $content = $(content);
+        $content.find('#tag-order').data('tags', tagList);
+        return $content;
     };
 
     var loadTags = function (e, tagType) {
@@ -81,6 +87,26 @@ $(function () {
         })
     };
 
+    var changeOrder = function (e) {
+        var $select = $(e.currentTarget);
+        var tags = $select.data('tags');
+        var order = $select.val();
+        var buttons = $select.parents('.tag-suggester').find('.tag-list button');
+        if (order == 'alphabetically') {
+            buttons.sort(function (a, b) {
+                return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
+            });
+        } else {
+            buttons.sort(function (a, b) {
+                var originalPositionA = parseInt($(a).data('sort'));
+                var originalPositionB = parseInt($(b).data('sort'));
+                return (originalPositionA < originalPositionB) ? -1 : 1;
+
+            });
+        }
+        $select.parents('.tag-suggester').find('.tag-list').html(buttons);
+    };
+
     var $body = $('body');
     $body.on('click', '.qtip-jgm button.btn-primary', selectTag);
     $body.on('click', '.qtip-jgm button.btn-success', submitTags);
@@ -98,4 +124,5 @@ $(function () {
         $('.result[data-question-id=' + questionId + '] .without-' + tagType).removeClass('disabled');
         tooltip.remove();
     });
+    $body.on('change', '.qtip-jgm #tag-order', changeOrder)
 });

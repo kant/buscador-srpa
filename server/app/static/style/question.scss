@@ -85,9 +85,8 @@
 }
 
 .qtip-jgm {
-  height: 400px;
+  height: 480px;
   width: 300px;
-  overflow: scroll;
   border-color: #ddd;
   background-color: #fafafa;
   border-radius: 4px;
@@ -103,34 +102,56 @@
     .tag-suggester {
       height: 100%;
       position: relative;
-      padding: 10px 10px 50px 10px;
-    }
+      padding: 80px 10px 50px 10px;
 
-    .menu {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      left: 0;
-      text-align: center;
+      .menu {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        left: 0;
+        text-align: center;
 
-      button {
-        width: 46%;
-        padding: 4px;
-        font-size: 14px;
-        &.btn-success {
-          margin-left: 8px;
+        button {
+          width: 46%;
+          padding: 4px;
+          font-size: 12px;
+          &.btn-success {
+            margin-left: 8px;
+          }
         }
       }
-    }
 
-    .tag-list {
-      overflow-x: hidden;
-      overflow-y: scroll;
-      height: 100%;
-
-      button {
-        padding: 8px;
+      .search-and-order {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
+        padding: 10px;
+        input[type="text"] {
+          display: block;
+          width: 100%;
+          margin-top: 10px;
+          font-size: 12px;
+        }
+        label {
+          margin: 0;
+          font-size: 12px;
+          display: block;
+          text-align: right;
+        }
+      }
+
+      .tag-list {
+        overflow-x: hidden;
+        overflow-y: scroll;
+        height: 100%;
+
+        button {
+          font-size: 14px;
+          padding: 4px 8px;
+          width: 100%;
+          margin-bottom: 5px;
+        }
       }
     }
   }

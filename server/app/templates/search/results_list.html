@@ -35,7 +35,7 @@
     </div>
 
     {% if results['query']['text'] and result_list|length > 0 and result_list[0][-1] > g.similarity_cutoff %}
-        <p>
+        <p id="few-similars-message">
             No encontramos preguntas *muy parecidas* pero de todas formas podes forzar resultados
             aprendando en el botón debajo.
         </p>

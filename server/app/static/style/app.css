@@ -2476,9 +2476,8 @@ mark {
   opacity: 1; }
 
 .qtip-jgm {
-  height: 400px;
+  height: 480px;
   width: 300px;
-  overflow: scroll;
   border-color: #ddd;
   background-color: #fafafa;
   border-radius: 4px;
@@ -2492,26 +2491,44 @@ mark {
     .qtip-jgm .qtip-content .tag-suggester {
       height: 100%;
       position: relative;
-      padding: 10px 10px 50px 10px; }
-    .qtip-jgm .qtip-content .menu {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      left: 0;
-      text-align: center; }
-      .qtip-jgm .qtip-content .menu button {
-        width: 46%;
-        padding: 4px;
-        font-size: 14px; }
-        .qtip-jgm .qtip-content .menu button.btn-success {
-          margin-left: 8px; }
-    .qtip-jgm .qtip-content .tag-list {
-      overflow-x: hidden;
-      overflow-y: scroll;
-      height: 100%; }
-      .qtip-jgm .qtip-content .tag-list button {
-        padding: 8px;
-        width: 100%; }
+      padding: 80px 10px 50px 10px; }
+      .qtip-jgm .qtip-content .tag-suggester .menu {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        left: 0;
+        text-align: center; }
+        .qtip-jgm .qtip-content .tag-suggester .menu button {
+          width: 46%;
+          padding: 4px;
+          font-size: 12px; }
+          .qtip-jgm .qtip-content .tag-suggester .menu button.btn-success {
+            margin-left: 8px; }
+      .qtip-jgm .qtip-content .tag-suggester .search-and-order {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 10px; }
+        .qtip-jgm .qtip-content .tag-suggester .search-and-order input[type="text"] {
+          display: block;
+          width: 100%;
+          margin-top: 10px;
+          font-size: 12px; }
+        .qtip-jgm .qtip-content .tag-suggester .search-and-order label {
+          margin: 0;
+          font-size: 12px;
+          display: block;
+          text-align: right; }
+      .qtip-jgm .qtip-content .tag-suggester .tag-list {
+        overflow-x: hidden;
+        overflow-y: scroll;
+        height: 100%; }
+        .qtip-jgm .qtip-content .tag-suggester .tag-list button {
+          font-size: 14px;
+          padding: 4px 8px;
+          width: 100%;
+          margin-bottom: 5px; }
 
 form#upload_form {
   margin-bottom: 20px; }
