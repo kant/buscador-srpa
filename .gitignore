@@ -5,3 +5,4 @@ db.sqlite
 .sass-cache
 uploads
 venv
+runserver.sh
