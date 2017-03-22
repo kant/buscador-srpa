@@ -48,6 +48,8 @@ class UserRoles(db.Model):
 
 
 class Question(db.Model):
+    __table_args__ = (db.UniqueConstraint('report_id', 'number', name='_report_question_number_uc'),)
+
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     number = db.Column(db.Integer)
     body = db.Column(db.Text(MAX_TEXT_LENGTH))

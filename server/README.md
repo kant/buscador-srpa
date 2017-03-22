@@ -1,6 +1,6 @@
 # Server
 
-Instalación de dependencias 
+Instalación de dependencias
 ```
 sudo apt-get install git-all python-pip python-dev build-essential sqlite3 libsqlite3-dev
 pip install virtualenv
@@ -15,11 +15,8 @@ pip install -r requirements.txt
 ## Para desarrollo
 
 ### Levantar el server:
-```
-cd text-classifier/server/
-. venv/bin/activate
-python main.py
-```
+
+Hay un script de bash de ejemplo para levantar el server llamado `runserver.sh.sample`.
 
 ### Compilar scss
 Dentro de la carpeta `app/static/style` ejecutar `sass --watch app.scss:app.css`
