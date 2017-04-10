@@ -2529,6 +2529,8 @@ mark {
           padding: 4px 8px;
           width: 100%;
           margin-bottom: 5px; }
+          .qtip-jgm .qtip-content .tag-suggester .tag-list button:hover, .qtip-jgm .qtip-content .tag-suggester .tag-list button.active {
+            background-color: #204d74; }
 
 form#upload_form {
   margin-bottom: 20px; }

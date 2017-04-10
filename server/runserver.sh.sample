@@ -1,0 +1,16 @@
+#!/bin/bash
+development=false
+
+server_folder_path=$(dirname $0)
+. "$server_folder_path/venv/bin/activate"
+
+export SMTP_PASS=''
+
+server_cmd="python $server_folder_path/main.py"
+if $development; then
+    input_scss="$server_folder_path/app/static/style/app.scss"
+    output_css="$server_folder_path/app/static/style/app.css"
+    server_cmd="$server_cmd & sass --watch '$input_scss':'$output_css'"
+fi
+trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
+sh -c "$server_cmd"

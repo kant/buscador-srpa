@@ -158,6 +158,7 @@ class Searcher:
         for question, keywords in results:
             db_session.delete(question)
         db_session.commit()
+        self.restart_text_classifier()
         return
 
     def search(self, query):

@@ -13,7 +13,7 @@ $(function () {
         var cancelButton = '<button class="btn btn-default" data-question-id="' + questionId + '">Cancelar</button>';
         var addButton = '<button class="btn btn-success disabled">Agregar tag</button>';
         content += '<div class="menu">' + cancelButton + addButton + '</div>';
-        var searchField = '<input type="text" placeholder="Busqueda rápida">' ;
+        var searchField = '<input type="text" placeholder="Busqueda rápida" class="suggest-search">' ;
         var orderSelect = '<label>Ordenar según <select id="tag-order"><option value="suggestion">relevancia</option><option value="alphabetically">nombre</option></select></label>';
         content += '<div class="search-and-order">' + orderSelect + searchField + '</div>';
         content = '<div class="tag-suggester">' + content + '</div>';
@@ -62,6 +62,7 @@ $(function () {
         }).then(function (response) {
             var content = tagsTemplate(response, questionId, tagType);
             api.set('content.text', content);
+            initializeLunr(response, content);
         });
         return ''
     };
@@ -107,6 +108,38 @@ $(function () {
         $select.parents('.tag-suggester').find('.tag-list').html(buttons);
     };
 
+    var initializeLunr = function (tagList, suggesterEl) {
+        var searcher = lunr(function () {
+            this.field('name');
+            this.ref('id');
+        });
+        for (var i=0; i<tagList.length; i++) {
+            var tag = {
+                name: tagList[i],
+                id: i
+            };
+            searcher.add(tag);
+        }
+        suggesterEl.find('.suggest-search').data('searcher', searcher);
+    };
+
+    var filterResults = function (e) {
+        var $select = $(e.currentTarget);
+        var query = $select.val().trim();
+        var tagList = $select.parents('.tag-suggester').find('.tag-list');
+        if (query.length > 0) {
+            var searcher = $select.data('searcher');
+            var results = searcher.search(query);
+            tagList.find('button').addClass('hidden');
+            for (var i=0; i<results.length; i++) {
+                var tagId = results[i].ref;
+                tagList.find('button[data-sort="' + tagId.toString() + '"]').removeClass('hidden');
+            }
+        } else {
+            tagList.find('button').removeClass('hidden');
+        }
+    };
+
     var $body = $('body');
     $body.on('click', '.qtip-jgm button.btn-primary', selectTag);
     $body.on('click', '.qtip-jgm button.btn-success', submitTags);
@@ -124,5 +157,6 @@ $(function () {
         $('.result[data-question-id=' + questionId + '] .without-' + tagType).removeClass('disabled');
         tooltip.remove();
     });
-    $body.on('change', '.qtip-jgm #tag-order', changeOrder)
+    $body.on('change', '.qtip-jgm #tag-order', changeOrder);
+    $body.on('change keyup', '.qtip-jgm .suggest-search', filterResults)
 });
