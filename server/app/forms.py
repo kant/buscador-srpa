@@ -29,6 +29,10 @@ class QuestionForm(Form):
     author = SelectField(_('Question author'), default="")
     topic = SelectField(_('Question topic'), default="")
     subtopic = SelectField(_('Question subtopic'), default="")
+    answer = TextAreaField(
+        _('Question answer'),
+        [validators.Length(min=0, max=MAX_TEXT_LENGTH)]
+    )
 
     def update_choices(self, db_session, searcher):
         other_models = searcher.list_models(db_session)
@@ -52,6 +56,7 @@ class QuestionForm(Form):
         self.number.data = question.number
         self.body.data = question.body
         self.context.data = question.context
+        self.answer = question.answer
         if question.report:
             self.report.data = question.report.name
         if question.author:
@@ -78,6 +83,7 @@ class QuestionForm(Form):
             number=self.number.data,
             body=self.body.data.strip(),
             context=self.context.data.strip(),
+            answer=self.answer.data.strip(),
             report_id=report_id,
             author_id=author_id,
             topic_id=topic_id,
@@ -91,6 +97,7 @@ class QuestionForm(Form):
         question.number = self.number.data
         question.body = self.body.data.strip()
         question.context = self.context.data.strip()
+        question.answer = self.answer.data.strip()
         question.report_id = get_or_create(db_session, Report, name=self.report.data.strip().lower())
         question.author_id = get_or_create(db_session, Author, name=self.author.data.strip().lower())
         question.topic_id = get_or_create(db_session, Topic, name=self.topic.data.strip().lower())

@@ -72,6 +72,12 @@
                 {{ render_errors(form.subtopic) }}
             </div>
 
+            <div class="col-xs-12">
+                {{ form.answer.label(class_="field-label answer ") }}
+                {{ form.answer(class_="field answer") }}
+                {{ render_errors(form.answer) }}
+            </div>
+
 
             <div class="col-xs-12 actions">
                 {% if standalone %}

@@ -1,14 +1,14 @@
 # Translations template for PROJECT.
-# Copyright (C) 2016 ORGANIZATION
+# Copyright (C) 2017 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-10-13 08:33-0300\n"
+"POT-Creation-Date: 2017-04-11 17:51-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,65 +17,62 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: forms.py:29 forms.py:114
+#: forms.py:16 forms.py:150
 msgid "Question number"
 msgstr ""
 
-#: forms.py:30
+#: forms.py:17
 msgid ""
 "Question number must be a"
 "                                                   positive integer"
 msgstr ""
 
-#: forms.py:34 forms.py:115
+#: forms.py:21 forms.py:151
 msgid "Question body"
 msgstr ""
 
-#: forms.py:38
-msgid "Question justification (optional)"
-msgstr ""
-
-#: forms.py:42
+#: forms.py:25
 msgid "Question context (optional)"
 msgstr ""
 
-#: forms.py:46 forms.py:118
-msgid "Question answerer"
-msgstr ""
-
-#: forms.py:50 forms.py:119
+#: forms.py:28 forms.py:153
 msgid "Report number"
 msgstr ""
 
-#: forms.py:54 forms.py:120
+#: forms.py:29 forms.py:154
 msgid "Question author"
 msgstr ""
 
-#: forms.py:58 forms.py:121
+#: forms.py:30 forms.py:155
 msgid "Question topic"
 msgstr ""
 
-#: forms.py:62 forms.py:122
+#: forms.py:31 forms.py:156
 msgid "Question subtopic"
 msgstr ""
 
-#: forms.py:113
+#: forms.py:33
+msgid "Question answer"
+msgstr ""
+
+#: forms.py:149
 msgid "First row is header"
 msgstr ""
 
-#: forms.py:116
-msgid "Question justification"
-msgstr ""
-
-#: forms.py:117
+#: forms.py:152
 msgid "Question context"
 msgstr ""
 
-#: forms.py:141
+#: forms.py:177
 msgid "None"
 msgstr ""
 
-#: forms.py:198
+#: forms.py:257
 msgid "Base text to query"
+msgstr ""
+
+#: templates/search/filters.html:60
+#, python-format
+msgid "%(model_name)s"
 msgstr ""
 
