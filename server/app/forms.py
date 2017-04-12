@@ -149,6 +149,7 @@ class ProcessSpreadsheetForm(Form):
     discard_first_row = BooleanField(_('First row is header'), default=True)
     number = SelectField(_('Question number'), [validators.DataRequired("Requerido")])
     body = SelectField(_('Question body'), [validators.DataRequired("Requerido")])
+    answer = SelectField(_('Question answer'))
     context = SelectField(_('Question context'))
     report = SelectField(_('Report number'))
     author = SelectField(_('Question author'))
@@ -177,6 +178,7 @@ class ProcessSpreadsheetForm(Form):
         choices = [('', _('None'))] + choices
         self.number.choices = choices
         self.body.choices = choices
+        self.answer.choices = choices
         self.context.choices = choices
         self.report.choices = choices
         self.author.choices = choices
@@ -209,6 +211,7 @@ class ProcessSpreadsheetForm(Form):
         columns = [
             (self.number.data, 'number'),
             (self.body.data, 'body'),
+            (self.answer.data, 'answer'),
             (self.context.data, 'context'),
             (self.report.data, 'report'),
             (self.author.data, 'author'),
