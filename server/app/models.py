@@ -72,6 +72,7 @@ class Question(db.Model):
         self.author_id = kwargs.get('author_id', None)
         self.topic_id = kwargs.get('topic_id', None)
         self.subtopic_id = kwargs.get('subtopic_id', None)
+        self.answer = kwargs.get('answer', '')
 
     @classmethod
     def delete(cls, question_id, db_session):
