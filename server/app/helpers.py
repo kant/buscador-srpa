@@ -42,7 +42,7 @@ class SpreadSheetReader:
 
     @classmethod
     def read_csv(cls, csvfile):
-        dialect = csv.Sniffer().sniff(csvfile.read(10240), delimiters=';,')
+        dialect = csv.Sniffer().sniff(csvfile.read(), delimiters=',')
         csvfile.seek(0)
         reader = csv.reader(csvfile, dialect)
         for i, row in enumerate(reader):
