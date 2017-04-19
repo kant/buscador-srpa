@@ -26,13 +26,15 @@ $(function() {
     var urlConstructor = function (args) {
         var getArgs = [];
         for (var key in args) {
-            getArgs.push(encodeURIComponent(key) + '=' + encodeURIComponent(args[key]));
+            if (args[key].length > 0) {
+                getArgs.push(encodeURIComponent(key) + '=' + encodeURIComponent(args[key]));
+            }
         }
         return '/buscar?' + getArgs.join('&');
     };
 
     var currentArgs = function () {
-        var args = jQuery.extend({}, window.jgm.query.filters);
+        var args = jQuery.extend({}, window.jgm.query.filters, {'buscar-usando': window.jgm.query.based_on, 'buscar-dentro-de': window.jgm.query.target});
         if (window.jgm.query.text) {
             args['q'] = window.jgm.query.text;
         }
