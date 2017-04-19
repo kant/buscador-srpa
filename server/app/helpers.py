@@ -255,12 +255,12 @@ class Searcher:
 
     def get_similar_to(self, question):
         query = self.query_from_url() # Se modifica para incluir based_on
-        if query['based_on'] == 'question':
+        if query['based_on'] == 'pregunta':
             query['text'] = 'q' + str(question.id)
-        elif query['based_on'] == 'answer':
+        elif query['based_on'] == 'respuesta':
             query['text'] = 'r' + str(question.id)
         else:
-            pass # Falta ver como queda todo junto ¿de donde viene el texto?
+            query['text'] = question.context + ' ' + question.body + ' ' + question.answer
         return self.search(query)
 
     def _search_similar(self, query): # TArget pasa a estar en el query
@@ -268,15 +268,14 @@ class Searcher:
         all_questions = models.Question.query.all()
         if self.text_classifier is None:
             return []
-        if query['target'] == 'question':
+        if query['target'] == 'preguntas':
             id_list = ['q' + str(q.id) for q in all_questions
                        if q.body is not None]
-        elif query['target'] == 'answer':
+        elif query['target'] == 'respuestas':
             id_list = ['r' + str(q.id) for q in all_questions
                        if q.answer is not None]
         else:
             id_list = None
-        print(id_list)
         if not isinstance(question_id, basestring):
             question_id = str(question_id)
         per_page = 'por-pagina' in query and int(query['por-pagina']) or self.per_page
@@ -286,11 +285,7 @@ class Searcher:
             max_options = per_page
         ids_sim, dist, best_words = self.text_classifier.get_similar(
             question_id, max_similars=max_options, filter_list=id_list)
-        print(ids_sim)
-        print(dist)
-        print(question_id)
         ids_sim = self._clean_ids(ids_sim, question_id)
-        print(ids_sim)
         results = []
         for qid in ids_sim:
             results.append(models.Question.query.get(qid))
@@ -333,8 +328,8 @@ class Searcher:
         ]
         query = {
             'text': request.args.get('q'),
-            'target': request.args.get('buscar_en'),
-            'based_on': request.args.get('usando'),
+            'target': request.args.get('buscar-dentro-de', ''),
+            'based_on': request.args.get('buscar-usando', ''),
             'current_page': int(request.args.get('pagina', 1)),
             'can_add_more_filters': True,
             'order': request.args.get('orden', 'asc'),

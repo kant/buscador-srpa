@@ -5,9 +5,11 @@ from . import app, db, models
 from routes import init_routes
 from helpers import Searcher
 
+
 def create_db():
     app.config.from_object('app.config.Config')
     db.create_all()
+
 
 def create_app():
     create_db()
@@ -17,6 +19,7 @@ def create_app():
     searcher = Searcher()
     init_routes(app, db.session, searcher)
     return app
+
 
 def init_users():
     db_adapter = SQLAlchemyAdapter(db, models.User)

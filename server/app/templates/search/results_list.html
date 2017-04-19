@@ -7,13 +7,14 @@
             {% if query and 'creado-en' in query.filters %}
                 Se cargaron exitosamente {{ pagination['total_results'] }} preguntas
             {% elif pagination['total_results'] > 0 and results['query']['text'] %}
-                Preguntas similares
+                Resultados similares
             {% elif pagination['total_results'] > 0 %}
-                Se encontraron {{ pagination['total_results'] }} preguntas
+                Se encontraron {{ pagination['total_results'] }} resultados
             {% else %}
-                No se encontraron preguntas
+                No se encontraron resultados
             {% endif %}
         </h2>
+        {% include 'search/result_list_type_filter.html' %}
         <div class="results-actions">
             {% if pagination['total_results'] > 0 and not hide_delete_massive %}
                 <span class="delete-all" data-toggle="modal" data-target="#question-delete-all">
@@ -36,7 +37,7 @@
 
     {% if results['query']['text'] and result_list|length > 0 and result_list[0][-1] > g.similarity_cutoff %}
         <p id="few-similars-message">
-            No encontramos preguntas *muy parecidas* pero de todas formas podes forzar resultados
+            No encontramos resultados *muy parecidos* pero de todas formas podes forzar resultados
             aprendando en el botón debajo.
         </p>
     {% endif %}

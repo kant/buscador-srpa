@@ -1,0 +1,79 @@
+{% if pagination['total_results'] > 0 and results['query']['text'] %}
+    {% set target = results['query']['target'] %}
+    {% set based_on = results['query']['based_on'] %}
+    <p>
+        Listado de
+        <select id="search-target" title="buscar-similares-a">
+            <option value="preguntas" {{ 'selected' if target == 'preguntas' else '' }}>preguntas</option>
+            <option value="respuestas" {{ 'selected' if target == 'respuestas' else '' }}>respuestas</option>
+            <option value="" {{ 'selected' if target != 'preguntas' and target != 'respuestas' else '' }}>preguntas y respuestas</option>
+        </select>
+        similares a
+        {% if request.endpoint == 'see_question' %}
+            esta
+            <select id="search-based-on" title="similares-a">
+                <option value="pregunta" {{ 'selected' if based_on == 'pregunta' else '' }}>pregunta</option>
+                <option value="respuesta" {{ 'selected' if based_on == 'respuesta' else '' }}>respuesta</option>
+                <option value="" {{ 'selected' if based_on != 'pregunta' and based_on != 'respuesta' else '' }}>pregunta y respuesta</option>
+            </select>
+        {% else %}
+            este texto
+        {% endif %}
+    </p>
+
+    <script>
+        window.jgm = window.jgm || {};
+        window.jgm.query = {{ results['query']|tojson|safe }};
+        $(function () {
+            var currentArgs = function () {
+                var args = jQuery.extend({}, window.jgm.query.filters, {'buscar-usando': window.jgm.query.based_on, 'buscar-dentro-de': window.jgm.query.target});
+                if (window.jgm.query.text) {
+                    args['q'] = window.jgm.query.text;
+                }
+                return args;
+            };
+            var urlConstructor = function (args) {
+                var getArgs = [];
+                for (var key in args) {
+                    if (args[key].length > 0) {
+                        getArgs.push(encodeURIComponent(key) + '=' + encodeURIComponent(args[key]));
+                    }
+                }
+                return window.location.pathname + '?' + getArgs.join('&');
+            };
+
+            var endpoint = '{{ request.endpoint }}';
+
+            var $basedOnSelect = $('#search-based-on');
+            $basedOnSelect.on('change', function () {
+                var basedOnArgs = currentArgs();
+                var selectedValue = $basedOnSelect.find('option:selected').val();
+                if (selectedValue.length > 0) {
+                    basedOnArgs['buscar-usando'] = selectedValue;
+                } else {
+                    delete basedOnArgs['buscar-usando']
+                }
+                if (endpoint == 'see_question') {
+                    delete basedOnArgs['q'];
+                }
+                window.location.href = urlConstructor(basedOnArgs);
+            });
+
+            var $targetSelect = $('#search-target');
+            $targetSelect.on('change', function () {
+                var targetArgs = currentArgs();
+                var selectedValue = $targetSelect.find('option:selected').val();
+                if (selectedValue.length > 0) {
+                    targetArgs['buscar-dentro-de'] = selectedValue;
+                } else {
+                    delete targetArgs['buscar-dentro-de'];
+                }
+                if (endpoint == 'see_question') {
+                    delete targetArgs['q'];
+                }
+                window.location.href = urlConstructor(targetArgs);
+            });
+        });
+
+    </script>
+{% endif %}
