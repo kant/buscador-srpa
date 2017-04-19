@@ -121,7 +121,7 @@ class Searcher:
                 print e
 
     def restart_suggesters(self, questions):
-        ids = [str(q.id) for q in questions if q.topic is not None]
+        ids = ['q' + str(q.id) for q in questions if q.topic is not None]
         topic_ids = [str(q.topic.id) for q in questions if q.topic is not None]
         self.text_classifier.make_classifier("topics", ids, topic_ids)
         all_topics = models.Topic.query.all()
@@ -286,14 +286,16 @@ class Searcher:
     def suggest_tags(self, tag_type, question_id):
         question = models.Question.query.get(question_id)
         if tag_type == 'topics':
-            tags, vals = self.text_classifier.classify('topics', [str(question_id)])
+            tags, vals = self.text_classifier.classify(
+                'topics', ['q' + str(question_id)])
             model = models.Topic
         else:
             classifier_name = str(question.topic_id) + "_" + tag_type
             model = models.SubTopic
 
             if classifier_name in dir(self.text_classifier):
-                tags, vals = self.text_classifier.classify(classifier_name, [str(question_id)])
+                tags, vals = self.text_classifier.classify(
+                    classifier_name, ['q' + str(question_id)])
             elif question.topic is not None:
                 subtopics = question.topic.subtopics
                 return list(sorted([x.name for x in subtopics]))
@@ -302,7 +304,8 @@ class Searcher:
                 return list(sorted([s.name for s in subtopics]))
 
         tag_names = [model.query.get(idt).name for idt in tags]
-        sorted_tags = [x for (y, x) in sorted(zip(vals.tolist()[0], tag_names))]
+        sorted_tags = [x for (y, x) in
+                       sorted(zip(vals.tolist()[0], tag_names))]
         return list(reversed(sorted_tags))
 
     @staticmethod
