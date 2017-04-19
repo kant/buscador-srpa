@@ -111,7 +111,7 @@ class Searcher:
                     if q.answer is not None]
             q_texts = [q.body + q.context for q in all_questions
                        if q.body is not None]
-            r_texts = [q.body + q.context for q in all_questions
+            r_texts = [q.answer for q in all_questions
                        if q.answer is not None]
             try:
                 self.text_classifier = TextClassifier(q_texts + r_texts,
@@ -253,31 +253,44 @@ class Searcher:
             filtered_questions = filter(lambda x: x[0].created_at == created_at, filtered_questions)
         return filtered_questions
 
-    def get_similar_to(self, question_id):
-        query = self.query_from_url()
-        query['text'] = question_id
+    def get_similar_to(self, question):
+        query = self.query_from_url() # Se modifica para incluir based_on
+        if query['based_on'] == 'question':
+            query['text'] = 'q' + str(question.id)
+        elif query['based_on'] == 'answer':
+            query['text'] = 'r' + str(question.id)
+        else:
+            pass # Falta ver como queda todo junto ¿de donde viene el texto?
         return self.search(query)
 
-    def _search_similar(self, query, target=None):
+    def _search_similar(self, query): # TArget pasa a estar en el query
         question_id = query['text']
         all_questions = models.Question.query.all()
         if self.text_classifier is None:
             return []
-        if target == 'question':
+        if query['target'] == 'question':
             id_list = ['q' + str(q.id) for q in all_questions
                        if q.body is not None]
-        elif target == 'answer':
+        elif query['target'] == 'answer':
             id_list = ['r' + str(q.id) for q in all_questions
                        if q.answer is not None]
         else:
             id_list = None
-
+        print(id_list)
         if not isinstance(question_id, basestring):
             question_id = str(question_id)
         per_page = 'por-pagina' in query and int(query['por-pagina']) or self.per_page
+        if id_list:
+            max_options = min(per_page, len(id_list))
+        else:
+            max_options = per_page
         ids_sim, dist, best_words = self.text_classifier.get_similar(
-            question_id, max_similars=per_page, filter_list=id_list)
-        ids_sim = map(self._clean_ids, ids_sim)
+            question_id, max_similars=max_options, filter_list=id_list)
+        print(ids_sim)
+        print(dist)
+        print(question_id)
+        ids_sim = self._clean_ids(ids_sim, question_id)
+        print(ids_sim)
         results = []
         for qid in ids_sim:
             results.append(models.Question.query.get(qid))
@@ -320,6 +333,8 @@ class Searcher:
         ]
         query = {
             'text': request.args.get('q'),
+            'target': request.args.get('buscar_en'),
+            'based_on': request.args.get('usando'),
             'current_page': int(request.args.get('pagina', 1)),
             'can_add_more_filters': True,
             'order': request.args.get('orden', 'asc'),
@@ -331,11 +346,12 @@ class Searcher:
         return query
 
     @staticmethod
-    def _clean_ids(ids):
+    def _clean_ids(ids, question_id):
         ids = map(lambda x: x[1:], ids)
+        ids = filter(lambda x: x != question_id[1:], ids)
         seen = set()
         seen_add = seen.add
-        return [x for x in ids if not (x in seen or seen_add(x))]
+        return [int(x) for x in ids if not (x in seen or seen_add(x))]
 
     @staticmethod
     def url_maker(query, page=None):
