@@ -105,16 +105,23 @@ class Searcher:
     def restart_text_classifier(self):
         all_questions = models.Question.query.all()
         if len(all_questions) > 0:
-            ids = [str(q.id) for q in all_questions]
-            texts = [q.body + q.context for q in all_questions]
+            qids = ['q' + str(q.id) for q in all_questions
+                    if q.body is not None]
+            rids = ['r' + str(q.id) for q in all_questions
+                    if q.answer is not None]
+            q_texts = [q.body + q.context for q in all_questions
+                       if q.body is not None]
+            r_texts = [q.body + q.context for q in all_questions
+                       if q.answer is not None]
             try:
-                self.text_classifier = TextClassifier(texts, ids)
+                self.text_classifier = TextClassifier(q_texts + r_texts,
+                                                      qids + rids)
                 self.restart_suggesters(all_questions)
             except Exception as e:
                 print e
 
     def restart_suggesters(self, questions):
-        ids = [str(q.id) for q in questions if q.topic is not None]
+        ids = ['q' + str(q.id) for q in questions if q.topic is not None]
         topic_ids = [str(q.topic.id) for q in questions if q.topic is not None]
         self.text_classifier.make_classifier("topics", ids, topic_ids)
         all_topics = models.Topic.query.all()
@@ -251,15 +258,26 @@ class Searcher:
         query['text'] = question_id
         return self.search(query)
 
-    def _search_similar(self, query):
+    def _search_similar(self, query, target=None):
         question_id = query['text']
+        all_questions = models.Question.query.all()
         if self.text_classifier is None:
             return []
+        if target == 'question':
+            id_list = ['q' + str(q.id) for q in all_questions
+                       if q.body is not None]
+        elif target == 'answer':
+            id_list = ['r' + str(q.id) for q in all_questions
+                       if q.answer is not None]
+        else:
+            id_list = None
+
         if not isinstance(question_id, basestring):
             question_id = str(question_id)
         per_page = 'por-pagina' in query and int(query['por-pagina']) or self.per_page
-        ids_sim, dist, best_words = self.text_classifier.get_similar(question_id, max_similars=per_page)
-        ids_sim = map(int, ids_sim)
+        ids_sim, dist, best_words = self.text_classifier.get_similar(
+            question_id, max_similars=per_page, filter_list=id_list)
+        ids_sim = map(self._clean_ids, ids_sim)
         results = []
         for qid in ids_sim:
             results.append(models.Question.query.get(qid))
@@ -268,14 +286,16 @@ class Searcher:
     def suggest_tags(self, tag_type, question_id):
         question = models.Question.query.get(question_id)
         if tag_type == 'topics':
-            tags, vals = self.text_classifier.classify('topics', [str(question_id)])
+            tags, vals = self.text_classifier.classify(
+                'topics', ['q' + str(question_id)])
             model = models.Topic
         else:
             classifier_name = str(question.topic_id) + "_" + tag_type
             model = models.SubTopic
 
             if classifier_name in dir(self.text_classifier):
-                tags, vals = self.text_classifier.classify(classifier_name, [str(question_id)])
+                tags, vals = self.text_classifier.classify(
+                    classifier_name, ['q' + str(question_id)])
             elif question.topic is not None:
                 subtopics = question.topic.subtopics
                 return list(sorted([x.name for x in subtopics]))
@@ -284,7 +304,8 @@ class Searcher:
                 return list(sorted([s.name for s in subtopics]))
 
         tag_names = [model.query.get(idt).name for idt in tags]
-        sorted_tags = [x for (y, x) in sorted(zip(vals.tolist()[0], tag_names))]
+        sorted_tags = [x for (y, x) in
+                       sorted(zip(vals.tolist()[0], tag_names))]
         return list(reversed(sorted_tags))
 
     @staticmethod
@@ -308,6 +329,13 @@ class Searcher:
         if request.args.get('por-pagina'):
             query['por-pagina'] = request.args.get('por-pagina')
         return query
+
+    @staticmethod
+    def _clean_ids(ids):
+        ids = map(lambda x: x[1:], ids)
+        seen = set()
+        seen_add = seen.add
+        return [x for x in ids if not (x in seen or seen_add(x))]
 
     @staticmethod
     def url_maker(query, page=None):
