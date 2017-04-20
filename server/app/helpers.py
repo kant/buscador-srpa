@@ -254,7 +254,7 @@ class Searcher:
         return filtered_questions
 
     def get_similar_to(self, question):
-        query = self.query_from_url() # Se modifica para incluir based_on
+        query = self.query_from_url()
         query['id'] = question.id
         if query['based_on'] == 'pregunta':
             query['text'] = 'q' + str(question.id)
@@ -264,7 +264,7 @@ class Searcher:
             query['text'] = question.context + ' ' + question.body + ' ' + question.answer
         return self.search(query)
 
-    def _search_similar(self, query): # TArget pasa a estar en el query
+    def _search_similar(self, query):
         question_id = query['text']
         all_questions = models.Question.query.all()
         if self.text_classifier is None:
@@ -286,7 +286,7 @@ class Searcher:
             max_options = per_page
         ids_sim, dist, best_words = self.text_classifier.get_similar(
             question_id, max_similars=max_options, filter_list=id_list)
-        ids_sim = self._clean_ids(ids_sim, query['id'])
+        ids_sim = self._clean_ids(ids_sim, query)
         results = []
         for qid in ids_sim:
             results.append(models.Question.query.get(qid))
@@ -342,10 +342,11 @@ class Searcher:
         return query
 
     @staticmethod
-    def _clean_ids(ids, question_id):
+    def _clean_ids(ids, query):
         ids = map(lambda x: x[1:], ids)
-        print(question_id)
-        ids = filter(lambda x: x != str(question_id), ids)
+        if 'id' in query:
+            question_id = str(query['id'])
+            ids = filter(lambda x: x != question_id, ids)
         seen = set()
         seen_add = seen.add
         return [int(x) for x in ids if not (x in seen or seen_add(x))]
