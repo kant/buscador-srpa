@@ -255,6 +255,7 @@ class Searcher:
 
     def get_similar_to(self, question):
         query = self.query_from_url() # Se modifica para incluir based_on
+        query['id'] = question.id
         if query['based_on'] == 'pregunta':
             query['text'] = 'q' + str(question.id)
         elif query['based_on'] == 'respuesta':
@@ -285,7 +286,7 @@ class Searcher:
             max_options = per_page
         ids_sim, dist, best_words = self.text_classifier.get_similar(
             question_id, max_similars=max_options, filter_list=id_list)
-        ids_sim = self._clean_ids(ids_sim, question_id)
+        ids_sim = self._clean_ids(ids_sim, query['id'])
         results = []
         for qid in ids_sim:
             results.append(models.Question.query.get(qid))
@@ -343,7 +344,8 @@ class Searcher:
     @staticmethod
     def _clean_ids(ids, question_id):
         ids = map(lambda x: x[1:], ids)
-        ids = filter(lambda x: x != question_id[1:], ids)
+        print(question_id)
+        ids = filter(lambda x: x != str(question_id), ids)
         seen = set()
         seen_add = seen.add
         return [int(x) for x in ids if not (x in seen or seen_add(x))]
