@@ -14,6 +14,13 @@ pip install -r requirements.txt
 
 ## Para desarrollo
 
+### Crear usuarios
+
+```
+. venv/bin/activate
+python main.py create_user
+```
+
 ### Levantar el server:
 
 Hay un script de bash de ejemplo para levantar el server llamado `runserver.sh.sample`.
