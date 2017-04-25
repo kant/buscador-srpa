@@ -14,6 +14,7 @@ window.jgm.results = {
         };
         question.find('p.question-body').mark(words, options);
         question.find('p.question-context').mark(words, options);
+        question.find('p.question-answer').mark(words, options);
     }
 };
 
