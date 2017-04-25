@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 # TODO: chequear longitudes de los campos de texto
-MAX_TEXT_LENGTH = 10000
+MAX_TEXT_LENGTH = 20000
 MAX_NAME_LENGTH = 255
 
 
