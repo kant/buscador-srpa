@@ -61,7 +61,7 @@ def init_routes(app, db_session, searcher):
     @login_required
     def see_question(question_id):
         question = searcher.get_question(question_id)
-        similar_results = searcher.get_similar_to(question_id)
+        similar_results = searcher.get_similar_to(question)
         return render_template('question.html', question=question, similar_results=similar_results,
                                url_maker=searcher.url_maker)
 

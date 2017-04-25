@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-10-13 08:33-0300\n"
+"POT-Creation-Date: 2017-04-11 17:51-0300\n"
 "PO-Revision-Date: 2016-10-12 10:34-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -18,68 +18,74 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: forms.py:29 forms.py:114
+#: forms.py:16 forms.py:150
 msgid "Question number"
-msgstr "Numero de Pregunta"
+msgstr "Numero de pregunta"
 
-#: forms.py:30
+#: forms.py:17
 msgid ""
 "Question number must be a"
 "                                                   positive integer"
 msgstr "El numero de pregunta debe ser un entero positivo"
 
-#: forms.py:34 forms.py:115
+#: forms.py:21 forms.py:151
 msgid "Question body"
-msgstr "Texto de la Pregunta"
+msgstr "Texto de la pregunta"
 
-#: forms.py:38
-msgid "Question justification (optional)"
-msgstr "Justificacion de la Pregunta (opcional)"
-
-#: forms.py:42
+#: forms.py:25
 msgid "Question context (optional)"
-msgstr "Contexto de la Pregunta (opcional)"
+msgstr "Contexto de la pregunta (opcional)"
 
-#: forms.py:46 forms.py:118
-msgid "Question answerer"
-msgstr "Responsable de la respuesta"
-
-#: forms.py:50 forms.py:119
+#: forms.py:28 forms.py:153
 msgid "Report number"
 msgstr "Informe"
 
-#: forms.py:54 forms.py:120
+#: forms.py:29 forms.py:154
 msgid "Question author"
-msgstr "Autor de la Pregunta"
+msgstr "Autor de la pregunta"
 
-#: forms.py:58 forms.py:121
+#: forms.py:30 forms.py:155
 msgid "Question topic"
-msgstr "Organo Requerido"
+msgstr "Organo requerido"
 
-#: forms.py:62 forms.py:122
+#: forms.py:31 forms.py:156
 msgid "Question subtopic"
-msgstr "Area de Gestion"
+msgstr "Area de gestion"
 
-#: forms.py:113
+#: forms.py:33
+msgid "Question answer"
+msgstr "Texto de la respuesta"
+
+#: forms.py:149
 msgid "First row is header"
 msgstr "Contiene encabezado"
 
-#: forms.py:116
-msgid "Question justification"
-msgstr "Justificacion de la Pregunta"
-
-#: forms.py:117
+#: forms.py:152
 msgid "Question context"
-msgstr "Contexto de la Pregunta"
+msgstr "Contexto de la pregunta"
 
-#: forms.py:141
+#: forms.py:177
 msgid "None"
 msgstr ""
 
-#: forms.py:198
+#: forms.py:257
 msgid "Base text to query"
 msgstr "Texto de busqueda"
 
+#: templates/search/filters.html:60
+#, python-format
+msgid "%(model_name)s"
+msgstr ""
+
 #~ msgid "Question number must be a positive integer"
 #~ msgstr ""
+
+#~ msgid "Question justification (optional)"
+#~ msgstr "Justificacion de la Pregunta (opcional)"
+
+#~ msgid "Question answerer"
+#~ msgstr "Responsable de la respuesta"
+
+#~ msgid "Question justification"
+#~ msgstr "Justificacion de la Pregunta"
 

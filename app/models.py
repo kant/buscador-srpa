@@ -7,6 +7,7 @@ from datetime import datetime
 MAX_TEXT_LENGTH = 10000
 MAX_NAME_LENGTH = 255
 
+
 def get_or_create(session, model, **kwargs):
     """ Imita el get_or_create de django
         URL: http://stackoverflow.com/questions/2546207/does-sqlalchemy-have-an-equivalent-of-djangos-get-or-create
@@ -60,6 +61,7 @@ class Question(db.Model):
     subtopic_id = db.Column(db.Integer, db.ForeignKey('subtopic.id'))
     created_at = db.Column(db.DateTime, default=datetime.now)
     modified_at = db.Column(db.DateTime, default=datetime.now)
+    answer = db.Column(db.Text(MAX_TEXT_LENGTH))
 
     def __init__(self, **kwargs):
         self.number = kwargs.get('number', None)
@@ -70,6 +72,7 @@ class Question(db.Model):
         self.author_id = kwargs.get('author_id', None)
         self.topic_id = kwargs.get('topic_id', None)
         self.subtopic_id = kwargs.get('subtopic_id', None)
+        self.answer = kwargs.get('answer', '')
 
     @classmethod
     def delete(cls, question_id, db_session):
