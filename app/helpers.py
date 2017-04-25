@@ -271,12 +271,14 @@ class Searcher:
             return []
         if query['target'] == 'preguntas':
             id_list = ['q' + str(q.id) for q in all_questions
-                       if q.body is not None]
+                       if q.body is not None and len(q.body) > 0]
         elif query['target'] == 'respuestas':
             id_list = ['r' + str(q.id) for q in all_questions
-                       if q.answer is not None]
+                       if q.answer is not None and len(q.answer) > 0]
         else:
-            id_list = None
+            id_list = ['q' + str(q.id) for q in all_questions
+                       if q.body is not None and len(q.body) > 0] + ['r' + str(q.id) for q in all_questions
+                       if q.answer is not None and len(q.answer) > 0]
         if not isinstance(question_id, basestring):
             question_id = str(question_id)
         per_page = 'por-pagina' in query and int(query['por-pagina']) or self.per_page
@@ -285,7 +287,7 @@ class Searcher:
         else:
             max_options = per_page
         ids_sim, dist, best_words = self.text_classifier.get_similar(
-            question_id, max_similars=max_options, filter_list=id_list)
+            question_id, max_similars=max_options, filter_list=id_list, term_diff_max_rank=40)
         ids_sim = self._clean_ids(ids_sim, query)
         results = []
         for qid in ids_sim:
