@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from flask import render_template, jsonify, request
-from flask_user import login_required
+from flask_user import login_required, roles_required
 from forms import QuestionForm, UploadForm, ProcessSpreadsheetForm, FullTextQueryForm
 from models import Question
 
@@ -14,18 +14,21 @@ def init_routes(app, db_session, searcher):
 
     @app.route('/carga_de_preguntas', methods=['GET', 'POST'])
     @login_required
+    @roles_required('admin')
     def question_upload():
         upload_form = UploadForm()
         return upload_form.handle_request()
 
     @app.route('/carga_de_preguntas/manual', methods=['GET', 'POST'])
     @login_required
+    @roles_required('admin')
     def single_question():
         single_question_form = QuestionForm()
         return single_question_form.handle_create_request(db_session, searcher)
 
     @app.route('/carga_de_preguntas/procesar_planilla/<filename>', methods=['GET', 'POST'])
     @login_required
+    @roles_required('admin')
     def process_spreadsheet(filename):
         process_spreadsheet_form = ProcessSpreadsheetForm()
         return process_spreadsheet_form.handle_request(filename, db_session, searcher)
@@ -47,6 +50,7 @@ def init_routes(app, db_session, searcher):
 
     @app.route('/buscar', methods=['DELETE'])
     @login_required
+    @roles_required('admin')
     def delete_all():
         searcher.delete_results_from_url(db_session)
         return jsonify({'success': True})
@@ -67,12 +71,14 @@ def init_routes(app, db_session, searcher):
 
     @app.route('/pregunta/<int:question_id>/editar', methods=['GET', 'POST'])
     @login_required
+    @roles_required('admin')
     def edit_question(question_id):
         single_question_form = QuestionForm()
         return single_question_form.handle_edit_request(request, db_session, searcher, question_id)
 
     @app.route('/pregunta/<int:question_id>/borrar', methods=['POST'])
     @login_required
+    @roles_required('admin')
     def delete_question(question_id):
         Question.delete(question_id, db_session)
         searcher.restart_text_classifier()

@@ -22,14 +22,16 @@
                         ocultar
                     </span>
                     {% endif %}
-                    <span class="edit">
-                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        editar
-                    </span>
-                    <span class="delete">
-                        <i class="fa fa-trash-o" aria-hidden="true"></i>
-                        eliminar
-                    </span>
+                    {% if current_user.has_role('admin') %}
+                        <span class="edit">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            editar
+                        </span>
+                        <span class="delete">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            eliminar
+                        </span>
+                    {% endif %}
                 {% endif %}
             </div>
 

@@ -16,7 +16,7 @@
         </h2>
         {% include 'search/result_list_type_filter.html' %}
         <div class="results-actions">
-            {% if pagination['total_results'] > 0 and not hide_delete_massive %}
+            {% if pagination['total_results'] > 0 and not hide_delete_massive and current_user.has_role('admin') %}
                 <span class="delete-all" data-toggle="modal" data-target="#question-delete-all">
                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                     eliminar resultados
