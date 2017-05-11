@@ -140,8 +140,8 @@
     <script>
         $(function () {
             // Tipo de dato esperado en cada columna
-            var desiredTypes = ['Categoria', 'Numero','Texto', 'Texto', 'Otro', 'Categoria', 'Categoria'];
-            var cant_have_empty = [true, true, false, true, true, false, false ];
+            var desiredTypes = ['Categoria', 'Numeros','Texto', 'Texto', 'Otro', 'Categoria', 'Categoria', 'Texto'];
+            var cant_have_empty = [true, true, false, true, true, false, false , true];
             var spreadsheetTypes = {{ spreadsheet_summary.datatypes|tojson|safe }};
             var bestRowFromSpreadsheet = {{ spreadsheet_summary.best_row|tojson|safe }};
             var selects = $('form select');
@@ -152,23 +152,22 @@
                     var $attributePreviewElement = $('.result [data-attribute-name="' + attributeName + '"]');
                     var attributeColumnNumber = parseInt($select.find('option:selected').val());
                     var attributeValue;
+                    var msg = '';
+                    var warningEl = $(this).parents('.select-group').find('.type-warning');
                     if (attributeColumnNumber > -1) {
-                        var valueTemplate = $attributePreviewElement.data('attribute-display-template');
-                        attributeValue = valueTemplate.replace('$', bestRowFromSpreadsheet[attributeColumnNumber]);
-                        var warningEl = $(this).parents('.select-group').find('.type-warning');
-                        if (desiredTypes[i] == 'Otro'){
-                          warningEl.text('');
-                        }else if ($.inArray(desiredTypes[i],spreadsheetTypes[attributeColumnNumber]) == -1){
-                          var msg = 'No coincide el tipo de dato. Se esperaba ' +  desiredTypes[i] + ' y fue ' +  spreadsheetTypes[attributeColumnNumber];
-                          console.log(msg);
-                          warningEl.text(msg);
-                        }
-                        else {
-                          warningEl.text('');
-                        }
-                        if (cant_have_empty[i] && $.inArray('Contiene Vacios', spreadsheetTypes[attributeColumnNumber])>=0){
-                          warningEl.text('Hay valores vacios');
-                        }
+                      var valueTemplate = $attributePreviewElement.data('attribute-display-template');
+                      attributeValue = valueTemplate.replace('$', bestRowFromSpreadsheet[attributeColumnNumber]);
+                      if ($.inArray(desiredTypes[i], spreadsheetTypes[attributeColumnNumber].types) == -1){
+                            msg = 'No coincide el tipo de dato. Se esperaba ' +  desiredTypes[i] + ' y fue ' +  spreadsheetTypes[attributeColumnNumber].types;
+                      }else {
+                            msg = ''
+                      }
+                      if (cant_have_empty[i] && spreadsheetTypes[attributeColumnNumber].empty_status=='Contiene Vacios'){
+                        msg = msg + ' Hay valores vacios'
+                      }else{
+                        msg = msg + ' ' + spreadsheetTypes[attributeColumnNumber].warnings
+                      }
+                        warningEl.text(msg);
                     } else {
                         attributeValue = $attributePreviewElement.data('attribute-default');
                     }

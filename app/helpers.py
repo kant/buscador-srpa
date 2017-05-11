@@ -26,7 +26,7 @@ class SpreadSheetReader:
 
             summary = {'best_row': []}
             for i, row in spreadsheet:
-                if i > 100:
+                if i > 200:
                     break
                 elif i == 0:
                     summary['first_row'] = row
@@ -76,22 +76,33 @@ class SpreadSheetReader:
         el tipo de dato en cada una. Por ahora solo hay 4 tipos:
         `Numero` `Texto` `Categoria` `Otro`
         """
-        data_props = [[] for col in data]
+        data_props = [{} for col in data]
         for i, col in enumerate(data):
             data_is_empty = map(lambda x: len(x) == 0, col)
-            if any(data_is_empty):
-                data_props[i].append('Contiene Vacios')
-            non_empty = filter(lambda x: len(x) > 0, col)
-            if all(map(lambda x: x.isdigit(), non_empty)):
-                data_props[i].append('Numero')
+            if all(data_is_empty):
+                data_props[i]['warnings'] = '¡Columna Vacia!'
+                data_props[i]['types'] = ['']
                 continue
-            if len(set(non_empty)) < (len(non_empty) * 0.5):
-                data_props[i].append('Categoria')
-                continue
-            if sum(map(len, non_empty)) / len(non_empty) > 100:
-                data_props[i].append('Texto')
             else:
-                data_props[i].append('Otro')
+                data_props[i]['warnings'] = ''
+            if any(data_is_empty):
+                data_props[i]['empty_status'] = 'Contiene Vacios'
+            else:
+                data_props[i]['empty_status'] = ''
+            non_empty = filter(lambda x: len(x) > 0, col)
+            data_props[i]['types'] = []
+            types = data_props[i]['types']
+            if all(map(lambda x: x.isdigit(), non_empty)):
+                types.append('Numeros')
+            else:
+                types.append('Letras')
+            if len(set(non_empty)) < (len(non_empty) * 0.5):
+                types.append('Categoria')
+            elif (sum(map(len, non_empty)) / len(non_empty) > 100 and
+                    'Letras' in types):
+                types[types.index('Letras')] = 'Texto'
+            else:
+                types.append('Otro')
         return data_props
 
 
