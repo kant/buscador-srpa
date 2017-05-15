@@ -144,36 +144,38 @@
             var cant_have_empty = [true, true, false, true, true, false, false , true];
             var spreadsheetTypes = {{ spreadsheet_summary.datatypes|tojson|safe }};
             var bestRowFromSpreadsheet = {{ spreadsheet_summary.best_row|tojson|safe }};
+            function update_example() {
+               for (var i = 0; i < selects.length; i++) {
+                   var $select = $(selects[i]);
+                   var attributeName = $select.attr('id');
+                   var $attributePreviewElement = $('.result [data-attribute-name="' + attributeName + '"]');
+                   var attributeColumnNumber = parseInt($select.find('option:selected').val());
+                   var attributeValue;
+                   var msg = '';
+                   var warningEl = $(this).parents('.select-group').find('.type-warning');
+                   if (attributeColumnNumber > -1) {
+                     var valueTemplate = $attributePreviewElement.data('attribute-display-template');
+                     attributeValue = valueTemplate.replace('$', bestRowFromSpreadsheet[attributeColumnNumber]);
+                     if ($.inArray(desiredTypes[i], spreadsheetTypes[attributeColumnNumber].types) == -1){
+                           msg = 'No coincide el tipo de dato. Se esperaba ' +  desiredTypes[i] + ' y fue ' +  spreadsheetTypes[attributeColumnNumber].types;
+                     }else {
+                           msg = ''
+                     }
+                     if (cant_have_empty[i] && spreadsheetTypes[attributeColumnNumber].empty_status=='Contiene Vacios'){
+                       msg = msg + ' Hay valores vacios'
+                     }else{
+                       msg = msg + ' ' + spreadsheetTypes[attributeColumnNumber].warnings
+                     }
+                       warningEl.text(msg);
+                   } else {
+                       attributeValue = $attributePreviewElement.data('attribute-default');
+                   }
+                   $attributePreviewElement.html(attributeValue);
+               }
+            }
             var selects = $('form select');
-            selects.on('change', function () {
-                for (var i = 0; i < selects.length; i++) {
-                    var $select = $(selects[i]);
-                    var attributeName = $select.attr('id');
-                    var $attributePreviewElement = $('.result [data-attribute-name="' + attributeName + '"]');
-                    var attributeColumnNumber = parseInt($select.find('option:selected').val());
-                    var attributeValue;
-                    var msg = '';
-                    var warningEl = $(this).parents('.select-group').find('.type-warning');
-                    if (attributeColumnNumber > -1) {
-                      var valueTemplate = $attributePreviewElement.data('attribute-display-template');
-                      attributeValue = valueTemplate.replace('$', bestRowFromSpreadsheet[attributeColumnNumber]);
-                      if ($.inArray(desiredTypes[i], spreadsheetTypes[attributeColumnNumber].types) == -1){
-                            msg = 'No coincide el tipo de dato. Se esperaba ' +  desiredTypes[i] + ' y fue ' +  spreadsheetTypes[attributeColumnNumber].types;
-                      }else {
-                            msg = ''
-                      }
-                      if (cant_have_empty[i] && spreadsheetTypes[attributeColumnNumber].empty_status=='Contiene Vacios'){
-                        msg = msg + ' Hay valores vacios'
-                      }else{
-                        msg = msg + ' ' + spreadsheetTypes[attributeColumnNumber].warnings
-                      }
-                        warningEl.text(msg);
-                    } else {
-                        attributeValue = $attributePreviewElement.data('attribute-default');
-                    }
-                    $attributePreviewElement.html(attributeValue);
-                }
-            })
+            selects.on('change', update_example);
+            update_example()
         })
     </script>
 {% endblock %}
