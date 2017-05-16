@@ -188,23 +188,26 @@ class ProcessSpreadsheetForm(Form):
     def save_models(self, filename, db_session):
         columns = self._collect_columns()
         extension = filename.split('.')[-1]
-        with open('app/uploads/' + filename, 'rb') as spreadsheet_file:
+        file_path = 'app/uploads/' + filename
 
-            if extension == 'csv':
-                spreadsheet = SpreadSheetReader.read_csv(spreadsheet_file)
-            # TODO: leer xls y xlsx
+        if extension == 'csv':
+            spreadsheet = SpreadSheetReader.read_csv(file_path)
+        elif extension == 'xlsx':
+            spreadsheet = SpreadSheetReader.read_xlsx(file_path)
+        else:
+            raise Exception('Formato no soportado')
 
-            created_at = datetime.now().replace(microsecond=0)
+        created_at = datetime.now().replace(microsecond=0)
 
-            for i, row in spreadsheet:
-                if i == 0 and self.discard_first_row.data:
-                    continue
-                args = self.collect_args(row, columns)
-                args = self._get_ids(args, db_session)
-                question = Question(**args)
-                question.created_at = created_at
-                db_session.add(question)
-            db_session.commit()
+        for i, row in spreadsheet:
+            if i == 0 and self.discard_first_row.data:
+                continue
+            args = self.collect_args(row, columns)
+            args = self._get_ids(args, db_session)
+            question = Question(**args)
+            question.created_at = created_at
+            db_session.add(question)
+        db_session.commit()
         return created_at
 
     def _collect_columns(self):

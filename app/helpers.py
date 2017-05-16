@@ -7,6 +7,7 @@ from flask import request, url_for, g
 from sqlalchemy import func
 from textar import TextClassifier
 from datetime import datetime
+from openpyxl import load_workbook
 
 
 class SpreadSheetReader:
@@ -17,36 +18,45 @@ class SpreadSheetReader:
     @classmethod
     def first_read(cls, filename):
         extension = filename.split('.')[-1]
-        with open('app/uploads/' + filename, 'rb') as spreadsheet_file:
+        file_path = 'app/uploads/' + filename
+        if extension == 'csv':
+            spreadsheet = cls.read_csv(file_path)
+        elif extension == 'xlsx':
+            spreadsheet = cls.read_xlsx(file_path)
+        else:
+            raise Exception('Formato no soportado')
 
-            if extension == 'csv':
-                spreadsheet = cls.read_csv(spreadsheet_file)
-
-            # TODO: leer xls y xlsx
-
-            summary = {'best_row': []}
-            for i, row in spreadsheet:
-                if i > 200:
-                    break
-                elif i == 0:
-                    summary['first_row'] = row
-                    data = [[] for col in row]
-                else:
-                    for colnum in range(len(row)):
-                        data[colnum].append(row[colnum])
-                    summary['best_row'] = cls._best_row(summary['best_row'], row)
-            if i == 0:
+        summary = {'best_row': []}
+        for i, row in spreadsheet:
+            if i > 200:
+                break
+            elif i == 0:
+                summary['first_row'] = row
+                data = [[] for col in row]
+            else:
+                for colnum in range(len(row)):
+                    data[colnum].append(row[colnum])
                 summary['best_row'] = cls._best_row(summary['best_row'], row)
-            summary['datatypes'] = cls._guess_datatypes(data)
-            return summary
+        if i == 0:
+            summary['best_row'] = cls._best_row(summary['best_row'], row)
+        summary['datatypes'] = cls._guess_datatypes(data)
+        return summary
 
     @classmethod
-    def read_csv(cls, csvfile):
-        dialect = csv.Sniffer().sniff(csvfile.read(), delimiters=',')
-        csvfile.seek(0)
-        reader = csv.reader(csvfile, dialect)
-        for i, row in enumerate(reader):
-            yield (i, [unicode(cell, 'utf-8') for cell in row])
+    def read_csv(cls, csv_path):
+        with open(csv_path, 'rb') as csvfile:
+            dialect = csv.Sniffer().sniff(csvfile.read(), delimiters=',')
+            csvfile.seek(0)
+            reader = csv.reader(csvfile, dialect)
+            for i, row in enumerate(reader):
+                yield (i, [unicode(cell, 'utf-8') for cell in row])
+
+    @classmethod
+    def read_xlsx(cls, xlsx_file_path):
+        wb = load_workbook(xlsx_file_path)
+        first_sheet = wb[wb.sheetnames[0]]
+        for i, row in enumerate(first_sheet):
+            yield (i, [unicode(cell.value or '') for cell in row])
 
     @staticmethod
     def _best_row(first_row, second_row):
