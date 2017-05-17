@@ -1,6 +1,6 @@
 from flask import render_template, jsonify, request
 from flask_user import login_required, roles_required
-from .forms import QuestionForm, UploadForm, ProcessSpreadsheetForm, FullTextQueryForm
+from .forms import QuestionForm, UploadForm, ProcessSpreadsheetForm, FullTextQueryForm, ProcessSpreadsheetTaquigraficasForm
 from .models import Question
 
 
@@ -29,6 +29,13 @@ def init_routes(app, db_session, searcher):
     @roles_required('admin')
     def process_spreadsheet(filename):
         process_spreadsheet_form = ProcessSpreadsheetForm()
+        return process_spreadsheet_form.handle_request(filename, db_session, searcher)
+
+    @app.route('/carga_de_preguntas/procesar_planilla_taquigraficas/<filename>', methods=['GET', 'POST'])
+    @login_required
+    @roles_required('admin')
+    def process_spreadsheet_taquigraficas(filename):
+        process_spreadsheet_form = ProcessSpreadsheetTaquigraficasForm()
         return process_spreadsheet_form.handle_request(filename, db_session, searcher)
 
     @app.route('/busqueda_por_similaridad', methods=['GET', 'POST'])

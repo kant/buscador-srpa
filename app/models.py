@@ -5,7 +5,7 @@ from datetime import datetime
 
 # TODO: chequear longitudes de los campos de texto
 MAX_TEXT_LENGTH = 20000
-MAX_NAME_LENGTH = 255
+MAX_NAME_LENGTH = 512
 
 
 def get_or_create(session, model, **kwargs):
@@ -51,6 +51,7 @@ class UserRoles(db.Model):
 class Question(db.Model):
     __table_args__ = (db.UniqueConstraint('report_id', 'number', name='_report_question_number_uc'),)
 
+    questiontype_id = db.Column(db.Integer, db.ForeignKey('questiontype.id'))
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     number = db.Column(db.Integer)
     body = db.Column(db.Text(MAX_TEXT_LENGTH))
@@ -89,6 +90,17 @@ class Question(db.Model):
             question.subtopic_id = get_or_create(db_session, SubTopic, name=new_attrs['subtopic'])
         db_session.commit()
         return question
+
+
+class QuestionType(db.Model):
+    __tablename__ = 'questiontype'
+
+    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+    name = db.Column(db.String(MAX_NAME_LENGTH), unique=True)
+    date = db.Column(db.Date())
+    questions = db.relationship('Question', backref='questiontype')
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    modified_at = db.Column(db.DateTime, default=datetime.now)
 
 
 class Report(db.Model):

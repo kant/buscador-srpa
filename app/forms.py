@@ -129,6 +129,10 @@ class UploadForm(Form):
         'spreadsheet',
         validators=[FileRequired(), FileAllowed(['xls', 'xlsx', 'csv'], 'Spreadsheets only (.xsl, .xslx, .csv)')]
     )
+    question_type = SelectField(_('Question type'), choices=[
+        ('informes', 'Informes'),
+        ('taquigraficas', 'Taquigraficas')
+    ])
 
     def save_spreadsheet(self):
         original_filename = self.spreadsheet.data.filename
@@ -139,11 +143,14 @@ class UploadForm(Form):
     def handle_request(self):
         if self.validate_on_submit():
             filename = self.save_spreadsheet()
-            return redirect(url_for('process_spreadsheet', filename=filename))
+            if self.data['question_type'] == 'informes':
+                return redirect(url_for('process_spreadsheet', filename=filename))
+            return redirect(url_for('process_spreadsheet_taquigraficas', filename=filename))
         return render_template('forms/question_upload_form.html', form=self)
 
 
 class ProcessSpreadsheetForm(Form):
+    type = 'informes'
     discard_first_row = BooleanField(_('First row is header'), default=True)
     number = SelectField(_('Question number'), [validators.DataRequired("Requerido")])
     body = SelectField(_('Question body'), [validators.DataRequired("Requerido")])
@@ -165,7 +172,7 @@ class ProcessSpreadsheetForm(Form):
         else:
             print(self.errors)
         return render_template(
-            'forms/process_spreadsheet.html',
+            'forms/process_spreadsheet_taquigraficas.html',
             filename=filename,
             spreadsheet_summary=spreadsheet_summary,
             form=self
@@ -254,6 +261,11 @@ class ProcessSpreadsheetForm(Form):
                 value = ''
             d[col[1]] = value
         return d
+
+
+class ProcessSpreadsheetTaquigraficasForm(ProcessSpreadsheetForm):
+    type = 'taquigraficas'
+    report = SelectField(_('Nombre de la comisión'))
 
 
 class FullTextQueryForm(Form):

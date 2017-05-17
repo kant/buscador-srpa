@@ -29,8 +29,7 @@ class SpreadSheetReader:
             if i == 0:
                 summary['first_row'] = row
                 data = [[] for col in row]
-                summary['best_row'] = cls._best_row(summary['best_row'], row)
-                pass
+                continue
             for colnum in range(len(data)):
                 data[colnum].append(row[colnum])
             summary['best_row'] = cls._best_row(summary['best_row'], row)

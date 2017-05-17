@@ -11,6 +11,12 @@
             <p>Seleccione una planilla (formatos soportados: xlsx y csv)</p>
             <input class="" id="spreadsheet" name="spreadsheet" type="file">
         </div>
+
+        <div class="form-group">
+            {{ form.question_type.label() }}
+            {{ form.question_type(class_='form-control') }}
+        </div>
+
         <input id="submit-btn" type=submit value="Subir" class="btn btn-success btn-sm">
     </form>
 {% endblock %}

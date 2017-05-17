@@ -9,7 +9,7 @@
             <ul class="nav nav-tabs">
 
                 {% set form_class = form.__class__.__name__ %}
-                <li role="presentation" class="{{ 'active' if form_class in ['UploadForm', 'ProcessSpreadsheetForm'] else '' }}">
+                <li role="presentation" class="{{ 'active' if form_class in ['UploadForm', 'ProcessSpreadsheetForm', 'ProcessSpreadsheetTaquigraficasForm'] else '' }}">
                     <a href="{{ url_for('question_upload') if form_class not in ['UploadForm', 'ProcessSpreadsheetForm'] else '#' }}">
                         Subir archivo
                     </a>

@@ -60,6 +60,12 @@
                 {{ render_errors(form.author) }}
             </div>
 
+            <div class="col-xs-12">
+                {{ form.answer.label(class_="field-label answer ") }}
+                {{ form.answer(class_="field answer") }}
+                {{ render_errors(form.answer) }}
+            </div>
+
             <div class="col-xs-12 col-sm-6">
                 {{ form.topic.label(class_="field-label topic ") }}
                 {{ render_select(form.topic, class_="field topic") }}
@@ -70,12 +76,6 @@
                 {{ form.subtopic.label(class_="field-label subtopic ") }}
                 {{ render_select(form.subtopic, class_="field subtopic") }}
                 {{ render_errors(form.subtopic) }}
-            </div>
-
-            <div class="col-xs-12">
-                {{ form.answer.label(class_="field-label answer ") }}
-                {{ form.answer(class_="field answer") }}
-                {{ render_errors(form.answer) }}
             </div>
 
 
