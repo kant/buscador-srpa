@@ -77,6 +77,17 @@
                 </div>
             </div>
 
+            <div class="col-xs-12 no-padding select-group">
+                <div class="col-xs-12 col-sm-6 field-label-container">
+                    {{ form.answer.label() }}
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    {{ form.answer(class_='form-control') }}
+                </div>
+                <div class="col-xs-12">
+                  <p class="type-warning"></p>
+                </div>
+            </div>
 
             <div class="col-xs-12 no-padding select-group">
                 <div class="col-xs-12 col-sm-6 field-label-container">
@@ -96,18 +107,6 @@
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     {{ form.subtopic(class_='form-control') }}
-                </div>
-                <div class="col-xs-12">
-                  <p class="type-warning"></p>
-                </div>
-            </div>
-
-            <div class="col-xs-12 no-padding select-group">
-                <div class="col-xs-12 col-sm-6 field-label-container">
-                    {{ form.answer.label() }}
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    {{ form.answer(class_='form-control') }}
                 </div>
                 <div class="col-xs-12">
                   <p class="type-warning"></p>
