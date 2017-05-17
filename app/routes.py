@@ -1,9 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from flask import render_template, jsonify, request
 from flask_user import login_required, roles_required
-from forms import QuestionForm, UploadForm, ProcessSpreadsheetForm, FullTextQueryForm
-from models import Question
+from .forms import QuestionForm, UploadForm, ProcessSpreadsheetForm, FullTextQueryForm
+from .models import Question
 
 
 def init_routes(app, db_session, searcher):

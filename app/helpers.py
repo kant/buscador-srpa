@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import csv
-import models
+from .models import Question, Topic, SubTopic, Author, Report
 import math
 from flask import request, url_for, g
 from sqlalchemy import func
@@ -28,35 +26,32 @@ class SpreadSheetReader:
 
         summary = {'best_row': []}
         for i, row in spreadsheet:
-            if i > 200:
-                break
-            elif i == 0:
+            if i == 0:
                 summary['first_row'] = row
                 data = [[] for col in row]
-            else:
-                for colnum in range(len(row)):
-                    data[colnum].append(row[colnum])
                 summary['best_row'] = cls._best_row(summary['best_row'], row)
-        if i == 0:
+                pass
+            for colnum in range(len(data)):
+                data[colnum].append(row[colnum])
             summary['best_row'] = cls._best_row(summary['best_row'], row)
         summary['datatypes'] = cls._guess_datatypes(data)
         return summary
 
     @classmethod
     def read_csv(cls, csv_path):
-        with open(csv_path, 'rb') as csvfile:
+        with open(csv_path, 'r') as csvfile:
             dialect = csv.Sniffer().sniff(csvfile.read(), delimiters=',')
             csvfile.seek(0)
             reader = csv.reader(csvfile, dialect)
             for i, row in enumerate(reader):
-                yield (i, [unicode(cell, 'utf-8') for cell in row])
+                yield (i, [str(cell) for cell in row])
 
     @classmethod
     def read_xlsx(cls, xlsx_file_path):
-        wb = load_workbook(xlsx_file_path)
+        wb = load_workbook(xlsx_file_path, read_only=True)
         first_sheet = wb[wb.sheetnames[0]]
         for i, row in enumerate(first_sheet):
-            yield (i, [unicode(cell.value or '') for cell in row])
+            yield (i, [str(cell.value or '') for cell in row])
 
     @staticmethod
     def _best_row(first_row, second_row):
@@ -99,7 +94,7 @@ class SpreadSheetReader:
                 data_props[i]['empty_status'] = 'Contiene Vacios'
             else:
                 data_props[i]['empty_status'] = ''
-            non_empty = filter(lambda x: len(x) > 0, col)
+            non_empty = list(filter(lambda x: len(x) > 0, col))
             data_props[i]['types'] = []
             types = data_props[i]['types']
             if all(map(lambda x: x.isdigit(), non_empty)):
@@ -124,7 +119,7 @@ class Searcher:
         self.per_page = 10
 
     def restart_text_classifier(self):
-        all_questions = models.Question.query.all()
+        all_questions = Question.query.all()
         if len(all_questions) > 0:
             qids = ['q' + str(q.id) for q in all_questions
                     if q.body is not None]
@@ -139,17 +134,17 @@ class Searcher:
                                                       qids + rids)
                 self.restart_suggesters(all_questions)
             except Exception as e:
-                print e
+                print(e)
 
     def restart_suggesters(self, questions):
         ids = ['q' + str(q.id) for q in questions if q.topic is not None]
         topic_ids = [str(q.topic.id) for q in questions if q.topic is not None]
         self.text_classifier.make_classifier("topics", ids, topic_ids)
-        all_topics = models.Topic.query.all()
+        all_topics = Topic.query.all()
         for topic in all_topics:
             if len(topic.name) < 2:
                 continue
-            questions_with_topic = models.Question.query.filter_by(topic=topic).all()
+            questions_with_topic = Question.query.filter_by(topic=topic).all()
             if len(set(questions_with_topic)) > 2:
                 questions_with_topic_ids = [str(q.id) for q in questions_with_topic if q.subtopic is not None]
                 subtopic_ids = [str(q.subtopic.id) for q in questions_with_topic if q.subtopic is not None]
@@ -160,20 +155,20 @@ class Searcher:
     def list_models(db_session):
         def instances_with_at_least_one_question(model):
             return db_session.query(model). \
-                join(models.Question). \
+                join(Question). \
                 group_by(model). \
-                having(func.count(models.Question.id) > 0). \
+                having(func.count(Question.id) > 0). \
                 all()
         return {
-            u'autor': instances_with_at_least_one_question(models.Author),
-            u'informe': instances_with_at_least_one_question(models.Report),
-            u'área de gestión': instances_with_at_least_one_question(models.SubTopic),
-            u'ministerio': instances_with_at_least_one_question(models.Topic)
+            u'autor': instances_with_at_least_one_question(Author),
+            u'informe': instances_with_at_least_one_question(Report),
+            u'área de gestión': instances_with_at_least_one_question(SubTopic),
+            u'ministerio': instances_with_at_least_one_question(Topic)
         }
 
     @staticmethod
     def get_question(question_id):
-        question = models.Question.query.get(question_id)
+        question = Question.query.get(question_id)
         return question
 
     def search_from_url(self):
@@ -198,7 +193,7 @@ class Searcher:
             g.similarity_cutoff = 1.1
             results = self._search_similar(query)
         else:
-            results = models.Question.query.all()
+            results = Question.query.all()
             results = self._order_results(results, query)
             results = [(result, []) for result in results]
         results = self._filter_results(results, query['filters'])
@@ -234,7 +229,7 @@ class Searcher:
         """
         result_only = result[0]
         comparisions = []
-        for filter_attr, filter_value in filters.iteritems():
+        for filter_attr, filter_value in filters.items():
             if filter_value['filter_value'] and len(filter_value['filter_value']) > 0:
                 compare_to = filter_value['filter_value'][0].id
             else:
@@ -248,13 +243,13 @@ class Searcher:
     @staticmethod
     def _collect_filter_values(filters):
         filter_models = {
-            'ministerio': ('topic_id', models.Topic),
-            'area': ('subtopic_id', models.SubTopic),
-            'autor': ('author_id', models.Author),
-            'informe': ('report_id', models.Report)
+            'ministerio': ('topic_id', Topic),
+            'area': ('subtopic_id', SubTopic),
+            'autor': ('author_id', Author),
+            'informe': ('report_id', Report)
         }
         filter_values = {}
-        for filter_name, filter_model in filter_models.iteritems():
+        for filter_name, filter_model in filter_models.items():
             if filter_name in filters.keys():
                 comparision_key = filter_name + '-comparacion'
                 filter_info = {
@@ -272,7 +267,7 @@ class Searcher:
         if 'creado-en' in filters:
             created_at = datetime.strptime(filters['creado-en'], '%Y-%m-%d %H:%M:%S')
             filtered_questions = filter(lambda x: x[0].created_at == created_at, filtered_questions)
-        return filtered_questions
+        return list(filtered_questions)
 
     def get_similar_to(self, question):
         query = self.query_from_url()
@@ -287,7 +282,7 @@ class Searcher:
 
     def _search_similar(self, query):
         question_id = query['text']
-        all_questions = models.Question.query.all()
+        all_questions = Question.query.all()
         if self.text_classifier is None:
             return []
         if query['target'] == 'preguntas':
@@ -300,7 +295,7 @@ class Searcher:
             id_list = ['q' + str(q.id) for q in all_questions
                        if q.body is not None and len(q.body) > 0] + ['r' + str(q.id) for q in all_questions
                        if q.answer is not None and len(q.answer) > 0]
-        if not isinstance(question_id, basestring):
+        if not isinstance(question_id, str):
             question_id = str(question_id)
         per_page = 'por-pagina' in query and int(query['por-pagina']) or self.per_page
         if id_list:
@@ -312,18 +307,18 @@ class Searcher:
         ids_sim = self._clean_ids(ids_sim, query)
         results = []
         for qid in ids_sim:
-            results.append(models.Question.query.get(qid))
+            results.append(Question.query.get(qid))
         return zip(results, best_words, dist)
 
     def suggest_tags(self, tag_type, question_id):
-        question = models.Question.query.get(question_id)
+        question = Question.query.get(question_id)
         if tag_type == 'topics':
             tags, vals = self.text_classifier.classify(
                 'topics', ['q' + str(question_id)])
-            model = models.Topic
+            model = Topic
         else:
             classifier_name = str(question.topic_id) + "_" + tag_type
-            model = models.SubTopic
+            model = SubTopic
 
             if classifier_name in dir(self.text_classifier):
                 tags, vals = self.text_classifier.classify(
@@ -332,7 +327,7 @@ class Searcher:
                 subtopics = question.topic.subtopics
                 return list(sorted([x.name for x in subtopics]))
             else:
-                subtopics = models.SubTopic.query.all()
+                subtopics = SubTopic.query.all()
                 return list(sorted([s.name for s in subtopics]))
 
         tag_names = [model.query.get(idt).name for idt in tags]
@@ -379,7 +374,7 @@ class Searcher:
         args = {}
         if 'text' in query and query['text'] is not None:
             args['q'] = query['text']
-        for title, value in query['filters'].iteritems():
+        for title, value in query['filters'].items():
             args[title] = value
         if page is not None:
             args['pagina'] = page

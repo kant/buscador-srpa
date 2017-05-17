@@ -9,7 +9,7 @@ sudo apt-get install git-all python-pip python-dev build-essential sqlite3 libsq
 pip install virtualenv
 git clone https://github.com/datosgobar/text-classifier.git
 cd text-classifier/
-virtualenv venv
+virtualenv -p python3 venv
 . venv/bin/activate
 pip install -r requirements.txt
 

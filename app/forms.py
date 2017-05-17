@@ -1,12 +1,10 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from flask.ext.wtf import Form
 from wtforms import validators, IntegerField, TextAreaField, BooleanField, SelectField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from flask_user.translations import lazy_gettext as _
-from models import MAX_TEXT_LENGTH, Question, Report, Topic, SubTopic, Author, get_or_create
+from .models import MAX_TEXT_LENGTH, Question, Report, Topic, SubTopic, Author, get_or_create
 import time
-from helpers import SpreadSheetReader
+from .helpers import SpreadSheetReader
 from flask import render_template, redirect, url_for
 from datetime import datetime
 

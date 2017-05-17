@@ -2,8 +2,8 @@ from flask_mail import Mail
 from flask_user import SQLAlchemyAdapter, UserManager
 from flask.ext.babel import Babel
 from . import app, db, models
-from routes import init_routes
-from helpers import Searcher
+from .routes import init_routes
+from .helpers import Searcher
 import getpass
 import os
 import pprint
@@ -34,7 +34,7 @@ def _init_users_manager():
 
 def create_user():
     user_manager = _init_users_manager()
-    email = raw_input("User email: ")
+    email = input("User email: ")
     if not models.User.query.filter(models.User.email == email).first():
         password = getpass.getpass('User password: ')
         password2 = getpass.getpass('Confirm user password: ')
@@ -65,7 +65,7 @@ def list_users():
 
 
 def _get_user():
-    email = raw_input("User email: ")
+    email = input("User email: ")
     return models.User.query.filter(models.User.email == email).first()
 
 
@@ -77,7 +77,7 @@ def add_user_role():
         return
     current_roles = [role.name for role in user.roles]
     print('Current user roles: ' + str(current_roles))
-    new_role_name = raw_input("New role name: ")
+    new_role_name = input("New role name: ")
     role_id = models.get_or_create(db.session, models.Role, name=new_role_name)
     role = models.Role.query.get(role_id)
     if role.name not in current_roles:
@@ -91,7 +91,7 @@ def remove_user_role():
     if not user:
         print("User doesn't exist!")
         return
-    role_to_remove = raw_input("Role to remove: ")
+    role_to_remove = input("Role to remove: ")
     current_roles = [role.name for role in user.roles]
     if role_to_remove in current_roles:
         role_index = current_roles.index(role_to_remove)
