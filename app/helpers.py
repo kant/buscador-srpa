@@ -38,7 +38,7 @@ class SpreadSheetReader:
 
     @classmethod
     def read_csv(cls, csv_path):
-        with open(csv_path, 'r') as csvfile:
+        with open(csv_path, 'r', encoding='utf-8') as csvfile:
             dialect = csv.Sniffer().sniff(csvfile.read(), delimiters=',')
             csvfile.seek(0)
             reader = csv.reader(csvfile, dialect)
