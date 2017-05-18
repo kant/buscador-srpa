@@ -63,6 +63,7 @@ class Question(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     modified_at = db.Column(db.DateTime, default=datetime.now)
     answer = db.Column(db.Text(MAX_TEXT_LENGTH))
+    answer_author_id = db.Column(db.Integer, db.ForeignKey('answer_author.id'))
 
     def __init__(self, **kwargs):
         self.number = kwargs.get('number', None)
@@ -147,3 +148,12 @@ class Author(db.Model):
     modified_at = db.Column(db.DateTime, default=datetime.now)
     # TODO: agregar origen del autor (prov, ciudad, etc)
     # y bloque al cual pertenece (ver excel)
+
+
+class AnswerAuthor(db.Model):
+    __tablename__ = 'answer_author'
+    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+    name = db.Column(db.String(MAX_NAME_LENGTH), unique=True)
+    questions = db.relationship('Question', backref='answer_author')
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    modified_at = db.Column(db.DateTime, default=datetime.now)

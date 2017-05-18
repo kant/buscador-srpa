@@ -3,7 +3,10 @@
 {% from "forms/_formhelpers.html" import render_field, render_label %}
 
 {% block form %}
-    <form id="upload_form" method="post" action="{{ url_for('process_spreadsheet', filename=filename) }}"
+    <form id="upload_form" method="post"
+          {% block form_action %}
+            action="{{ url_for('process_spreadsheet', filename=filename) }}"
+          {% endblock %}
           class="form-tab" enctype="multipart/form-data">
         {{ form.csrf_token }}
 
@@ -29,17 +32,19 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 no-padding select-group">
-                <div class="col-xs-12 col-sm-6 field-label-container">
-                    {{ form.number.label() }}
+            {% block question_number %}
+                <div class="col-xs-12 no-padding select-group">
+                    <div class="col-xs-12 col-sm-6 field-label-container">
+                        {{ form.number.label() }}
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        {{ form.number(class_='form-control') }}
+                    </div>
+                    <div class="col-xs-12">
+                      <p class="type-warning"></p>
+                    </div>
                 </div>
-                <div class="col-xs-12 col-sm-6">
-                    {{ form.number(class_='form-control') }}
-                </div>
-                <div class="col-xs-12">
-                  <p class="type-warning"></p>
-                </div>
-            </div>
+            {% endblock %}
 
             <div class="col-xs-12 no-padding select-group">
                 <div class="col-xs-12 col-sm-6 field-label-container">
@@ -77,41 +82,47 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 no-padding select-group">
-                <div class="col-xs-12 col-sm-6 field-label-container">
-                    {{ form.answer.label() }}
+            {% block answer %}
+                <div class="col-xs-12 no-padding select-group">
+                    <div class="col-xs-12 col-sm-6 field-label-container">
+                        {{ form.answer.label() }}
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        {{ form.answer(class_='form-control') }}
+                    </div>
+                    <div class="col-xs-12">
+                      <p class="type-warning"></p>
+                    </div>
                 </div>
-                <div class="col-xs-12 col-sm-6">
-                    {{ form.answer(class_='form-control') }}
-                </div>
-                <div class="col-xs-12">
-                  <p class="type-warning"></p>
-                </div>
-            </div>
+            {% endblock %}
 
-            <div class="col-xs-12 no-padding select-group">
-                <div class="col-xs-12 col-sm-6 field-label-container">
-                    {{ form.topic.label() }}
+            {% block topic %}
+                <div class="col-xs-12 no-padding select-group">
+                    <div class="col-xs-12 col-sm-6 field-label-container">
+                        {{ form.topic.label() }}
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        {{ form.topic(class_='form-control') }}
+                    </div>
+                    <div class="col-xs-12">
+                      <p class="type-warning"></p>
+                    </div>
                 </div>
-                <div class="col-xs-12 col-sm-6">
-                    {{ form.topic(class_='form-control') }}
-                </div>
-                <div class="col-xs-12">
-                  <p class="type-warning"></p>
-                </div>
-            </div>
+            {% endblock %}
 
-            <div class="col-xs-12 no-padding select-group">
-                <div class="col-xs-12 col-sm-6 field-label-container">
-                    {{ form.subtopic.label() }}
+            {% block subtopic %}
+                <div class="col-xs-12 no-padding select-group">
+                    <div class="col-xs-12 col-sm-6 field-label-container">
+                        {{ form.subtopic.label() }}
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        {{ form.subtopic(class_='form-control') }}
+                    </div>
+                    <div class="col-xs-12">
+                      <p class="type-warning"></p>
+                    </div>
                 </div>
-                <div class="col-xs-12 col-sm-6">
-                    {{ form.subtopic(class_='form-control') }}
-                </div>
-                <div class="col-xs-12">
-                  <p class="type-warning"></p>
-                </div>
-            </div>
+            {% endblock %}
 
             <div class="col-xs-10 col-xs-offset-1">
                 {% if form.number.errors %}

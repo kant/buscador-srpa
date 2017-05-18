@@ -2,11 +2,12 @@ from flask.ext.wtf import Form
 from wtforms import validators, IntegerField, TextAreaField, BooleanField, SelectField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from flask_user.translations import lazy_gettext as _
-from .models import MAX_TEXT_LENGTH, Question, Report, Topic, SubTopic, Author, get_or_create
+from .models import MAX_TEXT_LENGTH, Question, Report, Topic, SubTopic, Author, AnswerAuthor, get_or_create
 import time
 from .helpers import SpreadSheetReader
 from flask import render_template, redirect, url_for
 from datetime import datetime
+from sqlalchemy import func
 
 
 class QuestionForm(Form):
@@ -161,6 +162,8 @@ class ProcessSpreadsheetForm(Form):
     topic = SelectField(_('Question topic'))
     subtopic = SelectField(_('Question subtopic'))
 
+    form_template = 'forms/process_spreadsheet.html'
+
     def handle_request(self, filename, db_session, searcher):
         spreadsheet_summary = SpreadSheetReader.first_read(filename)
         self.update_choices(spreadsheet_summary['first_row'])
@@ -172,7 +175,7 @@ class ProcessSpreadsheetForm(Form):
         else:
             print(self.errors)
         return render_template(
-            'forms/process_spreadsheet_taquigraficas.html',
+            self.form_template,
             filename=filename,
             spreadsheet_summary=spreadsheet_summary,
             form=self
@@ -189,6 +192,7 @@ class ProcessSpreadsheetForm(Form):
         self.author.choices = choices
         self.topic.choices = choices
         self.subtopic.choices = choices
+        return choices
 
     def save_models(self, filename, db_session):
         columns = self._collect_columns()
@@ -207,13 +211,18 @@ class ProcessSpreadsheetForm(Form):
         for i, row in spreadsheet:
             if i == 0 and self.discard_first_row.data:
                 continue
-            args = self.collect_args(row, columns)
-            args = self._get_ids(args, db_session)
-            question = Question(**args)
-            question.created_at = created_at
-            db_session.add(question)
+            self.save_model(row, columns, db_session, created_at)
         db_session.commit()
         return created_at
+
+    def save_model(self, row, columns, db_session, created_at):
+        args = self.collect_args(row, columns)
+        if len(args['report']) == 0:
+            return
+        args = self._get_ids(args, db_session)
+        question = Question(**args)
+        question.created_at = created_at
+        db_session.add(question)
 
     def _collect_columns(self):
         columns = [
@@ -229,7 +238,8 @@ class ProcessSpreadsheetForm(Form):
         return [(int(tuple[0]), tuple[1]) for tuple in columns
                 if len(tuple[0]) > 0]
 
-    def _get_ids(self, question_args, db_session):
+    @staticmethod
+    def _get_ids(question_args, db_session):
         if 'report' in question_args.keys():
             question_args['report_id'] = get_or_create(
                 db_session, Report, name=question_args['report'])
@@ -246,6 +256,9 @@ class ProcessSpreadsheetForm(Form):
             mysubtopic = SubTopic.query.get(question_args['subtopic_id'])
             mytopic.subtopics.append(mysubtopic)
             db_session.commit()
+        if 'answer_author' in question_args.keys():
+            question_args['answer_author_id'] = get_or_create(
+                db_session, AnswerAuthor, name=question_args['author'])
         return question_args
 
     @staticmethod
@@ -255,7 +268,7 @@ class ProcessSpreadsheetForm(Form):
             position = col[0]
             if 0 <= position < len(row):
                 value = row[col[0]].strip()
-                if col[1] in ['author', 'report', 'topic', 'subtopic']:
+                if col[1] in ['author', 'report', 'topic', 'subtopic', 'answer_author']:
                     value = value.lower()
             else:
                 value = ''
@@ -266,6 +279,43 @@ class ProcessSpreadsheetForm(Form):
 class ProcessSpreadsheetTaquigraficasForm(ProcessSpreadsheetForm):
     type = 'taquigraficas'
     report = SelectField(_('Nombre de la comisión'))
+    form_template = 'forms/process_spreadsheet_taquigraficas.html'
+    answer_author = SelectField(_('Autor de la respuesta'))
+    number = SelectField(_('Question number'), [validators.Optional()])
+    topic = SelectField(_('Question topic'), [validators.Optional()])
+    subtopic = SelectField(_('Question subtopic'), [validators.Optional()])
+
+    def update_choices(self, first_row):
+        choices = super(ProcessSpreadsheetTaquigraficasForm, self).update_choices(first_row)
+        self.answer_author.choices = choices
+
+    def _collect_columns(self):
+        columns = [
+            (self.report.data, 'report'),
+            (self.context.data, 'context'),
+            (self.body.data, 'body'),
+            (self.author.data, 'author'),
+            (self.answer.data, 'answer'),
+            (self.answer_author.data, 'answer_author')
+        ]
+        return [(int(tuple[0]), tuple[1]) for tuple in columns
+                if len(tuple[0]) > 0]
+
+    def save_model(self, row, columns, db_session, created_at):
+        args = self.collect_args(row, columns)
+        if len(args['report']) == 0:
+            return
+        args = self._get_ids(args, db_session)
+        max_number_for_that_comission = db_session.query(
+            func.max(Question.number).label('max_number')
+        ).filter_by(report_id=args['report_id']).one().max_number
+        if max_number_for_that_comission is None:
+            args['number'] = 1
+        else:
+            args['number'] = max_number_for_that_comission + 1
+        question = Question(**args)
+        question.created_at = created_at
+        db_session.add(question)
 
 
 class FullTextQueryForm(Form):
