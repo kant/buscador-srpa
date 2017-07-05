@@ -1,4 +1,4 @@
-# Text Classifier
+# buscador-srpa
 Pequeño servidor para clasificar o buscar textos similares para los informes mensuales del poder ejecutivo al congreso de la nación argentina. 
 
 ## Instalación del servidor
