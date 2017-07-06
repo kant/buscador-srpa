@@ -36,14 +36,14 @@ Para levantar un servidor smtp para desarrollo, correr `sudo python -m smtpd -n 
 
 ### i18n
 
-Cada vez que se agreguen, remuevan o modifiquen textos traducibles, ejecutar lo siguiente parado dentro de la carpeta `app` ejecutar:
+Cada vez que se agreguen, remuevan o modifiquen textos traducibles, ejecutar dentro de la carpeta `app` esto:
 ```
 pybabel extract -F translations/babel.cfg -o translations/messages.pot .
 pybabel update -i translations/messages.pot -d translations
 ```
 
-Esto actualiza los archivos `app/translations/messages.pot` y `app/translations/es/LC_MESSAGES/messages.po`.
-Editar este ultimo con las traducciones pertinentes y ejecutar `pybabel compile -d translations` para compilar las traducciones.
+Esta acción actualiza los archivos `app/translations/messages.pot` y `app/translations/es/LC_MESSAGES/messages.po`.
+Editar éste último con las traducciones pertinentes y ejecutar `pybabel compile -d translations` para compilar las traducciones.
 
 
 ### Documentaciones relevantes:
